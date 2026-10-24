@@ -16,14 +16,15 @@ db.exec("DELETE FROM sqlite_sequence WHERE name = 'buildings';");
 const insertBuilding = db.prepare('INSERT INTO buildings (building_name, building_code) VALUES (?, ?)');
 
 const vnrvjietBuildings = [
-  ['Dr. A.P.J. Abdul Kalam Block (CSE, IT, AIML, DS Labs)', 'KALAM'],
-  ['Patel Rama Reddy Block (ECE, EEE, EIE Departments)', 'PRR'],
-  ['B. Rama Rao Block (Civil, Mechanical & Auto Workshops)', 'BRR'],
-  ['K.S. Rao Block (Main Administrative & Exam Branch)', 'KSR'],
-  ['Vignana Jyothi Central Library & Auditorium Complex', 'LIB'],
-  ['First Year Academic Block (Freshman Engineering & H&S)', 'FYA'],
-  ['Vignana Jyothi Sports Complex & Indoor Stadium', 'SPORTS'],
-  ['Vignana Jyothi Student Hostels (Boys & Girls Hostels)', 'HOSTEL']
+  ['E Block', 'E-BLOCK'],
+  ['D Block', 'D-BLOCK'],
+  ['C Block', 'C-BLOCK'],
+  ['A Block', 'A-BLOCK'],
+  ['PG Block', 'PG-BLOCK'],
+  ['Canteen', 'CANTEEN'],
+  ['Annapurna Canteen', 'ANNAPURNA'],
+  ['Senti Stage', 'SENTI-STAGE'],
+  ['Sports Block', 'SPORTS']
 ];
 
 for (const b of vnrvjietBuildings) {
