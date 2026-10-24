@@ -79,45 +79,29 @@
 
       <!-- Dashboard Content -->
       <main class="dashboard-content">
-        <!-- Metrics Row -->
-        <div class="metrics-row">
-          <div class="metric-box">
-            <div class="metric-icon-wrap" style="background: rgba(99, 102, 241, 0.18); color: var(--electric-indigo-bright); border: 1px solid rgba(99, 102, 241, 0.3);">
-              <i data-lucide="clipboard-list"></i>
-            </div>
-            <div class="metric-info">
-              <div class="metric-num" id="metric-total">0</div>
-              <div class="metric-label">Total Submitted</div>
-            </div>
+        <!-- Geometric Shapes Metrics (Matching Sketch) -->
+        <div class="metrics-shapes-container">
+          <!-- Left: Large Oval Shape for Submitted -->
+          <div class="shape-oval-submitted">
+            <div class="shape-num" id="metric-total">0</div>
+            <div class="shape-label">Submitted</div>
           </div>
 
-          <div class="metric-box">
-            <div class="metric-icon-wrap" style="background: rgba(251, 215, 132, 0.18); color: var(--cream-gold); border: 1px solid rgba(251, 215, 132, 0.3);">
-              <i data-lucide="clock"></i>
+          <!-- Right: Stacked Pill Shapes for Pending, Progress, and Fixed -->
+          <div class="shapes-pills-stack">
+            <div class="shape-pill pill-pending">
+              <span class="pill-label">Pending Reviews</span>
+              <span class="pill-num" id="metric-pending">0</span>
             </div>
-            <div class="metric-info">
-              <div class="metric-num" id="metric-pending">0</div>
-              <div class="metric-label">Pending Review</div>
-            </div>
-          </div>
 
-          <div class="metric-box">
-            <div class="metric-icon-wrap" style="background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
-              <i data-lucide="tool"></i>
+            <div class="shape-pill pill-progress">
+              <span class="pill-label">In Progress</span>
+              <span class="pill-num" id="metric-progress">0</span>
             </div>
-            <div class="metric-info">
-              <div class="metric-num" id="metric-progress">0</div>
-              <div class="metric-label">In Progress</div>
-            </div>
-          </div>
 
-          <div class="metric-box">
-            <div class="metric-icon-wrap" style="background: rgba(52, 211, 153, 0.18); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">
-              <i data-lucide="check-circle-2"></i>
-            </div>
-            <div class="metric-info">
-              <div class="metric-num" id="metric-resolved">0</div>
-              <div class="metric-label">Resolved & Fixed</div>
+            <div class="shape-pill pill-fixed">
+              <span class="pill-label">Fixed</span>
+              <span class="pill-num" id="metric-resolved">0</span>
             </div>
           </div>
         </div>

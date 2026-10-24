@@ -231,6 +231,193 @@
   gap: 2rem;
 }
 
+/* Custom Geometric Shapes Metrics (as per user sketch) */
+.metrics-shapes-container {
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+  padding: 2.25rem 2.75rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-subtle);
+  flex-wrap: wrap;
+}
+
+.shape-oval-submitted {
+  width: 240px;
+  height: 190px;
+  border-radius: 95px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.28), rgba(18, 19, 43, 0.95));
+  border: 2px solid var(--electric-indigo);
+  box-shadow: 0 10px 32px var(--electric-indigo-glow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.shape-oval-submitted:hover {
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--electric-indigo-bright);
+  box-shadow: 0 14px 40px rgba(99, 102, 241, 0.35);
+}
+
+.shape-oval-submitted .shape-num {
+  font-family: var(--font-serif);
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--cream-pure);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.shape-oval-submitted .shape-label {
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cream-gold);
+  text-transform: capitalize;
+  letter-spacing: 0.06em;
+  margin-top: 0.4rem;
+}
+
+.shapes-pills-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  flex: 1;
+  min-width: 280px;
+  max-width: 540px;
+}
+
+.shape-pill {
+  border-radius: 9999px;
+  padding: 1.15rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: var(--transition);
+  cursor: default;
+}
+
+.shape-pill:hover {
+  transform: translateX(6px);
+}
+
+.shape-pill .pill-label {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.shape-pill .pill-num {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--cream-pure);
+  margin-left: 1.5rem;
+}
+
+/* Pill 1: Pending Reviews (Warm Cream Gold) */
+.pill-pending {
+  background: linear-gradient(135deg, rgba(251, 215, 132, 0.22), rgba(18, 19, 43, 0.95));
+  border: 1.5px solid rgba(251, 215, 132, 0.45);
+  box-shadow: 0 4px 18px rgba(251, 215, 132, 0.12);
+}
+.pill-pending .pill-label {
+  color: var(--cream-gold);
+}
+.pill-pending:hover {
+  border-color: var(--cream-gold);
+  box-shadow: 0 6px 24px rgba(251, 215, 132, 0.25);
+}
+
+/* Pill 2: In Progress (Electric Cyan) */
+.pill-progress {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(18, 19, 43, 0.95));
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.12);
+}
+.pill-progress .pill-label {
+  color: #38bdf8;
+}
+.pill-progress:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 6px 24px rgba(56, 189, 248, 0.25);
+}
+
+/* Pill 3: Fixed (Emerald Green) */
+.pill-fixed {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.22), rgba(18, 19, 43, 0.95));
+  border: 1.5px solid rgba(52, 211, 153, 0.45);
+  box-shadow: 0 4px 18px rgba(52, 211, 153, 0.12);
+}
+.pill-fixed .pill-label {
+  color: #34d399;
+}
+.pill-fixed:hover {
+  border-color: #34d399;
+  box-shadow: 0 6px 24px rgba(52, 211, 153, 0.25);
+}
+
+/* Standard .metrics-row and .metric-box rules for multi-card dashboards */
+.metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1.25rem;
+}
+
+.metric-box {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-cream);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  transition: var(--transition);
+}
+
+.metric-box:hover {
+  border-color: var(--border-cream-hover);
+  transform: translateY(-2px);
+}
+
+.metric-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-num {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--cream-pure);
+  line-height: 1.1;
+}
+
+.metric-label {
+  font-size: 0.78rem;
+  color: var(--cream-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.2rem;
+}
+
 /* KPI Cards Grid */
 .kpi-grid {
   display: grid;
