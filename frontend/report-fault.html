@@ -200,12 +200,36 @@
               <textarea id="description" class="form-control" rows="4" placeholder="Describe the symptom, what happened, and any safety concerns..." required></textarea>
             </div>
 
-            <!-- Optional Image Upload with Preview -->
-            <div class="form-group">
-              <label for="fault-image">Upload Fault Photo (Optional, max 5MB - JPG, PNG, WEBP)</label>
+            <!-- Upload Fault Image (Optional, max 5MB - JPG, JPEG, PNG, WEBP) -->
+            <div class="form-group" style="margin-top: 1.5rem; background: rgba(99, 102, 241, 0.05); padding: 1.5rem; border-radius: var(--radius-md); border: 1px dashed var(--border-cream);">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem;">
+                <label for="fault-image" style="color: var(--cream-pure); font-weight: 700; margin-bottom: 0;">Upload Fault Image</label>
+                <span style="font-size: 0.78rem; color: var(--cream-dim);">Optional (Max: 5 MB)</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--cream-muted); margin-bottom: 1rem; line-height: 1.5;">
+                <i data-lucide="info" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; color: var(--cream-gold);"></i>
+                Uploading a photograph of the faulty equipment or campus facility helps the maintenance team understand and diagnose the issue more quickly.
+              </p>
+
               <input type="file" id="fault-image" class="form-control" accept="image/jpeg,image/png,image/webp">
-              <div id="image-preview-container" style="display: none; margin-top: 0.75rem;">
-                <img id="image-preview" src="#" alt="Preview" style="max-height: 180px; border-radius: var(--radius-md); border: 1px solid var(--border-color); object-fit: cover;">
+              <div id="image-error-msg" style="display: none; color: #f87171; font-size: 0.85rem; margin-top: 0.5rem; font-weight: 600;"></div>
+
+              <!-- Preview & File Info Card -->
+              <div id="image-preview-container" style="display: none; margin-top: 1rem; background: var(--bg-surface); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-cream);">
+                <div style="display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap;">
+                  <img id="image-preview" src="#" alt="Fault Preview" style="width: 110px; height: 90px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--border-cream-hover);">
+                  <div style="flex: 1; min-width: 180px;">
+                    <div id="image-filename" style="font-size: 0.92rem; font-weight: 600; color: var(--cream-pure); word-break: break-all;">image.jpg</div>
+                    <div id="image-filesize" style="font-size: 0.8rem; color: var(--cream-muted); margin-top: 2px;">0 KB</div>
+                    <span class="badge badge-verified" style="margin-top: 0.4rem;">Ready to upload</span>
+                  </div>
+                  <div>
+                    <button type="button" id="remove-image-btn" class="btn btn-outline btn-sm" style="color: #f87171; border-color: rgba(248, 113, 113, 0.4);">
+                      <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                      Remove Image
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
 

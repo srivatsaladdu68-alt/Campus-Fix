@@ -201,10 +201,14 @@
           <p id="modal-description" style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6;"></p>
         </div>
 
-        <!-- Photo if available -->
+        <!-- Photo if available, or fallback message -->
         <div id="modal-image-box" style="display: none; margin-bottom: 1.5rem;">
-          <h4 style="font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.4rem;">Attached Photo</h4>
-          <img id="modal-image" src="#" alt="Complaint Image" style="max-width: 100%; max-height: 280px; border-radius: var(--radius-md); border: 1px solid var(--border-color); object-fit: contain;">
+          <h4 style="font-size: 0.82rem; color: var(--cream-gold); text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em;">Attached Photo</h4>
+          <img id="modal-image" src="#" alt="Complaint Image" style="max-width: 100%; max-height: 280px; border-radius: var(--radius-md); border: 1px solid var(--border-cream); object-fit: contain; cursor: pointer;" onclick="window.open(this.src, '_blank')" title="Click to view full resolution in new tab">
+        </div>
+        <div id="modal-no-image" style="display: none; padding: 0.85rem 1.25rem; background: rgba(99, 102, 241, 0.04); border: 1px dashed var(--border-cream); border-radius: var(--radius-sm); color: var(--cream-dim); font-size: 0.88rem; margin-bottom: 1.5rem;">
+          <i data-lucide="image-off" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>
+          No photograph was attached to this complaint.
         </div>
 
         <!-- Maintenance & Repair Notes -->

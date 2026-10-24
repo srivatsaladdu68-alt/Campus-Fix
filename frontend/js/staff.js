@@ -56,12 +56,15 @@ function renderTasks(tasks) {
         ${t.is_overdue ? '<span class="badge badge-overdue" style="margin-top: 4px;">Overdue</span>' : ''}
       </td>
       <td>
-        <img src="${t.image_path || '/images/projector_fault.svg'}" 
-             alt="${escapeHtml(t.item_name || 'Equipment')}" 
-             class="equipment-thumbnail" 
-             onclick="openTaskModal(${t.fault_id})" 
-             title="Click to view work order"
-             onerror="this.src='/images/projector_fault.svg'">
+        ${t.image_path 
+          ? `<img src="${t.image_path}" 
+                  alt="${escapeHtml(t.item_name || 'Equipment')}" 
+                  class="equipment-thumbnail" 
+                  onclick="openTaskModal(${t.fault_id})" 
+                  title="Click to view work order"
+                  onerror="this.onerror=null;this.src='/images/projector_fault.svg';">`
+          : `<span class="badge" style="background: rgba(148, 163, 184, 0.1); color: var(--cream-dim); border: 1px dashed var(--border-cream); font-size: 0.72rem;">No image attached</span>`
+        }
       </td>
       <td style="max-width: 250px;">
         <span class="badge badge-verified" style="font-size: 0.72rem; margin-bottom: 2px; display: inline-block;">

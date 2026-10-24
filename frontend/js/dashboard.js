@@ -49,12 +49,18 @@ async function loadDashboardData() {
           <span class="complaint-code-tag">${f.complaint_code}</span>
         </td>
         <td>
-          <div style="font-weight: 600; color: var(--primary);">${escapeHtml(f.title)}</div>
-          <div style="font-size: 0.78rem; color: var(--text-muted);">${API.formatDate(f.created_at)}</div>
+          ${f.image_path 
+            ? `<img src="${f.image_path}" alt="Photo" class="equipment-thumbnail" style="width:40px;height:40px;border-radius:6px;object-fit:cover;cursor:pointer;" onclick="window.open('${f.image_path}', '_blank')" title="Click to view full image">`
+            : `<span style="color: var(--cream-dim); font-size: 0.75rem;">No image attached</span>`
+          }
+        </td>
+        <td>
+          <div style="font-weight: 600; color: var(--cream-pure);">${escapeHtml(f.title)}</div>
+          <div style="font-size: 0.78rem; color: var(--cream-muted);">${API.formatDate(f.created_at)}</div>
         </td>
         <td>
           <span style="font-size: 0.85rem; font-weight: 500;">${escapeHtml(f.building_name || 'Campus')}</span>
-          <span style="font-size: 0.78rem; color: var(--text-muted); display: block;">${escapeHtml(f.room_number)}</span>
+          <span style="font-size: 0.78rem; color: var(--cream-muted); display: block;">${escapeHtml(f.room_number)}</span>
         </td>
         <td>${escapeHtml(f.category)}</td>
         <td>${API.getPriorityBadge(f.priority)}</td>

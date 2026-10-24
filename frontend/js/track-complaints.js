@@ -102,12 +102,15 @@ async function loadComplaints() {
         ${f.is_overdue ? '<br><span class="badge badge-overdue" style="margin-top: 4px;">Overdue</span>' : ''}
       </td>
       <td>
-        <img src="${f.image_path || '/images/projector_fault.svg'}" 
-             alt="${escapeHtml(f.item_name || 'Equipment')}" 
-             class="equipment-thumbnail" 
-             onclick="openDetailModal(${f.fault_id})" 
-             title="Click to expand photo"
-             onerror="this.src='/images/projector_fault.svg'">
+        ${f.image_path 
+          ? `<img src="${f.image_path}" 
+                  alt="${escapeHtml(f.item_name || 'Equipment')}" 
+                  class="equipment-thumbnail" 
+                  onclick="openDetailModal(${f.fault_id})" 
+                  title="Click to view photo"
+                  onerror="this.onerror=null;this.src='/images/projector_fault.svg';">`
+          : `<span class="badge" style="background: rgba(148, 163, 184, 0.1); color: var(--cream-dim); border: 1px dashed var(--border-cream); font-size: 0.72rem;">No image attached</span>`
+        }
       </td>
       <td style="max-width: 270px;">
         <span class="badge badge-verified" style="font-size: 0.74rem; margin-bottom: 3px; display: inline-block;">
@@ -189,14 +192,17 @@ function renderDetailModal(data) {
   document.getElementById('modal-staff').textContent = f.staff_name ? `${f.staff_name} (${f.staff_phone || 'Staff'})` : 'Unassigned';
   document.getElementById('modal-description').textContent = f.description;
 
-  // Handle Photo
+  // Handle Photo or No Image Message
   const imgBox = document.getElementById('modal-image-box');
   const imgTag = document.getElementById('modal-image');
+  const noImgBox = document.getElementById('modal-no-image');
   if (f.image_path) {
     imgTag.src = f.image_path;
     imgBox.style.display = 'block';
+    if (noImgBox) noImgBox.style.display = 'none';
   } else {
     imgBox.style.display = 'none';
+    if (noImgBox) noImgBox.style.display = 'block';
   }
 
   // Handle Maintenance Notes

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>How It Works – Campus Fix</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/dashboard.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
@@ -14,317 +13,124 @@
   <nav class="navbar">
     <a href="index.html" class="nav-brand">
       <div class="nav-logo-icon">
-        <i data-lucide="wrench"></i>
+        <i data-lucide="wrench" style="width: 20px; height: 20px;"></i>
       </div>
       <span>Campus Fix</span>
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#equipment">Equipment</a></li>
+      <li><a href="report-fault.html">Report Fault</a></li>
+      <li><a href="track-complaints.html">Track Status</a></li>
       <li><a href="features.html">Features</a></li>
-      <li><a href="how-it-works.html" style="color: var(--secondary); font-weight: 700;">How It Works</a></li>
+      <li><a href="how-it-works.html" class="active">How It Works</a></li>
       <li><a href="live-stats.html">Live Stats</a></li>
-      <li><a href="track-complaints.html">Track Complaint</a></li>
     </ul>
     <div class="nav-actions" id="nav-auth-buttons">
-      <a href="login.html" class="btn btn-outline">Sign In</a>
-      <a href="report-fault.html" class="btn btn-secondary">
-        <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
-        Report a Fault
-      </a>
+      <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+      <a href="report-fault.html" class="btn btn-gold btn-sm">Report a Fault</a>
     </div>
   </nav>
 
-  <!-- Hero Header -->
-  <header class="hero" style="padding: 4rem 2rem 4.5rem;">
+  <!-- Editorial Hero Header -->
+  <header class="hero" style="min-height: 50vh; padding: 4.5rem 2rem 3.5rem;">
     <div class="hero-content">
-      <div class="hero-badge">
-        <i data-lucide="workflow" style="width: 16px; height: 16px;"></i>
-        Standardized Maintenance Workflow
-      </div>
-      <h1 style="font-size: 2.6rem;">From Breakdown to Resolution in 6 Clear Stages</h1>
+      <div class="editorial-tag">WORKFLOW PIPELINE</div>
+      <h1>From Breakdown to Fix in Four Clear Steps</h1>
       <p>
-        Campus Fix brings complete accountability to university facilities management. Every complaint is tracked from the moment it is reported until work is confirmed and closed.
+        A transparent, accountable cycle ensuring zero lost maintenance requests, rapid technician dispatch, and verified repair completion.
       </p>
     </div>
   </header>
 
-  <!-- Visual Workflow Lifecycle Section -->
-  <main class="section">
-    <div class="section-header">
-      <span class="section-tag">Complaint Lifecycle</span>
-      <h2 class="section-title">The 6-Stage Resolution Pipeline</h2>
-      <p class="section-desc">Every request progresses through a standardized state machine with full audit logging.</p>
-    </div>
+  <!-- Clean Step Grid -->
+  <main style="max-width: 1140px; margin: 4rem auto 6rem; padding: 0 1.5rem;">
+    <div class="equipment-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2rem;">
 
-    <!-- Timeline Progression Visual -->
-    <div class="content-card" style="padding: 2.5rem 2rem; margin-bottom: 3.5rem;">
-      <div class="timeline" style="margin: 1.5rem 0 2rem;">
-        <div class="timeline-step completed">
-          <div class="timeline-dot">1</div>
-          <div class="timeline-label">Reported</div>
-        </div>
-        <div class="timeline-step completed">
-          <div class="timeline-dot">2</div>
-          <div class="timeline-label">Verified</div>
-        </div>
-        <div class="timeline-step completed">
-          <div class="timeline-dot">3</div>
-          <div class="timeline-label">Assigned</div>
-        </div>
-        <div class="timeline-step active">
-          <div class="timeline-dot">4</div>
-          <div class="timeline-label">In Progress</div>
-        </div>
-        <div class="timeline-step">
-          <div class="timeline-dot">5</div>
-          <div class="timeline-label">Resolved</div>
-        </div>
-        <div class="timeline-step">
-          <div class="timeline-dot">6</div>
-          <div class="timeline-label">Closed</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Detailed 6 Step Cards -->
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 4rem;">
       <!-- Step 1 -->
-      <div class="content-card" style="margin-bottom: 0; display: flex; gap: 1.5rem; align-items: start;">
-        <div style="width: 48px; height: 48px; border-radius: var(--radius-full); background: #fef3c7; color: #b45309; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0;">
-          1
-        </div>
-        <div>
-          <h3 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">
-            Step 1: Fault Reported by Student or Faculty
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-            The user selects the facility category (Electrical, Washroom, Classroom Equipment, IT, etc.), campus building, floor, and room number. They add problem symptoms and optionally attach a photo. An automated unique tracking code (e.g. <code>CF-2026-1495</code>) is generated, and a deadline is computed according to priority.
-          </p>
-        </div>
+      <div class="equipment-card">
+        <div style="font-family: var(--font-serif); font-size: 3rem; color: var(--cream-gold); line-height: 1; margin-bottom: 0.75rem;">01</div>
+        <div class="editorial-tag" style="margin-bottom: 0.75rem;">SUBMISSION</div>
+        <h3>Report with Photo & Room</h3>
+        <p>Student or faculty member spots broken equipment, picks the item type, snaps a photo, and enters the building & room number.</p>
+        <span class="badge badge-reported">Stage: Reported</span>
       </div>
 
       <!-- Step 2 -->
-      <div class="content-card" style="margin-bottom: 0; display: flex; gap: 1.5rem; align-items: start;">
-        <div style="width: 48px; height: 48px; border-radius: var(--radius-full); background: #e0e7ff; color: #4338ca; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0;">
-          2
-        </div>
-        <div>
-          <h3 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">
-            Step 2: Administrative Verification
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-            Campus facilities administrators review new incoming reports. They verify legitimacy, eliminate duplicates or spam, adjust priority if safety hazards exist, and confirm facility accessibility.
-          </p>
-        </div>
+      <div class="equipment-card">
+        <div style="font-family: var(--font-serif); font-size: 3rem; color: var(--cream-gold); line-height: 1; margin-bottom: 0.75rem;">02</div>
+        <div class="editorial-tag" style="margin-bottom: 0.75rem;">VERIFICATION</div>
+        <h3>Auto Duplicate Check</h3>
+        <p>The system validates the report against existing open tickets in that location and flags urgency (Low, Medium, High, or Critical).</p>
+        <span class="badge badge-verified">Stage: Verified</span>
       </div>
 
       <!-- Step 3 -->
-      <div class="content-card" style="margin-bottom: 0; display: flex; gap: 1.5rem; align-items: start;">
-        <div style="width: 48px; height: 48px; border-radius: var(--radius-full); background: #dbeafe; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0;">
-          3
-        </div>
-        <div>
-          <h3 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">
-            Step 3: Specialized Technician Assignment
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-            The administrator dispatches the work ticket to the qualified staff member (e.g., Electrician for power faults, Plumber for pipe leaks). The technician receives an immediate in-app notification with location details and targeted deadline.
-          </p>
-        </div>
+      <div class="equipment-card">
+        <div style="font-family: var(--font-serif); font-size: 3rem; color: var(--cream-gold); line-height: 1; margin-bottom: 0.75rem;">03</div>
+        <div class="editorial-tag" style="margin-bottom: 0.75rem;">DISPATCH</div>
+        <h3>Technician Assignment</h3>
+        <p>The maintenance supervisor routes the work order directly to the qualified plumbing, electrical, furniture, or IT technician queue.</p>
+        <span class="badge badge-assigned">Stage: Assigned</span>
       </div>
 
       <!-- Step 4 -->
-      <div class="content-card" style="margin-bottom: 0; display: flex; gap: 1.5rem; align-items: start;">
-        <div style="width: 48px; height: 48px; border-radius: var(--radius-full); background: #e0f2fe; color: #0369a1; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0;">
-          4
-        </div>
-        <div>
-          <h3 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">
-            Step 4: Repair Execution & "In Progress" Updates
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-            The technician accepts the work order and begins on-site inspection. The status switches to <strong>In Progress</strong>. The technician logs repair notes and can check a box to flag administrators if extra replacement parts or vendor assistance is required.
-          </p>
-        </div>
+      <div class="equipment-card">
+        <div style="font-family: var(--font-serif); font-size: 3rem; color: var(--cream-gold); line-height: 1; margin-bottom: 0.75rem;">04</div>
+        <div class="editorial-tag" style="margin-bottom: 0.75rem;">RESOLUTION</div>
+        <h3>Repair & Verification</h3>
+        <p>The technician completes the repair, enters resolution notes, and the reporter receives an alert with rights to confirm or reopen.</p>
+        <span class="badge badge-resolved">Stage: Resolved</span>
       </div>
 
-      <!-- Step 5 -->
-      <div class="content-card" style="margin-bottom: 0; display: flex; gap: 1.5rem; align-items: start;">
-        <div style="width: 48px; height: 48px; border-radius: var(--radius-full); background: #d1fae5; color: #065f46; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0;">
-          5
-        </div>
-        <div>
-          <h3 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">
-            Step 5: Completion & "Resolved" Notification
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-            Upon replacing broken parts and testing the equipment, the technician records completion notes and marks the ticket as <strong>Resolved</strong>. The student or faculty reporter immediately receives an alert confirming the fix.
-          </p>
-        </div>
-      </div>
-
-      <!-- Step 6 -->
-      <div class="content-card" style="margin-bottom: 0; display: flex; gap: 1.5rem; align-items: start;">
-        <div style="width: 48px; height: 48px; border-radius: var(--radius-full); background: #f1f5f9; color: #475569; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; flex-shrink: 0;">
-          6
-        </div>
-        <div>
-          <h3 style="color: var(--primary); font-size: 1.25rem; font-weight: 700; margin-bottom: 0.35rem;">
-            Step 6: Final Closure or User Reopen
-          </h3>
-          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-            The complaint can be officially marked <strong>Closed</strong>. However, if the issue recurs within a few hours or days (e.g. the AC trips again), the reporter can simply click <strong>Reopen Complaint</strong>, returning it to the queue with high-priority dispatch.
-          </p>
-        </div>
-      </div>
     </div>
 
-    <!-- User Roles Matrix -->
-    <div class="section-header">
-      <span class="section-tag">Role Separation</span>
-      <h2 class="section-title">Who Uses Campus Fix?</h2>
-      <p class="section-desc">Tailored interfaces and strict role-based access for each stakeholder.</p>
-    </div>
-
-    <div class="feature-grid" style="margin-bottom: 4rem;">
-      <div class="feature-card">
-        <div class="feature-icon-box" style="background: #eff6ff; color: #2563eb;">
-          <i data-lucide="graduation-cap"></i>
-        </div>
-        <h3>Students & Faculty</h3>
-        <ul style="list-style: disc; margin-left: 1.2rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem;">
-          <li>Report issues with photos and exact rooms</li>
-          <li>Track real-time progress timelines</li>
-          <li>Receive status notifications</li>
-          <li>Reopen complaints if issues persist</li>
-        </ul>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-box" style="background: #ecfdf5; color: #059669;">
-          <i data-lucide="wrench"></i>
-        </div>
-        <h3>Maintenance Technicians</h3>
-        <ul style="list-style: disc; margin-left: 1.2rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem;">
-          <li>View assigned work orders</li>
-          <li>Update task to "In Progress" & "Resolved"</li>
-          <li>Record parts replaced and repair notes</li>
-          <li>Flag requests needing extra resources</li>
-        </ul>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon-box" style="background: #fdf2f8; color: #db2777;">
-          <i data-lucide="shield"></i>
-        </div>
-        <h3>Campus Administrators</h3>
-        <ul style="list-style: disc; margin-left: 1.2rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem;">
-          <li>Dispatch staff and adjust deadlines</li>
-          <li>Detect overdue & recurring hotspot faults</li>
-          <li>Analyze Chart.js failure trends</li>
-          <li>Export filtered compliance CSV reports</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- FAQ Section -->
-    <div class="section-header">
-      <span class="section-tag">Frequently Asked Questions</span>
-      <h2 class="section-title">Common Questions & System Rules</h2>
-    </div>
-
-    <div style="max-width: 800px; margin: 0 auto 4rem; display: flex; flex-direction: column; gap: 1rem;">
-      <div class="content-card" style="margin-bottom: 0;">
-        <h4 style="color: var(--primary); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem;">
-          How does duplicate detection help technicians?
-        </h4>
-        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
-          If ten students in the same lecture hall report a broken projector simultaneously, the duplicate detection engine immediately alerts each student that the issue has already been logged, preventing 10 duplicate work orders from cluttering the technician queue.
-        </p>
-      </div>
-
-      <div class="content-card" style="margin-bottom: 0;">
-        <h4 style="color: var(--primary); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem;">
-          Who can create staff or administrator accounts?
-        </h4>
-        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
-          In accordance with security requirements, staff and admin roles cannot be self-selected on the public registration form. They must be registered directly by an authorized campus facilities administrator.
-        </p>
-      </div>
-
-      <div class="content-card" style="margin-bottom: 0;">
-        <h4 style="color: var(--primary); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem;">
-          Can I track a complaint without logging in?
-        </h4>
-        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6;">
-          Students and staff can navigate to the Track Complaints page to search for complaints by code or room number, while full editing and reopen privileges remain protected by authentication.
-        </p>
-      </div>
-    </div>
-
-    <!-- Ready to Start CTA -->
-    <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 3rem 2rem; text-align: center; box-shadow: var(--shadow-md);">
-      <h3 style="font-size: 1.85rem; font-weight: 800; color: var(--primary); margin-bottom: 0.75rem;">Ready to Try It Out?</h3>
-      <p style="color: var(--text-muted); max-width: 550px; margin: 0 auto 1.5rem; font-size: 1rem;">
-        Submit a test fault or log in with one of our demo accounts to experience the full workflow.
-      </p>
-      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-        <a href="report-fault.html" class="btn btn-secondary btn-lg">Report a Fault</a>
-        <a href="track-complaints.html" class="btn btn-outline btn-lg">Track Open Complaints</a>
+    <!-- Quick Action CTA -->
+    <div class="clean-card" style="text-align: center; margin-top: 4.5rem; padding: 3rem 2rem;">
+      <div class="editorial-tag">START NOW</div>
+      <h2 style="font-family: var(--font-serif); font-size: 2.2rem; color: var(--cream-pure); margin-bottom: 1rem;">Experience Transparent Campus Maintenance</h2>
+      <p style="color: var(--cream-muted); max-width: 600px; margin: 0 auto 2rem;">Report any classroom or lab fault in under 60 seconds with live tracking.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="report-fault.html" class="btn btn-gold btn-lg">Report a Fault</a>
+        <a href="track-complaints.html" class="btn btn-outline btn-lg">Track Open Tickets</a>
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
+  <!-- Editorial Footer -->
   <footer class="footer">
-    <div class="footer-content">
+    <div class="footer-container">
       <div class="footer-brand">
         <h3>Campus Fix</h3>
-        <p>Smart Campus Fault Detection & Maintenance Management Platform. Built for modern university campuses and colleges.</p>
+        <p>A unified fault detection and maintenance management system engineered to keep collegiate campuses, labs, and facilities operating flawlessly.</p>
       </div>
-      <div class="footer-links">
-        <h4>Navigation</h4>
+      <div class="footer-column">
+        <h4>Portals & Actions</h4>
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="features.html">Features</a></li>
-          <li><a href="how-it-works.html">How It Works</a></li>
-          <li><a href="live-stats.html">Live Stats</a></li>
+          <li><a href="report-fault.html">Report a Fault</a></li>
           <li><a href="track-complaints.html">Track Complaint</a></li>
+          <li><a href="staff-dashboard.html">Technician Portal</a></li>
+          <li><a href="admin-dashboard.html">Admin Control Center</a></li>
         </ul>
       </div>
-      <div class="footer-links">
-        <h4>Help & Support</h4>
+      <div class="footer-column">
+        <h4>System Information</h4>
         <ul>
-          <li><a href="mailto:support@campusfix.edu">Emergency Facilities Desk</a></li>
-          <li><a href="login.html">Sign In to Portal</a></li>
-          <li><a href="register.html">Student / Faculty Registration</a></li>
+          <li><a href="features.html">Platform Features</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="live-stats.html">Live Analytics</a></li>
+          <li><a href="login.html">Account Sign In</a></li>
         </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Campus Facilities</h4>
-        <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">
-          Serving Central Library, Engineering Blocks, Science Complex, Admin Offices, and Student Hostels.
-        </p>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 Campus Fix – College Maintenance Management System. All rights reserved.
+      <span>&copy; 2026 Campus Fix Inc. Smart Campus Maintenance.</span>
+      <span>Electric Indigo & Cream Design</span>
     </div>
   </footer>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
-  <script>
-    lucide.createIcons();
-    if (Auth.isLoggedIn()) {
-      const user = Auth.getUser();
-      const navActions = document.getElementById('nav-auth-buttons');
-      const targetDash = Auth.getDashboardUrl(user.role);
-      navActions.innerHTML = `
-        <a href="${targetDash}" class="btn btn-outline">My Dashboard (${user.role})</a>
-        <a href="report-fault.html" class="btn btn-secondary">Report Fault</a>
-      `;
-    }
-  </script>
+  <script>lucide.createIcons();</script>
 </body>
 </html>

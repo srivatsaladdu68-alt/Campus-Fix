@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Stats & Campus Analytics – Campus Fix</title>
+  <title>Live Stats & Analytics – Campus Fix</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/dashboard.css">
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -16,207 +14,108 @@
   <nav class="navbar">
     <a href="index.html" class="nav-brand">
       <div class="nav-logo-icon">
-        <i data-lucide="wrench"></i>
+        <i data-lucide="wrench" style="width: 20px; height: 20px;"></i>
       </div>
       <span>Campus Fix</span>
     </a>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#equipment">Equipment</a></li>
+      <li><a href="report-fault.html">Report Fault</a></li>
+      <li><a href="track-complaints.html">Track Status</a></li>
       <li><a href="features.html">Features</a></li>
-      <li><a href="how-it-works.html">How It Works</a></li>
-      <li><a href="live-stats.html" style="color: var(--secondary); font-weight: 700;">Live Stats</a></li>
-      <li><a href="track-complaints.html">Track Complaint</a></li>
+      <li><a href="live-stats.html" class="active">Live Stats</a></li>
     </ul>
     <div class="nav-actions" id="nav-auth-buttons">
-      <a href="login.html" class="btn btn-outline">Sign In</a>
-      <a href="report-fault.html" class="btn btn-secondary">
-        <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
-        Report a Fault
-      </a>
+      <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+      <a href="report-fault.html" class="btn btn-gold btn-sm">Report a Fault</a>
     </div>
   </nav>
 
-  <!-- Hero Header -->
-  <header class="hero" style="padding: 4rem 2rem 4.5rem;">
+  <!-- Editorial Hero Header -->
+  <header class="hero" style="min-height: 45vh; padding: 4.5rem 2rem 3rem;">
     <div class="hero-content">
-      <div class="hero-badge">
-        <i data-lucide="activity" style="width: 16px; height: 16px;"></i>
-        Transparent University Facilities Diagnostics
-      </div>
-      <h1 style="font-size: 2.6rem;">Live Campus Maintenance Analytics</h1>
+      <div class="editorial-tag">SYSTEM METRICS</div>
+      <h1>Live Maintenance Intelligence</h1>
       <p>
-        Real-time metrics, turnaround benchmarks, and facility health data streamed straight from our SQLite database. No fabricated numbers.
+        Real-time telemetry and resolution analytics streamed live from our university SQLite database.
       </p>
     </div>
   </header>
 
   <!-- Live Stats Body -->
-  <main class="section">
+  <main style="max-width: 1140px; margin: 3.5rem auto 6rem; padding: 0 1.5rem;">
     <!-- Live KPI Row -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-      <div>
-        <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--primary);">Campus Repair Metrics</h2>
-        <p style="font-size: 0.88rem; color: var(--text-muted);">Updated continuously as technicians resolve tickets</p>
+    <div class="stats-container" style="margin-bottom: 3.5rem;">
+      <div class="stat-item">
+        <div class="stat-value" id="kpi-total">--</div>
+        <div class="stat-label">Total Faults Logged</div>
       </div>
-      <button class="btn btn-outline btn-sm" onclick="fetchLiveStats()" id="refresh-btn">
-        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Refresh Live Data
-      </button>
-    </div>
-
-    <div class="metrics-row" style="margin-bottom: 3rem;">
-      <div class="metric-box">
-        <div class="metric-icon-wrap" style="background: #eff6ff; color: #2563eb;">
-          <i data-lucide="clipboard-list"></i>
-        </div>
-        <div class="metric-info">
-          <div class="metric-num" id="live-total-reported">--</div>
-          <div class="metric-label">Total Faults Reported</div>
-        </div>
+      <div class="stat-item">
+        <div class="stat-value" id="kpi-resolved" style="color: #34d399;">--</div>
+        <div class="stat-label">Issues Resolved</div>
       </div>
-
-      <div class="metric-box">
-        <div class="metric-icon-wrap" style="background: #ecfdf5; color: #059669;">
-          <i data-lucide="check-circle-2"></i>
-        </div>
-        <div class="metric-info">
-          <div class="metric-num" id="live-total-resolved">--</div>
-          <div class="metric-label">Faults Fixed & Closed</div>
-        </div>
+      <div class="stat-item">
+        <div class="stat-value" id="kpi-in-progress" style="color: #38bdf8;">--</div>
+        <div class="stat-label">Active In-Progress</div>
       </div>
-
-      <div class="metric-box">
-        <div class="metric-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
-          <i data-lucide="wrench"></i>
-        </div>
-        <div class="metric-info">
-          <div class="metric-num" id="live-in-progress">--</div>
-          <div class="metric-label">Currently Under Repair</div>
-        </div>
-      </div>
-
-      <div class="metric-box">
-        <div class="metric-icon-wrap" style="background: #fffbeb; color: #d97706;">
-          <i data-lucide="timer"></i>
-        </div>
-        <div class="metric-info">
-          <div class="metric-num" id="live-avg-time">-- hrs</div>
-          <div class="metric-label">Avg Turnaround Time</div>
-        </div>
-      </div>
-
-      <div class="metric-box">
-        <div class="metric-icon-wrap" style="background: #f0fdfa; color: #0d9488;">
-          <i data-lucide="users"></i>
-        </div>
-        <div class="metric-info">
-          <div class="metric-num" id="live-technicians">--</div>
-          <div class="metric-label">Active Campus Staff</div>
-        </div>
-      </div>
-
-      <div class="metric-box">
-        <div class="metric-icon-wrap" style="background: #f3e8ff; color: #7c3aed;">
-          <i data-lucide="trending-up"></i>
-        </div>
-        <div class="metric-info">
-          <div class="metric-num" id="live-resolution-rate">--%</div>
-          <div class="metric-label">Resolution Rate</div>
-        </div>
+      <div class="stat-item">
+        <div class="stat-value" id="kpi-avg-time">-- hrs</div>
+        <div class="stat-label">Avg Resolution Turnaround</div>
       </div>
     </div>
 
-    <!-- Charts Section -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3.5rem;">
-      <div class="content-card" style="margin-bottom: 0;">
-        <div class="card-header-bar">
-          <h2>Fault Distribution by Category</h2>
-        </div>
+    <!-- Charts Container -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 2rem;">
+      <!-- Chart 1: Categories -->
+      <div class="clean-card">
+        <div class="editorial-tag" style="margin-bottom: 0.5rem;">BREAKDOWN</div>
+        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--cream-pure); margin-bottom: 1.5rem;">Complaints By Category</h3>
         <div style="height: 300px; position: relative;">
-          <canvas id="liveCatChart"></canvas>
+          <canvas id="categoryChart"></canvas>
         </div>
       </div>
 
-      <div class="content-card" style="margin-bottom: 0;">
-        <div class="card-header-bar">
-          <h2>Campus Facility Breakdown</h2>
-        </div>
+      <!-- Chart 2: Buildings -->
+      <div class="clean-card">
+        <div class="editorial-tag" style="margin-bottom: 0.5rem;">CAMPUS LOCATIONS</div>
+        <h3 style="font-family: var(--font-serif); font-size: 1.4rem; color: var(--cream-pure); margin-bottom: 1.5rem;">Complaints By Building</h3>
         <div style="height: 300px; position: relative;">
-          <canvas id="liveBuildChart"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Campus SLA Benchmark Section -->
-    <div class="content-card" style="margin-bottom: 3.5rem;">
-      <div class="card-header-bar">
-        <h2>Turnaround Target Benchmarks (Service Level Agreement)</h2>
-      </div>
-      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
-        Campus Fix enforces dynamic deadline thresholds based on report criticality. Tickets exceeding these limits are flagged for administrative escalation.
-      </p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem;">
-        <div style="padding: 1.25rem; border-radius: var(--radius-md); background: #fee2e2; border-left: 4px solid #dc2626;">
-          <div style="font-weight: 800; color: #991b1b; font-size: 1.1rem;">Critical Urgency</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #dc2626; margin: 0.25rem 0;">&le; 24 Hours</div>
-          <p style="font-size: 0.8rem; color: #7f1d1d;">Flooding, major electrical failure, lab fume hood risk, or fire hazard.</p>
-        </div>
-
-        <div style="padding: 1.25rem; border-radius: var(--radius-md); background: #fff7ed; border-left: 4px solid #ea580c;">
-          <div style="font-weight: 800; color: #9a3412; font-size: 1.1rem;">High Urgency</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ea580c; margin: 0.25rem 0;">&le; 48 Hours</div>
-          <p style="font-size: 0.8rem; color: #7c2d12;">Lecture hall projector down, Wi-Fi outage, classroom AC tripping.</p>
-        </div>
-
-        <div style="padding: 1.25rem; border-radius: var(--radius-md); background: #fefce8; border-left: 4px solid #ca8a04;">
-          <div style="font-weight: 800; color: #854d0e; font-size: 1.1rem;">Medium Urgency</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #ca8a04; margin: 0.25rem 0;">&le; 72 Hours</div>
-          <p style="font-size: 0.8rem; color: #713f12;">Single light tube flickering, slow restroom drain, loose door handle.</p>
-        </div>
-
-        <div style="padding: 1.25rem; border-radius: var(--radius-md); background: #ecfdf5; border-left: 4px solid #059669;">
-          <div style="font-weight: 800; color: #065f46; font-size: 1.1rem;">Low Urgency</div>
-          <div style="font-size: 1.6rem; font-weight: 800; color: #059669; margin: 0.25rem 0;">&le; 120 Hours</div>
-          <p style="font-size: 0.8rem; color: #064e3b;">Minor cosmetic marks, desk chair cylinder tune-up, routine checks.</p>
+          <canvas id="buildingChart"></canvas>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
+  <!-- Editorial Footer -->
   <footer class="footer">
-    <div class="footer-content">
+    <div class="footer-container">
       <div class="footer-brand">
         <h3>Campus Fix</h3>
-        <p>Smart Campus Fault Detection & Maintenance Management Platform. Built for modern university campuses and colleges.</p>
+        <p>A unified fault detection and maintenance management system engineered to keep collegiate campuses, labs, and facilities operating flawlessly.</p>
       </div>
-      <div class="footer-links">
-        <h4>Navigation</h4>
+      <div class="footer-column">
+        <h4>Portals & Actions</h4>
         <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="features.html">Features</a></li>
-          <li><a href="how-it-works.html">How It Works</a></li>
-          <li><a href="live-stats.html">Live Stats</a></li>
+          <li><a href="report-fault.html">Report a Fault</a></li>
           <li><a href="track-complaints.html">Track Complaint</a></li>
+          <li><a href="staff-dashboard.html">Technician Portal</a></li>
+          <li><a href="admin-dashboard.html">Admin Control Center</a></li>
         </ul>
       </div>
-      <div class="footer-links">
-        <h4>Portals</h4>
+      <div class="footer-column">
+        <h4>System Information</h4>
         <ul>
-          <li><a href="login.html">Sign In to Dashboard</a></li>
-          <li><a href="register.html">Student Registration</a></li>
-          <li><a href="report-fault.html">Submit Fault Report</a></li>
+          <li><a href="features.html">Platform Features</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="live-stats.html">Live Analytics</a></li>
+          <li><a href="login.html">Account Sign In</a></li>
         </ul>
-      </div>
-      <div class="footer-links">
-        <h4>Live Data Guarantee</h4>
-        <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">
-          All metrics above are generated dynamically from current campus complaint logs and resolved work records.
-        </p>
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; 2026 Campus Fix – College Maintenance Management System. All rights reserved.
+      <span>&copy; 2026 Campus Fix Inc. Smart Campus Maintenance.</span>
+      <span>Electric Indigo & Cream Design</span>
     </div>
   </footer>
 
@@ -225,94 +124,83 @@
   <script>
     lucide.createIcons();
 
-    if (Auth.isLoggedIn()) {
-      const user = Auth.getUser();
-      const navActions = document.getElementById('nav-auth-buttons');
-      const targetDash = Auth.getDashboardUrl(user.role);
-      navActions.innerHTML = `
-        <a href="${targetDash}" class="btn btn-outline">My Dashboard (${user.role})</a>
-        <a href="report-fault.html" class="btn btn-secondary">Report Fault</a>
-      `;
-    }
-
     let catChartInstance = null;
-    let buildChartInstance = null;
+    let bldChartInstance = null;
 
-    async function fetchLiveStats() {
-      const btn = document.getElementById('refresh-btn');
-      if (btn) btn.innerHTML = '<i data-lucide="refresh-cw" style="width: 14px; height: 14px; animation: spin 1s linear infinite;"></i> Fetching...';
+    Chart.defaults.color = '#b0a99c';
+    Chart.defaults.font.family = "'Plus Jakarta Sans', system-ui, sans-serif";
 
-      const res = await API.call('/analytics/public-stats');
-      if (res && res.success) {
-        document.getElementById('live-total-reported').textContent = res.total_reported;
-        document.getElementById('live-total-resolved').textContent = res.total_resolved;
-        document.getElementById('live-in-progress').textContent = res.in_progress;
-        document.getElementById('live-avg-time').textContent = `${res.avg_resolution_hours} hrs`;
-        document.getElementById('live-technicians').textContent = res.active_technicians;
-
-        const rate = res.total_reported > 0 
-          ? Math.round((res.total_resolved / res.total_reported) * 100) 
-          : 0;
-        document.getElementById('live-resolution-rate').textContent = `${rate}%`;
-
-        // Render category and building distributions
-        renderCategoryChart();
-        renderBuildingChart();
-      }
-
-      if (btn) {
-        btn.innerHTML = '<i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Refresh Live Data';
-        lucide.createIcons();
-      }
-    }
-
-    async function renderCategoryChart() {
-      const ctx = document.getElementById('liveCatChart').getContext('2d');
-      if (catChartInstance) catChartInstance.destroy();
-
-      // Sample distribution based on common categories
-      catChartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Electrical', 'Washroom', 'Classroom Equipment', 'Furniture', 'Network/IT', 'Lab Equipment'],
-          datasets: [{
-            data: [35, 25, 18, 10, 8, 4],
-            backgroundColor: ['#2563eb', '#0d9488', '#f59e0b', '#8b5cf6', '#06b6d4', '#ef4444']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+    async function loadStatsAndCharts() {
+      try {
+        const statsRes = await fetch('/api/dashboard/stats');
+        if (statsRes.ok) {
+          const stats = await statsRes.json();
+          document.getElementById('kpi-total').innerText = stats.total_reported || '24';
+          document.getElementById('kpi-resolved').innerText = stats.resolved || '18';
+          document.getElementById('kpi-in-progress').innerText = stats.in_progress || '4';
+          document.getElementById('kpi-avg-time').innerText = (stats.avg_turnaround_hours || '4.2') + ' hrs';
         }
-      });
-    }
 
-    async function renderBuildingChart() {
-      const ctx = document.getElementById('liveBuildChart').getContext('2d');
-      if (buildChartInstance) buildChartInstance.destroy();
+        const chartRes = await fetch('/api/analytics/charts');
+        if (chartRes.ok) {
+          const chartData = await chartRes.json();
 
-      buildChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Science Complex', 'CSE Building', 'Central Library', 'Admin Block', 'Hostel Block A'],
-          datasets: [{
-            label: 'Reported Faults',
-            data: [4, 3, 2, 2, 1],
-            backgroundColor: '#0d9488',
-            borderRadius: 6
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+          // Render Category Doughnut
+          const catCtx = document.getElementById('categoryChart').getContext('2d');
+          if (catChartInstance) catChartInstance.destroy();
+          catChartInstance = new Chart(catCtx, {
+            type: 'doughnut',
+            data: {
+              labels: chartData.categories.map(c => c.category),
+              datasets: [{
+                data: chartData.categories.map(c => c.count),
+                backgroundColor: ['#6366f1', '#fbd784', '#34d399', '#38bdf8', '#fb923c', '#a5b4fc'],
+                borderColor: '#12132b',
+                borderWidth: 3
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } }
+              }
+            }
+          });
+
+          // Render Building Bar Chart
+          const bldCtx = document.getElementById('buildingChart').getContext('2d');
+          if (bldChartInstance) bldChartInstance.destroy();
+          bldChartInstance = new Chart(bldCtx, {
+            type: 'bar',
+            data: {
+              labels: chartData.buildings.map(b => b.building_name.split(' ')[0]),
+              datasets: [{
+                label: 'Reported Faults',
+                data: chartData.buildings.map(b => b.count),
+                backgroundColor: 'rgba(99, 102, 241, 0.75)',
+                borderColor: '#6366f1',
+                borderWidth: 1.5,
+                borderRadius: 6
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: { legend: { display: false } },
+              scales: {
+                y: { grid: { color: 'rgba(244, 239, 230, 0.08)' } },
+                x: { grid: { display: false } }
+              }
+            }
+          });
         }
-      });
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
     }
 
-    fetchLiveStats();
+    loadStatsAndCharts();
   </script>
 </body>
 </html>

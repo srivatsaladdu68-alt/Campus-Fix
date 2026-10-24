@@ -1,4 +1,5 @@
 const db = require('../database');
+const fs = require('fs');
 const { createNotification, notifyAdmins } = require('../services/notificationService');
 
 // Helper to generate a unique complaint code like CF-2026-1042
@@ -116,6 +117,14 @@ function createFault(req, res) {
     });
   } catch (err) {
     console.error('Create fault error:', err);
+    // Clean up uploaded file if complaint could not be saved
+    if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+      try {
+        fs.unlinkSync(req.file.path);
+      } catch (unlinkErr) {
+        console.error('Failed to unlink orphaned file:', unlinkErr);
+      }
+    }
     return res.status(500).json({ success: false, message: 'Server error creating fault complaint.' });
   }
 }
