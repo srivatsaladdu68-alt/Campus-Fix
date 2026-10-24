@@ -84,11 +84,11 @@ async function loadDashboardData() {
     `;
   } else {
     notifList.innerHTML = res.notifications.map(n => `
-      <div style="padding: 0.85rem; background: ${n.is_read ? '#f8fafc' : '#eff6ff'}; border: 1px solid var(--border-color); border-radius: var(--radius-md); font-size: 0.88rem;">
-        <div style="font-weight: ${n.is_read ? '500' : '700'}; color: var(--text-main); margin-bottom: 0.25rem;">
+      <div style="padding: 0.95rem 1.15rem; background: ${n.is_read ? 'var(--bg-deep)' : 'rgba(99, 102, 241, 0.12)'}; border: 1px solid ${n.is_read ? 'var(--border-cream)' : 'var(--electric-indigo)'}; border-radius: var(--radius-md); font-size: 0.88rem; margin-bottom: 0.5rem;">
+        <div style="font-weight: ${n.is_read ? '500' : '700'}; color: var(--cream-pure); margin-bottom: 0.25rem;">
           ${escapeHtml(n.message)}
         </div>
-        <div style="font-size: 0.75rem; color: var(--text-muted);">
+        <div style="font-size: 0.75rem; color: var(--cream-muted);">
           ${API.formatDate(n.created_at)}
         </div>
       </div>
