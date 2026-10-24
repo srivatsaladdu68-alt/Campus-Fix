@@ -1,0 +1,12 @@
+{
+  "name": "campus-fix",
+  "version": "1.0.0",
+  "description": "Campus Fix - Smart Campus Fault Detection and Maintenance Management System",
+  "scripts": {
+    "start": "node backend/server.js",
+    "seed": "node backend/database.js",
+    "install:all": "cd backend && npm install"
+  },
+  "author": "Campus Fix Team",
+  "license": "ISC"
+}

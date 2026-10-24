@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="100%" height="100%">
+  <defs>
+    <linearGradient id="wall" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="pipe" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="50%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <radialGradient id="water" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.3"/>
+    </radialGradient>
+  </defs>
+  <rect width="500" height="350" fill="url(#wall)" rx="16"/>
+  <!-- Tiles -->
+  <line x1="0" y1="260" x2="500" y2="260" stroke="#475569" stroke-width="2"/>
+  <line x1="120" y1="260" x2="80" y2="350" stroke="#475569" stroke-width="1.5"/>
+  <line x1="260" y1="260" x2="220" y2="350" stroke="#475569" stroke-width="1.5"/>
+  <line x1="400" y1="260" x2="360" y2="350" stroke="#475569" stroke-width="1.5"/>
+
+  <!-- Sink Base -->
+  <rect x="160" y="40" width="180" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="3"/>
+  <rect x="220" y="70" width="60" height="20" fill="#e2e8f0"/>
+
+  <!-- Vertical Drain Pipe & Trap -->
+  <path d="M 250 85 L 250 140 Q 250 180 280 180 Q 310 180 310 140 L 310 120" fill="none" stroke="url(#pipe)" stroke-width="18" stroke-linecap="round"/>
+  <!-- Supply Pipe Connection -->
+  <path d="M 200 120 L 200 230 L 150 230" fill="none" stroke="url(#pipe)" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- Joint Fitting Leak with Spray/Drips -->
+  <rect x="190" y="160" width="20" height="15" fill="#f59e0b" rx="3"/>
+  <!-- Water Spray Rays -->
+  <path d="M 190 168 L 140 155 M 190 170 L 135 170 M 190 172 L 145 185" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="3,3"/>
+  <circle cx="150" cy="180" r="3.5" fill="#38bdf8"/>
+  <circle cx="170" cy="210" r="4" fill="#38bdf8"/>
+  <circle cx="210" cy="225" r="4.5" fill="#38bdf8"/>
+  <circle cx="205" cy="250" r="5" fill="#0284c7"/>
+
+  <!-- Water Puddle on Floor -->
+  <ellipse cx="230" cy="295" rx="140" ry="25" fill="url(#water)"/>
+  <ellipse cx="220" cy="295" rx="110" ry="18" fill="#38bdf8" opacity="0.6"/>
+
+  <!-- Warning Badge -->
+  <rect x="20" y="20" width="230" height="38" rx="8" fill="#dc2626" opacity="0.95"/>
+  <text x="32" y="44" fill="white" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">🚨 ACTIVE WATER LEAKAGE</text>
+  <text x="20" y="335" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="13">Location: Science Complex - Restroom 2B</text>
+</svg>

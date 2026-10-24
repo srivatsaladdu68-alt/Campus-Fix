@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Fix – Smart Campus Fault Detection & Maintenance System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-icon">
+        <i data-lucide="wrench"></i>
+      </div>
+      <span>Campus Fix</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" style="color: var(--secondary); font-weight: 700;">Home</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="live-stats.html">Live Stats</a></li>
+      <li><a href="track-complaints.html">Track Complaint</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-buttons">
+      <a href="login.html" class="btn btn-outline">Sign In</a>
+      <a href="report-fault.html" class="btn btn-secondary">
+        <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
+        Report a Fault
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i data-lucide="sparkles" style="width: 16px; height: 16px;"></i>
+        Intelligent Campus Maintenance Platform
+      </div>
+      <h1>A Smarter Campus Starts with Faster Fixes.</h1>
+      <p>
+        Say goodbye to broken projectors, leaking washroom taps, and delayed repairs. Campus Fix empowers students, faculty, and administrators with transparent fault tracking, rapid dispatch, and automated maintenance intelligence.
+      </p>
+      <div class="hero-actions">
+        <a href="report-fault.html" class="btn btn-secondary btn-lg">
+          <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
+          Report a Fault
+        </a>
+        <a href="track-complaints.html" class="btn btn-outline btn-lg" style="color: white !important; border-color: rgba(255,255,255,0.4);">
+          <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+          Track Complaint
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Statistics Banner (Populated dynamically from DB) -->
+  <section class="stats-banner" id="statistics">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon primary">
+          <i data-lucide="clipboard-list"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-total-reported">--</h3>
+          <p>Total Faults Reported</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon success">
+          <i data-lucide="check-circle-2"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-total-resolved">--</h3>
+          <p>Issues Resolved</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon warning">
+          <i data-lucide="clock"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-avg-time">-- hrs</h3>
+          <p>Average Resolution Time</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon teal">
+          <i data-lucide="users"></i>
+        </div>
+        <div class="stat-info">
+          <h3 id="stat-technicians">--</h3>
+          <p>Active Staff & Technicians</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features -->
+  <section class="section" id="features">
+    <div class="section-header">
+      <span class="section-tag">Why Campus Fix</span>
+      <h2 class="section-title">Engineered for Fast, Accountable Maintenance</h2>
+      <p class="section-desc">Transforming manual paper registers and forgotten emails into an organized, responsive workflow for universities.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="camera"></i>
+        </div>
+        <h3>Rapid Fault Reporting</h3>
+        <p>Submit classroom, lab, washroom, or electrical issues in under 60 seconds with exact building, room, and photo uploads.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="git-commit"></i>
+        </div>
+        <h3>Real-Time Tracking</h3>
+        <p>Monitor progress step-by-step from initial verification to staff assignment and completion with visual status timelines.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="zap"></i>
+        </div>
+        <h3>Smart Duplicate Detection</h3>
+        <p>Intelligent checks alert reporters if a problem has already been logged in the same classroom, preventing duplicate work orders.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="cpu"></i>
+        </div>
+        <h3>IoT-Ready Architecture</h3>
+        <p>Designed with open telemetry APIs ready to accept automatic alerts from water sensors, temperature meters, and circuit monitors.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Real Campus Equipment & Facilities Gallery -->
+  <section class="section" style="background: #f1f5f9; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); max-width: 100%; padding: 4.5rem 2rem;">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div class="section-header">
+        <span class="section-tag">Visual Facilities Directory</span>
+        <h2 class="section-title">Campus Equipment Handled by Campus Fix</h2>
+        <p class="section-desc">Real-time tracking and maintenance for all university facilities, from lecture halls to research labs.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.75rem;">
+        <!-- Card 1: Chair -->
+        <div class="feature-card" style="padding: 1.25rem; background: white; border-radius: var(--radius-lg); overflow: hidden;">
+          <img src="images/chair_broken_fault.svg" alt="Broken Study Chair" style="width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-verified">Furniture</span>
+            <span class="badge badge-low">Low / Medium</span>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 0.35rem;">Ergonomic Study Chairs & Desks</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+            Snapped hydraulic gas lifts, tilted seat bases, missing caster wheels, and broken classroom study benches.
+          </p>
+          <a href="report-fault.html" class="btn btn-outline btn-sm" style="width: 100%;">Report Chair / Desk</a>
+        </div>
+
+        <!-- Card 2: Pipe -->
+        <div class="feature-card" style="padding: 1.25rem; background: white; border-radius: var(--radius-lg); overflow: hidden;">
+          <img src="images/pipe_leak_fault.svg" alt="Water Pipe Leak" style="width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-reported">Plumbing</span>
+            <span class="badge badge-critical">Critical</span>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 0.35rem;">Water Supply Pipes & Restroom Taps</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+            Joint connection bursts, sink drainage clogs, continuous tap dripping, and washroom flooding hazards.
+          </p>
+          <a href="report-fault.html" class="btn btn-outline btn-sm" style="width: 100%;">Report Plumbing Leak</a>
+        </div>
+
+        <!-- Card 3: Projector -->
+        <div class="feature-card" style="padding: 1.25rem; background: white; border-radius: var(--radius-lg); overflow: hidden;">
+          <img src="images/projector_fault.svg" alt="Ceiling Projector Fault" style="width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-assigned">Classroom Equipment</span>
+            <span class="badge badge-high">High Urgency</span>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 0.35rem;">Classroom Ceiling Projectors</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+            Damaged HDMI/VGA ports, lamp replacement warnings, ceiling mount vibration, and lecture blackout issues.
+          </p>
+          <a href="report-fault.html" class="btn btn-outline btn-sm" style="width: 100%;">Report Projector Issue</a>
+        </div>
+
+        <!-- Card 4: AC -->
+        <div class="feature-card" style="padding: 1.25rem; background: white; border-radius: var(--radius-lg); overflow: hidden;">
+          <img src="images/ac_fault.svg" alt="AC Compressor Tripping" style="width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-reported">Electrical & HVAC</span>
+            <span class="badge badge-critical">Critical</span>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 0.35rem;">Central AC & Compressor Units</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+            Compressor overheating error codes, circuit breaker tripping, water leakage from indoor splits, and server room cooling.
+          </p>
+          <a href="report-fault.html" class="btn btn-outline btn-sm" style="width: 100%;">Report AC / HVAC</a>
+        </div>
+
+        <!-- Card 5: Wi-Fi -->
+        <div class="feature-card" style="padding: 1.25rem; background: white; border-radius: var(--radius-lg); overflow: hidden;">
+          <img src="images/wifi_fault.svg" alt="Wi-Fi Router Offline" style="width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-assigned">Network / IT</span>
+            <span class="badge badge-medium">Medium</span>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 0.35rem;">Campus Wi-Fi Access Points</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+            Hostel and department corridor access points flashing offline, DHCP failure, and loose PoE Ethernet wiring.
+          </p>
+          <a href="report-fault.html" class="btn btn-outline btn-sm" style="width: 100%;">Report Network Issue</a>
+        </div>
+
+        <!-- Card 6: Lab PC -->
+        <div class="feature-card" style="padding: 1.25rem; background: white; border-radius: var(--radius-lg); overflow: hidden;">
+          <img src="images/computer_lab.svg" alt="Lab PC Hardware Failure" style="width: 100%; height: 180px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 1rem; border: 1px solid var(--border-color);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-verified">Laboratory Equipment</span>
+            <span class="badge badge-high">High</span>
+          </div>
+          <h3 style="font-size: 1.15rem; color: var(--primary); font-weight: 700; margin-bottom: 0.35rem;">Computer Lab Workstations</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+            Operating system crashes, non-booting workstation towers, faulty monitor displays, and laboratory peripheral issues.
+          </p>
+          <a href="report-fault.html" class="btn btn-outline btn-sm" style="width: 100%;">Report Lab PC</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works (Three-step explanation) -->
+  <section class="section" id="how-it-works" style="background: white; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="section-header">
+      <span class="section-tag">Workflow</span>
+      <h2 class="section-title">How Campus Fix Works</h2>
+      <p class="section-desc">A transparent 3-step cycle ensuring zero maintenance requests are lost.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--primary);">Report The Fault</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Students or faculty select the facility, specify the building and room, snap a photo, and submit the ticket with urgency details.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--primary);">Verify & Assign</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Administrators verify complaint urgency and instantly dispatch the appropriate technician (Electrician, Plumber, IT) with clear deadlines.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--primary);">Fix & Confirm</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">Staff execute repairs, record notes, and mark tasks resolved. Reporters receive instant updates and can reopen if issues persist.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>Campus Fix</h3>
+        <p>Smart Campus Fault Detection & Maintenance Management Platform. Built for modern university campuses and colleges.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="live-stats.html">Live Stats</a></li>
+          <li><a href="track-complaints.html">Track Complaint</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Support & Help</h4>
+        <ul>
+          <li><a href="mailto:support@campusfix.edu">Emergency Facilities Desk</a></li>
+          <li><a href="how-it-works.html">Reporting Workflow</a></li>
+          <li><a href="login.html">Staff & Admin Access</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Facility Coverage</h4>
+        <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">
+          Covers Electrical, HVAC, Washrooms, Computer Labs, Smart Classrooms, Library, Hostels, and Campus Sports Centers.
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Campus Fix – College Maintenance Management System. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Check if user is logged in and adjust navbar buttons
+    if (Auth.isLoggedIn()) {
+      const user = Auth.getUser();
+      const navActions = document.getElementById('nav-auth-buttons');
+      const targetDash = Auth.getDashboardUrl(user.role);
+      navActions.innerHTML = `
+        <a href="${targetDash}" class="btn btn-outline">My Dashboard (${user.role})</a>
+        <a href="report-fault.html" class="btn btn-secondary">Report Fault</a>
+      `;
+    }
+
+    // Load Live Statistics from Backend Database
+    async function loadStats() {
+      const res = await API.call('/analytics/public-stats');
+      if (res && res.success) {
+        document.getElementById('stat-total-reported').textContent = res.total_reported;
+        document.getElementById('stat-total-resolved').textContent = res.total_resolved;
+        document.getElementById('stat-avg-time').textContent = `${res.avg_resolution_hours} hrs`;
+        document.getElementById('stat-technicians').textContent = res.active_technicians;
+      }
+    }
+    loadStats();
+  </script>
+</body>
+</html>

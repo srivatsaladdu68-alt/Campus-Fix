@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-icon">
+        <i data-lucide="wrench"></i>
+      </div>
+      <span>Campus Fix</span>
+    </a>
+    <div class="nav-actions">
+      <a href="index.html" class="btn btn-outline">Back to Home</a>
+    </div>
+  </nav>
+
+  <!-- Login Card Container -->
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="nav-logo-icon" style="margin: 0 auto 1rem; width: 44px; height: 44px;">
+          <i data-lucide="lock" style="width: 22px; height: 22px;"></i>
+        </div>
+        <h2>Sign In to Campus Fix</h2>
+        <p>Access your campus maintenance dashboard</p>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Campus Email</label>
+          <input type="email" id="email" class="form-control" placeholder="user@campusfix.edu" required autofocus>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="login-btn">
+          <i data-lucide="log-in" style="width: 18px; height: 18px;"></i>
+          Sign In
+        </button>
+      </form>
+
+      <p style="text-align: center; font-size: 0.88rem; margin-top: 1.5rem; color: var(--text-muted);">
+        Don't have an account? <a href="register.html" style="font-weight: 600;">Register as Student / Faculty</a>
+      </p>
+
+      <!-- Quick Demo Account Switcher -->
+      <div class="demo-accounts">
+        <div class="demo-accounts-title">Quick Demo Login (1-Click Test):</div>
+        <div class="demo-btn-group">
+          <button type="button" class="demo-btn" onclick="fillCreds('admin@campusfix.edu', 'Admin@123')">
+            Administrator
+          </button>
+          <button type="button" class="demo-btn" onclick="fillCreds('staff.mike@campusfix.edu', 'Staff@123')">
+            Staff (Electrician)
+          </button>
+          <button type="button" class="demo-btn" onclick="fillCreds('staff.sarah@campusfix.edu', 'Staff@123')">
+            Staff (Plumber)
+          </button>
+          <button type="button" class="demo-btn" onclick="fillCreds('student.alex@campusfix.edu', 'Student@123')">
+            Student (Alex)
+          </button>
+          <button type="button" class="demo-btn" onclick="fillCreds('prof.sharma@campusfix.edu', 'Faculty@123')">
+            Faculty (Prof. Sharma)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    lucide.createIcons();
+    Auth.redirectIfLoggedIn();
+
+    // Check for expired session query
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('expired')) {
+      API.showToast('Your session has expired. Please sign in again.', 'warning');
+    }
+
+    function fillCreds(email, pass) {
+      document.getElementById('email').value = email;
+      document.getElementById('password').value = pass;
+      API.showToast(`Selected demo credentials for ${email}`, 'info');
+    }
+
+    const form = document.getElementById('login-form');
+    const submitBtn = document.getElementById('login-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        API.showToast('Please enter both email and password.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Signing in...';
+
+      const res = await API.call('/auth/login', 'POST', { email, password });
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i data-lucide="log-in" style="width: 18px; height: 18px;"></i> Sign In';
+      lucide.createIcons();
+
+      if (res && res.success) {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        API.showToast(`Welcome back, ${res.user.full_name}!`, 'success');
+
+        const redirect = urlParams.get('redirect') || Auth.getDashboardUrl(res.user.role);
+        setTimeout(() => {
+          window.location.href = redirect;
+        }, 500);
+      } else {
+        API.showToast(res.message || 'Login failed. Please check credentials.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>

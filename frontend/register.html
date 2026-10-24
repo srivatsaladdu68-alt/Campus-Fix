@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-icon">
+        <i data-lucide="wrench"></i>
+      </div>
+      <span>Campus Fix</span>
+    </a>
+    <div class="nav-actions">
+      <a href="login.html" class="btn btn-outline">Already registered? Sign In</a>
+    </div>
+  </nav>
+
+  <!-- Register Card Container -->
+  <div class="auth-wrapper">
+    <div class="auth-card" style="max-width: 520px;">
+      <div class="auth-header">
+        <div class="nav-logo-icon" style="margin: 0 auto 1rem; width: 44px; height: 44px;">
+          <i data-lucide="user-plus" style="width: 22px; height: 22px;"></i>
+        </div>
+        <h2>Create an Account</h2>
+        <p>Report and track campus maintenance requests seamlessly</p>
+      </div>
+
+      <form id="register-form">
+        <div class="form-group">
+          <label for="full_name">Full Name *</label>
+          <input type="text" id="full_name" class="form-control" placeholder="e.g. John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Campus Email Address *</label>
+          <input type="email" id="email" class="form-control" placeholder="john.doe@campusfix.edu" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" class="form-control" placeholder="+91 98765 43210">
+          </div>
+
+          <div class="form-group">
+            <label for="role">Campus Role *</label>
+            <select id="role" class="form-control" required>
+              <option value="student">Student</option>
+              <option value="faculty">Faculty / Instructor</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" id="password" class="form-control" placeholder="At least 6 characters" required>
+          </div>
+
+          <div class="form-group">
+            <label for="confirm_password">Confirm Password *</label>
+            <input type="password" id="confirm_password" class="form-control" placeholder="Re-enter password" required>
+          </div>
+        </div>
+
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          * Note: Maintenance Staff and Administrator accounts are assigned by the Campus Facilities Admin.
+        </div>
+
+        <button type="submit" class="btn btn-secondary" style="width: 100%;" id="register-btn">
+          <i data-lucide="check" style="width: 18px; height: 18px;"></i>
+          Register Account
+        </button>
+      </form>
+
+      <p style="text-align: center; font-size: 0.88rem; margin-top: 1.5rem; color: var(--text-muted);">
+        Already have an account? <a href="login.html" style="font-weight: 600;">Sign In here</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    lucide.createIcons();
+    Auth.redirectIfLoggedIn();
+
+    const form = document.getElementById('register-form');
+    const submitBtn = document.getElementById('register-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const full_name = document.getElementById('full_name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const role = document.getElementById('role').value;
+      const password = document.getElementById('password').value;
+      const confirm_password = document.getElementById('confirm_password').value;
+
+      if (!full_name || !email || !password) {
+        API.showToast('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        API.showToast('Password must be at least 6 characters.', 'error');
+        return;
+      }
+
+      if (password !== confirm_password) {
+        API.showToast('Passwords do not match.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Registering...';
+
+      const res = await API.call('/auth/register', 'POST', {
+        full_name,
+        email,
+        phone,
+        role,
+        password
+      });
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i data-lucide="check" style="width: 18px; height: 18px;"></i> Register Account';
+      lucide.createIcons();
+
+      if (res && res.success) {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        API.showToast('Account registered successfully! Welcome.', 'success');
+        setTimeout(() => {
+          window.location.href = Auth.getDashboardUrl(res.user.role);
+        }, 600);
+      } else {
+        API.showToast(res.message || 'Registration failed.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>

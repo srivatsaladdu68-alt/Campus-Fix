@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator Dashboard – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="nav-logo-icon">
+          <i data-lucide="shield"></i>
+        </div>
+        <div>
+          <div class="brand-title">Campus Fix</div>
+          <div class="brand-subtitle" style="color: #60a5fa;">Admin Control Center</div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <span class="nav-category">Management</span>
+        <a href="#overview" class="sidebar-link active" onclick="switchTab('overview')">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Analytics Overview</span>
+        </a>
+        <a href="#complaints" class="sidebar-link" onclick="switchTab('complaints')">
+          <i data-lucide="list-checks"></i>
+          <span>All Complaints</span>
+        </a>
+        <a href="#reports" class="sidebar-link" onclick="switchTab('reports')">
+          <i data-lucide="file-spreadsheet"></i>
+          <span>Reports & CSV Export</span>
+        </a>
+        <a href="#staff-mgmt" class="sidebar-link" onclick="switchTab('staff-mgmt')">
+          <i data-lucide="users"></i>
+          <span>Staff Directory</span>
+        </a>
+        <a href="notifications.html" class="sidebar-link">
+          <i data-lucide="bell"></i>
+          <span>Notifications</span>
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="user-avatar-initials" style="background: linear-gradient(135deg, #2563eb, #7c3aed);">A</div>
+          <div class="user-details">
+            <div class="user-name" id="user-display-name">Admin</div>
+            <span class="user-role-badge" id="user-display-role" style="color: #60a5fa;">Administrator</span>
+          </div>
+          <button onclick="Auth.logout()" title="Logout" style="background:none;border:none;color:#94a3b8;cursor:pointer;padding:4px;">
+            <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Campus Facilities Control</h1>
+          <p>Real-time campus fault intelligence, workload dispatch, and facility diagnostics</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline" onclick="openAddStaffModal()">
+            <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
+            Register Staff
+          </button>
+          <button class="btn btn-secondary" onclick="exportDataCSV()">
+            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+            Export CSV
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+
+        <!-- TAB 1: Analytics Overview -->
+        <div id="tab-overview">
+          <!-- Metric KPI Boxes -->
+          <div class="metrics-row">
+            <div class="metric-box">
+              <div class="metric-icon-wrap" style="background: #eff6ff; color: #2563eb;">
+                <i data-lucide="clipboard-list"></i>
+              </div>
+              <div class="metric-info">
+                <div class="metric-num" id="admin-total-faults">0</div>
+                <div class="metric-label">Total Faults</div>
+              </div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-icon-wrap" style="background: #fffbeb; color: #d97706;">
+                <i data-lucide="alert-circle"></i>
+              </div>
+              <div class="metric-info">
+                <div class="metric-num" id="admin-open-complaints">0</div>
+                <div class="metric-label">Open Complaints</div>
+              </div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-icon-wrap" style="background: #fee2e2; color: #dc2626;">
+                <i data-lucide="flame"></i>
+              </div>
+              <div class="metric-info">
+                <div class="metric-num" id="admin-critical-faults">0</div>
+                <div class="metric-label">Critical Issues</div>
+              </div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
+                <i data-lucide="wrench"></i>
+              </div>
+              <div class="metric-info">
+                <div class="metric-num" id="admin-in-progress">0</div>
+                <div class="metric-label">In Progress</div>
+              </div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-icon-wrap" style="background: #ecfdf5; color: #059669;">
+                <i data-lucide="check-circle-2"></i>
+              </div>
+              <div class="metric-info">
+                <div class="metric-num" id="admin-resolved">0</div>
+                <div class="metric-label">Resolved Fixed</div>
+              </div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-icon-wrap" style="background: #fdf2f8; color: #db2777;">
+                <i data-lucide="timer"></i>
+              </div>
+              <div class="metric-info">
+                <div class="metric-num" id="admin-avg-time">0 hrs</div>
+                <div class="metric-label">Avg Repair Time</div>
+              </div>
+            </div>
+
+            <div class="metric-box">
+              <div class="metric-icon-wrap" style="background: #fef2f2; color: #dc2626;">
+                <i data-lucide="clock"></i>
+              </div>
+              <div class="metric-info">
+                <div class="metric-num" id="admin-overdue">0</div>
+                <div class="metric-label">Overdue Tickets</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recurring Fault Warning Banner (Phase 2 Intelligent Maintenance) -->
+          <div id="recurring-alert-box" style="display: none; background: #fffbeb; border: 1px solid #fcd34d; border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 2rem;">
+            <div style="display: flex; gap: 0.75rem; align-items: start;">
+              <i data-lucide="alert-triangle" style="color: #d97706; width: 24px; height: 24px; flex-shrink: 0;"></i>
+              <div style="flex: 1;">
+                <h4 style="color: #92400e; font-size: 0.95rem; font-weight: 700;">Intelligent Maintenance Alert: Recurring Problem Spots Detected</h4>
+                <div id="recurring-list" style="margin-top: 0.4rem; font-size: 0.88rem; color: #b45309;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row 1: Trends & Categories -->
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="content-card" style="margin-bottom: 0;">
+              <div class="card-header-bar">
+                <h2>Complaint Trends (Reported vs Resolved)</h2>
+              </div>
+              <div style="height: 280px; position: relative;">
+                <canvas id="trendChart"></canvas>
+              </div>
+            </div>
+
+            <div class="content-card" style="margin-bottom: 0;">
+              <div class="card-header-bar">
+                <h2>Faults by Category</h2>
+              </div>
+              <div style="height: 280px; position: relative;">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts Row 2: Building Breakdown & Staff Workload -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="content-card" style="margin-bottom: 0;">
+              <div class="card-header-bar">
+                <h2>Faults by Campus Building</h2>
+              </div>
+              <div style="height: 280px; position: relative;">
+                <canvas id="buildingChart"></canvas>
+              </div>
+            </div>
+
+            <div class="content-card" style="margin-bottom: 0;">
+              <div class="card-header-bar">
+                <h2>Staff Workload & Performance</h2>
+              </div>
+              <div style="height: 280px; position: relative;">
+                <canvas id="staffChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 2: Complaints Management Table -->
+        <div id="tab-complaints" style="display: none;">
+          <!-- Filter Controls -->
+          <div class="filter-bar">
+            <div class="search-input-wrap">
+              <i data-lucide="search" class="search-icon" style="width: 16px; height: 16px;"></i>
+              <input type="text" id="admin-search-input" placeholder="Search title, complaint code, student, room...">
+            </div>
+
+            <select id="admin-filter-status" class="form-control" style="width: auto;">
+              <option value="">All Statuses</option>
+              <option value="Reported">Reported</option>
+              <option value="Verified">Verified</option>
+              <option value="Assigned">Assigned</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Closed">Closed</option>
+              <option value="Rejected">Rejected</option>
+              <option value="Reopened">Reopened</option>
+            </select>
+
+            <select id="admin-filter-category" class="form-control" style="width: auto;">
+              <option value="">All Categories</option>
+              <option value="Electrical">Electrical</option>
+              <option value="Plumbing">Plumbing</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Classroom Equipment">Classroom Equipment</option>
+              <option value="Laboratory Equipment">Laboratory Equipment</option>
+              <option value="Network/IT">Network / IT</option>
+              <option value="Washroom">Washroom</option>
+              <option value="Safety">Safety</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <select id="admin-filter-priority" class="form-control" style="width: auto;">
+              <option value="">All Priorities</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+
+            <button id="admin-reset-btn" class="btn btn-outline btn-sm">Reset</button>
+          </div>
+
+          <div class="content-card">
+            <div class="card-header-bar">
+              <h2>All Campus Fault Tickets</h2>
+              <span id="admin-complaints-count" style="font-size: 0.85rem; color: var(--text-muted);">0 complaints</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Code & Overdue</th>
+                    <th>Photo</th>
+                    <th>Equipment & Issue</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Reported By</th>
+                    <th>Assigned Staff</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-complaints-tbody">
+                  <tr>
+                    <td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+                      Loading complaints directory...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: Reports & CSV Export -->
+        <div id="tab-reports" style="display: none;">
+          <div class="content-card" style="max-width: 800px; margin: 0 auto;">
+            <div class="card-header-bar">
+              <h2>Generate Filtered Maintenance Report</h2>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+              Download university compliance, work order history, and repair turnaround metrics in standard CSV spreadsheet format.
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+              <div class="form-group">
+                <label for="report-start-date">Start Date</label>
+                <input type="date" id="report-start-date" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label for="report-end-date">End Date</label>
+                <input type="date" id="report-end-date" class="form-control">
+              </div>
+
+              <div class="form-group">
+                <label for="report-category">Category</label>
+                <select id="report-category" class="form-control">
+                  <option value="">All Categories</option>
+                  <option value="Electrical">Electrical</option>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Furniture">Furniture</option>
+                  <option value="Classroom Equipment">Classroom Equipment</option>
+                  <option value="Laboratory Equipment">Laboratory Equipment</option>
+                  <option value="Network/IT">Network / IT</option>
+                  <option value="Washroom">Washroom</option>
+                  <option value="Safety">Safety</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="report-status">Status</label>
+                <select id="report-status" class="form-control">
+                  <option value="">All Statuses</option>
+                  <option value="Reported">Reported</option>
+                  <option value="Verified">Verified</option>
+                  <option value="Assigned">Assigned</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Resolved">Resolved</option>
+                  <option value="Closed">Closed</option>
+                  <option value="Rejected">Rejected</option>
+                  <option value="Reopened">Reopened</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; text-align: right;">
+              <button class="btn btn-secondary btn-lg" onclick="downloadFilteredCSV()">
+                <i data-lucide="download" style="width: 20px; height: 20px;"></i>
+                Download CSV Spreadsheet
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: Staff Directory Management -->
+        <div id="tab-staff-mgmt" style="display: none;">
+          <div class="content-card">
+            <div class="card-header-bar">
+              <h2>Authorized Campus Maintenance Technicians</h2>
+              <button class="btn btn-primary btn-sm" onclick="openAddStaffModal()">
+                <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i> Register New Staff
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Staff Name</th>
+                    <th>Email Address</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody id="staff-directory-tbody">
+                  <tr>
+                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading technicians...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Admin Assign Staff & Priority Modal -->
+  <div class="modal-overlay" id="assign-modal">
+    <div class="modal-card" style="max-width: 550px;">
+      <div class="modal-header">
+        <div>
+          <span class="complaint-code-tag" id="assign-modal-code">CF-2026-XXXX</span>
+          <h3 id="assign-modal-title" style="margin-top: 0.35rem;">Assign Maintenance Staff</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeAssignModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="assign-form">
+          <div class="form-group">
+            <label for="assign-staff-select">Assign Technician *</label>
+            <select id="assign-staff-select" class="form-control" required>
+              <option value="">Loading technicians...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="assign-priority-select">Adjust Priority</label>
+            <select id="assign-priority-select" class="form-control">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="assign-deadline">Target Completion Deadline</label>
+            <input type="datetime-local" id="assign-deadline" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="assign-notes">Admin Dispatch Note</label>
+            <textarea id="assign-notes" class="form-control" rows="2" placeholder="e.g. Please check during evening break to avoid class interruption"></textarea>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeAssignModal()">Cancel</button>
+        <button type="button" class="btn btn-secondary" id="confirm-assign-btn">
+          Confirm Assignment
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Status Change Modal -->
+  <div class="modal-overlay" id="status-modal">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 id="status-modal-title">Change Complaint Status</h3>
+        <button class="modal-close-btn" onclick="closeStatusModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="change-status-select">Select New Status *</label>
+          <select id="change-status-select" class="form-control">
+            <option value="Reported">Reported</option>
+            <option value="Verified">Verified</option>
+            <option value="Assigned">Assigned</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Closed">Closed</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Reopened">Reopened</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="change-status-notes">Status Change Notes / Reason</label>
+          <textarea id="change-status-notes" class="form-control" rows="3" placeholder="Reason for status update..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeStatusModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="confirm-status-btn">Save Status</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Staff Member Modal (Admin only) -->
+  <div class="modal-overlay" id="add-staff-modal">
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>Register Maintenance Staff</h3>
+        <button class="modal-close-btn" onclick="closeAddStaffModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="add-staff-form">
+          <div class="form-group">
+            <label for="new-staff-name">Staff Full Name *</label>
+            <input type="text" id="new-staff-name" class="form-control" placeholder="e.g. Robert Smith (HVAC)" required>
+          </div>
+          <div class="form-group">
+            <label for="new-staff-email">Staff Email *</label>
+            <input type="email" id="new-staff-email" class="form-control" placeholder="staff.robert@campusfix.edu" required>
+          </div>
+          <div class="form-group">
+            <label for="new-staff-phone">Contact Phone</label>
+            <input type="tel" id="new-staff-phone" class="form-control" placeholder="+91 98765 00000">
+          </div>
+          <div class="form-group">
+            <label for="new-staff-password">Initial Password *</label>
+            <input type="password" id="new-staff-password" class="form-control" placeholder="At least 6 characters" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeAddStaffModal()">Cancel</button>
+        <button type="button" class="btn btn-secondary" id="confirm-add-staff-btn">Create Staff Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

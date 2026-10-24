@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report a Fault – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="nav-logo-icon">
+          <i data-lucide="wrench"></i>
+        </div>
+        <div>
+          <div class="brand-title">Campus Fix</div>
+          <div class="brand-subtitle" id="sidebar-role-label">Portal</div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <span class="nav-category">Main Menu</span>
+        <a href="dashboard.html" class="sidebar-link" id="nav-dash-link">
+          <i data-lucide="layout-dashboard"></i>
+          <span>My Dashboard</span>
+        </a>
+        <a href="report-fault.html" class="sidebar-link active">
+          <i data-lucide="plus-circle"></i>
+          <span>Report Fault</span>
+        </a>
+        <a href="track-complaints.html" class="sidebar-link">
+          <i data-lucide="search"></i>
+          <span>Track Complaints</span>
+        </a>
+        <a href="notifications.html" class="sidebar-link">
+          <i data-lucide="bell"></i>
+          <span>Notifications</span>
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="user-avatar-initials">U</div>
+          <div class="user-details">
+            <div class="user-name" id="user-display-name">Loading...</div>
+            <span class="user-role-badge" id="user-display-role">Student</span>
+          </div>
+          <button onclick="Auth.logout()" title="Logout" style="background:none;border:none;color:#94a3b8;cursor:pointer;padding:4px;">
+            <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Report a Campus Fault</h1>
+          <p>Submit problem details for rapid maintenance dispatch</p>
+        </div>
+        <div class="topbar-actions">
+          <a href="track-complaints.html" class="btn btn-outline">
+            <i data-lucide="list" style="width: 18px; height: 18px;"></i>
+            My Complaints
+          </a>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <div class="content-card" style="max-width: 850px; margin: 0 auto;">
+          <div class="card-header-bar">
+            <div>
+              <h2>Fault Report Form</h2>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Please provide accurate location info to expedite the technician visit.</p>
+            </div>
+            <span class="badge badge-assigned" style="font-size: 0.8rem;">
+              <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i> Authenticated Submission
+            </span>
+          </div>
+
+          <!-- Real-Time Duplicate Warning Alert -->
+          <div id="duplicate-warning" style="display: none; background: #fffbeb; border: 1px solid #fcd34d; border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+            <div style="display: flex; gap: 0.75rem; align-items: start;">
+              <i data-lucide="alert-circle" style="color: #d97706; width: 22px; height: 22px; flex-shrink: 0;"></i>
+              <div>
+                <strong style="color: #92400e; font-size: 0.95rem;">Possible Duplicate Issue Detected</strong>
+                <p style="color: #b45309; font-size: 0.85rem; margin-top: 0.25rem;" id="duplicate-warning-text"></p>
+              </div>
+            </div>
+          <!-- Visual Quick Equipment Picker -->
+          <div style="margin-bottom: 1.5rem;">
+            <label style="font-size: 0.88rem; font-weight: 700; color: var(--primary); display: block; margin-bottom: 0.5rem;">
+              Quick Select Equipment / Facility (1-Click Fill):
+            </label>
+            <div class="quick-picker-grid">
+              <div class="quick-picker-card" onclick="quickFillEquipment('Ergonomic Study Chair', 'Furniture', 'Broken chair hydraulic cylinder or tilted base', 'Low')">
+                <img src="images/chair_broken_fault.svg" alt="Chair">
+                <span>Study Chair</span>
+              </div>
+              <div class="quick-picker-card" onclick="quickFillEquipment('Under-Sink Water Pipe', 'Plumbing', 'Water pipe joint leak flooding restroom floor', 'Critical')">
+                <img src="images/pipe_leak_fault.svg" alt="Pipe">
+                <span>Water Pipe</span>
+              </div>
+              <div class="quick-picker-card" onclick="quickFillEquipment('Classroom Projector', 'Classroom Equipment', 'Ceiling projector loose HDMI port causing blackout', 'High')">
+                <img src="images/projector_fault.svg" alt="Projector">
+                <span>Projector</span>
+              </div>
+              <div class="quick-picker-card" onclick="quickFillEquipment('Central AC Compressor', 'Electrical', 'AC unit compressor overheating error code E4', 'Critical')">
+                <img src="images/ac_fault.svg" alt="AC">
+                <span>AC Unit</span>
+              </div>
+              <div class="quick-picker-card" onclick="quickFillEquipment('Wi-Fi Access Point', 'Network/IT', 'Corridor Wi-Fi access point flashing offline', 'Medium')">
+                <img src="images/wifi_fault.svg" alt="Wi-Fi">
+                <span>Wi-Fi Router</span>
+              </div>
+              <div class="quick-picker-card" onclick="quickFillEquipment('Fluorescent Tube Light', 'Electrical', 'Ceiling tube light fixture violently flickering', 'Medium')">
+                <img src="images/tubelight_fault.svg" alt="Light">
+                <span>Tube Light</span>
+              </div>
+              <div class="quick-picker-card" onclick="quickFillEquipment('Computer Lab Workstation', 'Laboratory Equipment', 'Lab PC boot error and hardware freeze', 'High')">
+                <img src="images/computer_lab.svg" alt="Lab PC">
+                <span>Lab PC</span>
+              </div>
+            </div>
+          </div>
+
+          <form id="report-fault-form" enctype="multipart/form-data">
+            <!-- Fault Title & Specific Item -->
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.25rem;">
+              <div class="form-group">
+                <label for="title">Fault Summary / Problem Title *</label>
+                <input type="text" id="title" class="form-control" placeholder="e.g. Broken study chair base or Leaking washroom pipe" required>
+              </div>
+              <div class="form-group">
+                <label for="item_name">Specific Item / Equipment *</label>
+                <input type="text" id="item_name" class="form-control" placeholder="e.g. Chair, Water Pipe, Projector, AC, Fan" required>
+              </div>
+            </div>
+
+            <!-- Category & Urgency -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+              <div class="form-group">
+                <label for="category">Fault Category *</label>
+                <select id="category" class="form-control" required>
+                  <option value="">Select Category...</option>
+                  <option value="Electrical">Electrical (Lights, Fans, Sockets, Wiring)</option>
+                  <option value="Plumbing">Plumbing (Taps, Pipes, Drains)</option>
+                  <option value="Furniture">Furniture (Benches, Chairs, Desks, Doors)</option>
+                  <option value="Classroom Equipment">Classroom Equipment (Projector, Smart Board, Mic)</option>
+                  <option value="Laboratory Equipment">Laboratory Equipment (Fume Hoods, Instruments)</option>
+                  <option value="Network/IT">Network / IT (Wi-Fi AP, Ethernet, PC Labs)</option>
+                  <option value="Washroom">Washroom & Sanitation Facilities</option>
+                  <option value="Safety">Safety & Fire Hazards</option>
+                  <option value="Other">Other Campus Facility</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="priority">Urgency Level *</label>
+                <select id="priority" class="form-control" required>
+                  <option value="Low">Low (General maintenance, minor inconvenience)</option>
+                  <option value="Medium" selected>Medium (Standard priority, affects study area)</option>
+                  <option value="High">High (Impacting ongoing classes or labs)</option>
+                  <option value="Critical">Critical (Immediate safety, electrical or water hazard)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Location Details: Building, Floor, Room -->
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 1.25rem;">
+              <div class="form-group">
+                <label for="building_id">Campus Building *</label>
+                <select id="building_id" class="form-control" required>
+                  <option value="">Loading campus buildings...</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="floor_number">Floor Number *</label>
+                <input type="text" id="floor_number" class="form-control" placeholder="e.g. Ground Floor, 2nd Floor" required>
+              </div>
+
+              <div class="form-group">
+                <label for="room_number">Room / Lab / Precise Spot *</label>
+                <input type="text" id="room_number" class="form-control" placeholder="e.g. Room 302, Bay C" required>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+              <label for="description">Detailed Problem Description *</label>
+              <textarea id="description" class="form-control" rows="4" placeholder="Describe the symptom, what happened, and any safety concerns..." required></textarea>
+            </div>
+
+            <!-- Optional Image Upload with Preview -->
+            <div class="form-group">
+              <label for="fault-image">Upload Fault Photo (Optional, max 5MB - JPG, PNG, WEBP)</label>
+              <input type="file" id="fault-image" class="form-control" accept="image/jpeg,image/png,image/webp">
+              <div id="image-preview-container" style="display: none; margin-top: 0.75rem;">
+                <img id="image-preview" src="#" alt="Preview" style="max-height: 180px; border-radius: var(--radius-md); border: 1px solid var(--border-color); object-fit: cover;">
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+              <a href="dashboard.html" class="btn btn-outline">Cancel</a>
+              <button type="submit" class="btn btn-secondary btn-lg" id="submit-fault-btn">
+                <i data-lucide="send" style="width: 18px; height: 18px;"></i>
+                Submit Fault Complaint
+              </button>
+            </div>
+          </form>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Success Confirmation Modal -->
+  <div class="modal-overlay" id="success-modal">
+    <div class="modal-card" style="max-width: 480px; text-align: center;">
+      <div class="modal-body" style="padding: 2.5rem 2rem;">
+        <div style="width: 64px; height: 64px; background: #ecfdf5; color: #10b981; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem;">
+          <i data-lucide="check" style="width: 32px; height: 32px;"></i>
+        </div>
+        <h3 style="font-size: 1.4rem; color: var(--primary); margin-bottom: 0.5rem;">Complaint Registered!</h3>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.25rem;">
+          Your fault report has been logged and queued for administrative dispatch.
+        </p>
+
+        <div style="background: #f8fafc; border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.5rem;">
+          <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Unique Tracking Code</div>
+          <div style="font-size: 1.6rem; font-weight: 800; color: var(--primary-light); font-family: monospace;" id="modal-complaint-code">CF-2026-XXXX</div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: center;">
+          <a href="track-complaints.html" class="btn btn-primary" id="modal-track-link">Track Complaint</a>
+          <button type="button" class="btn btn-outline" onclick="window.location.reload()">Report Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/report-fault.js"></script>
+</body>
+</html>

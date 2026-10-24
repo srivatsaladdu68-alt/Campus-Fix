@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="nav-logo-icon">
+          <i data-lucide="wrench"></i>
+        </div>
+        <div>
+          <div class="brand-title">Campus Fix</div>
+          <div class="brand-subtitle">Student / Faculty</div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <span class="nav-category">Main Menu</span>
+        <a href="dashboard.html" class="sidebar-link active">
+          <i data-lucide="layout-dashboard"></i>
+          <span>My Dashboard</span>
+        </a>
+        <a href="report-fault.html" class="sidebar-link">
+          <i data-lucide="plus-circle"></i>
+          <span>Report Fault</span>
+        </a>
+        <a href="track-complaints.html" class="sidebar-link">
+          <i data-lucide="search"></i>
+          <span>Track Complaints</span>
+        </a>
+        <a href="notifications.html" class="sidebar-link">
+          <i data-lucide="bell"></i>
+          <span>Notifications</span>
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="user-avatar-initials">U</div>
+          <div class="user-details">
+            <div class="user-name" id="user-display-name">Loading...</div>
+            <span class="user-role-badge" id="user-display-role">Student</span>
+          </div>
+          <button onclick="Auth.logout()" title="Logout" style="background:none;border:none;color:#94a3b8;cursor:pointer;padding:4px;">
+            <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1 id="welcome-message">Welcome to Campus Fix</h1>
+          <p>Track your submitted campus issues and maintenance progress</p>
+        </div>
+        <div class="topbar-actions">
+          <a href="notifications.html" class="notification-bell-btn" title="View Notifications">
+            <i data-lucide="bell"></i>
+            <span class="badge-counter" id="unread-notif-count" style="display: none;">0</span>
+          </a>
+          <a href="report-fault.html" class="btn btn-secondary">
+            <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+            Report New Fault
+          </a>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="dashboard-content">
+        <!-- Metrics Row -->
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #eff6ff; color: #2563eb;">
+              <i data-lucide="clipboard-list"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="metric-total">0</div>
+              <div class="metric-label">Total Submitted</div>
+            </div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #fffbeb; color: #d97706;">
+              <i data-lucide="clock"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="metric-pending">0</div>
+              <div class="metric-label">Pending Review</div>
+            </div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
+              <i data-lucide="tool"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="metric-progress">0</div>
+              <div class="metric-label">In Progress</div>
+            </div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #ecfdf5; color: #059669;">
+              <i data-lucide="check-circle-2"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="metric-resolved">0</div>
+              <div class="metric-label">Resolved & Fixed</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Complaints & Activity Grid -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start;">
+          <!-- Recent Complaints Table -->
+          <div class="content-card" style="margin-bottom: 0;">
+            <div class="card-header-bar">
+              <h2>My Recent Complaints</h2>
+              <a href="track-complaints.html" class="btn btn-outline btn-sm">View All Complaints</a>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Issue Title</th>
+                    <th>Location</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-complaints-tbody">
+                  <tr>
+                    <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading complaints...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Recent Notifications & Updates -->
+          <div class="content-card" style="margin-bottom: 0;">
+            <div class="card-header-bar">
+              <h2>Recent Status Updates</h2>
+              <a href="notifications.html" style="font-size: 0.85rem; font-weight: 600;">All Updates</a>
+            </div>
+
+            <div id="recent-notifications-list" style="display: flex; flex-direction: column; gap: 0.85rem;">
+              <div style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Loading updates...</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="nav-logo-icon">
+          <i data-lucide="wrench"></i>
+        </div>
+        <div>
+          <div class="brand-title">Campus Fix</div>
+          <div class="brand-subtitle" id="sidebar-role-label">Portal</div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <span class="nav-category">Main Menu</span>
+        <a href="dashboard.html" class="sidebar-link" id="nav-dash-link">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="track-complaints.html" class="sidebar-link">
+          <i data-lucide="search"></i>
+          <span>Track Complaints</span>
+        </a>
+        <a href="notifications.html" class="sidebar-link active">
+          <i data-lucide="bell"></i>
+          <span>Notifications</span>
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="user-avatar-initials">U</div>
+          <div class="user-details">
+            <div class="user-name" id="user-display-name">Loading...</div>
+            <span class="user-role-badge" id="user-display-role">User</span>
+          </div>
+          <button onclick="Auth.logout()" title="Logout" style="background:none;border:none;color:#94a3b8;cursor:pointer;padding:4px;">
+            <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Notifications Center</h1>
+          <p>Real-time updates on your submitted faults and technician assignments</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-outline btn-sm" onclick="markAllNotificationsAsRead()">
+            <i data-lucide="check-check" style="width: 16px; height: 16px;"></i>
+            Mark All as Read
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <div class="content-card" style="max-width: 800px; margin: 0 auto;">
+          <div class="card-header-bar">
+            <h2>Recent Notifications</h2>
+            <span id="unread-status-label" style="font-size: 0.85rem; color: var(--text-muted);">0 unread</span>
+          </div>
+
+          <div id="notifications-list-container" style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+              Loading notifications...
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/notifications.js"></script>
+</body>
+</html>

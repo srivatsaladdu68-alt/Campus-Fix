@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="100%" height="100%">
+  <rect width="500" height="350" fill="#0f172a" rx="16"/>
+  <!-- Ceiling fixture -->
+  <rect x="60" y="80" width="380" height="25" rx="4" fill="#64748b"/>
+  <!-- Fluorescent tube with flickering ends -->
+  <rect x="80" y="105" width="340" height="18" rx="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+  <!-- Dark burnt end on left -->
+  <rect x="80" y="105" width="45" height="18" rx="4" fill="#334155"/>
+  <!-- Burnt end on right -->
+  <rect x="375" y="105" width="45" height="18" rx="4" fill="#475569"/>
+
+  <!-- Electric Spark & Strobe rays -->
+  <path d="M 125 90 L 140 115 L 120 125 L 145 150" stroke="#38bdf8" stroke-width="3" fill="none"/>
+  <path d="M 370 90 L 385 115 L 365 125 L 390 150" stroke="#f59e0b" stroke-width="3" fill="none"/>
+  
+  <text x="175" y="220" fill="#fef08a" font-family="Segoe UI, sans-serif" font-size="20" font-weight="700" letter-spacing="2">⚡ FLICKERING STROBE</text>
+
+  <!-- Warning Badge -->
+  <rect x="20" y="20" width="250" height="38" rx="8" fill="#eab308" opacity="0.95"/>
+  <text x="32" y="44" fill="#713f12" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">💡 FAULTY TUBE LIGHT T12</text>
+  <text x="20" y="335" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="13">Location: Science Complex - Room 101</text>
+</svg>

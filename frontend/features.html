@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Platform Features – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-icon">
+        <i data-lucide="wrench"></i>
+      </div>
+      <span>Campus Fix</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="features.html" style="color: var(--secondary); font-weight: 700;">Features</a></li>
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="live-stats.html">Live Stats</a></li>
+      <li><a href="track-complaints.html">Track Complaint</a></li>
+    </ul>
+    <div class="nav-actions" id="nav-auth-buttons">
+      <a href="login.html" class="btn btn-outline">Sign In</a>
+      <a href="report-fault.html" class="btn btn-secondary">
+        <i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i>
+        Report a Fault
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="hero" style="padding: 4rem 2rem 4.5rem;">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i data-lucide="layers" style="width: 16px; height: 16px;"></i>
+        Complete System Architecture & Capabilities
+      </div>
+      <h1 style="font-size: 2.6rem;">Engineered for Fast, Accountable Campus Fixes</h1>
+      <p>
+        Discover how Campus Fix replaces disorganized manual reporting with intelligent detection, transparent tracking, automated staff dispatch, and data-driven university facilities maintenance.
+      </p>
+    </div>
+  </header>
+
+  <!-- Main Features Section -->
+  <main class="section">
+    <!-- Grid 1: Core Operations -->
+    <div class="section-header">
+      <span class="section-tag">Core Capabilities</span>
+      <h2 class="section-title">End-to-End Maintenance Intelligence</h2>
+      <p class="section-desc">Designed to address the exact breakdown points in university campus facility management.</p>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom: 4rem;">
+      <div class="feature-card">
+        <div class="feature-icon-box" style="background: #eff6ff; color: #2563eb;">
+          <i data-lucide="camera"></i>
+        </div>
+        <h3>Rapid Fault Reporting & Photo Upload</h3>
+        <p>Students and faculty can report faults in under a minute with building, floor, room number, urgency levels (Low, Medium, High, Critical), and optional photo upload with client-side preview.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box" style="background: #fef3c7; color: #d97706;">
+          <i data-lucide="copy-check"></i>
+        </div>
+        <h3>Smart Duplicate Detection</h3>
+        <p>Prevents duplicate work tickets by checking the database in real-time. If a problem is already open in that exact room and category, reporters are alerted before submitting.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box" style="background: #ecfdf5; color: #059669;">
+          <i data-lucide="git-commit"></i>
+        </div>
+        <h3>Visual Status Progress Timeline</h3>
+        <p>Track complaints step-by-step from <strong>Reported &rarr; Verified &rarr; Assigned &rarr; In Progress &rarr; Resolved &rarr; Closed</strong>, complete with full audit timestamps and technician notes.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box" style="background: #fee2e2; color: #dc2626;">
+          <i data-lucide="clock"></i>
+        </div>
+        <h3>Automated Overdue Detection</h3>
+        <p>Critical tickets set a 24-hour turnaround target, while High priority sets 48 hours. If unresolved when the deadline expires, the system flags the ticket with red pulsing overdue alerts.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box" style="background: #f3e8ff; color: #7c3aed;">
+          <i data-lucide="rotate-ccw"></i>
+        </div>
+        <h3>User Reopen Mechanism</h3>
+        <p>If an issue persists after being marked resolved, students and faculty can reopen the ticket with a description, automatically sending a high-priority dispatch notice back to facilities.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box" style="background: #f0fdfa; color: #0d9488;">
+          <i data-lucide="bell"></i>
+        </div>
+        <h3>In-App Notification Center</h3>
+        <p>Near real-time alerts notify reporters when complaints are verified, assigned, started, completed, or overdue, with unread counters and 1-click mark-all-read.</p>
+      </div>
+    </div>
+
+    <!-- Grid 2: Administrative & Analytical Features -->
+    <div class="section-header">
+      <span class="section-tag">Governance & Analytics</span>
+      <h2 class="section-title">Administrative Power & Performance Oversight</h2>
+      <p class="section-desc">Equipping campus facility directors with real-time diagnostics and staff management tools.</p>
+    </div>
+
+    <div class="feature-grid" style="margin-bottom: 4rem;">
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="bar-chart-3"></i>
+        </div>
+        <h3>Real-Time Chart.js Visualizations</h3>
+        <p>Interactive analytics tracking 14-day complaint trends, category breakdown doughnut charts, building failure distributions, and staff workload balances based entirely on real database data.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="alert-triangle"></i>
+        </div>
+        <h3>Recurring Problem Spot Alerts</h3>
+        <p>Intelligent maintenance automatically pinpoints rooms and labs with recurring failures (&ge; 2 complaints), helping administrators replace aging equipment before final failure.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="file-spreadsheet"></i>
+        </div>
+        <h3>One-Click CSV Reports Export</h3>
+        <p>Filter work orders by date range, facility category, urgency, and status, and export RFC-4180 compliant CSV spreadsheets for university inspections and compliance records.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="user-check"></i>
+        </div>
+        <h3>Work Order Dispatch & Resource Flagging</h3>
+        <p>Assign qualified electricians or plumbers with custom deadlines. Technicians can log inspection notes and flag tickets when spare parts or budget approval is needed.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="cpu"></i>
+        </div>
+        <h3>Future IoT Telemetry Ingestion</h3>
+        <p>Designed with open REST APIs (<code>/api/iot/events</code>) to receive automated readings from water leak sensors, room temperature probes, and power meters with automated ticket creation.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <h3>Enterprise-Grade Security</h3>
+        <p>Parameterized SQLite queries prevent SQL injection, Bcrypt hashes all passwords, and JWT middleware enforces strict role-based access control across all operations.</p>
+      </div>
+    </div>
+
+    <!-- Call to Action Banner -->
+    <div style="background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border-radius: var(--radius-lg); padding: 3rem 2rem; text-align: center; box-shadow: var(--shadow-lg);">
+      <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.75rem;">Experience Campus Fix in Action</h2>
+      <p style="color: #cbd5e1; max-width: 600px; margin: 0 auto 1.75rem; font-size: 1.05rem;">
+        Log in to explore the Student Portal, Technician Work Orders, or the Administrator Control Center.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <a href="login.html" class="btn btn-secondary btn-lg">Open Portal Sign In</a>
+        <a href="report-fault.html" class="btn btn-outline btn-lg" style="color: white !important; border-color: rgba(255,255,255,0.4);">Report a Fault Now</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h3>Campus Fix</h3>
+        <p>Smart Campus Fault Detection & Maintenance Management Platform. Built for modern university campuses and colleges.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="features.html">Features</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="live-stats.html">Live Stats</a></li>
+          <li><a href="track-complaints.html">Track Complaint</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Portals & Roles</h4>
+        <ul>
+          <li><a href="login.html">Administrator Control</a></li>
+          <li><a href="login.html">Technician Work Orders</a></li>
+          <li><a href="login.html">Student / Faculty Access</a></li>
+          <li><a href="register.html">Create New Account</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Campus Facility Scope</h4>
+        <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6;">
+          Covers Electrical, Plumbing, Classrooms, IT Labs, Library Bays, Hostels, and Research Facilities.
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2026 Campus Fix – College Maintenance Management System. All rights reserved.
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    lucide.createIcons();
+    if (Auth.isLoggedIn()) {
+      const user = Auth.getUser();
+      const navActions = document.getElementById('nav-auth-buttons');
+      const targetDash = Auth.getDashboardUrl(user.role);
+      navActions.innerHTML = `
+        <a href="${targetDash}" class="btn btn-outline">My Dashboard (${user.role})</a>
+        <a href="report-fault.html" class="btn btn-secondary">Report Fault</a>
+      `;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="nav-logo-icon">
+          <i data-lucide="wrench"></i>
+        </div>
+        <div>
+          <div class="brand-title">Campus Fix</div>
+          <div class="brand-subtitle">Maintenance Staff</div>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <span class="nav-category">Main Menu</span>
+        <a href="staff-dashboard.html" class="sidebar-link active">
+          <i data-lucide="wrench"></i>
+          <span>My Assigned Tasks</span>
+        </a>
+        <a href="track-complaints.html" class="sidebar-link">
+          <i data-lucide="search"></i>
+          <span>All Complaints</span>
+        </a>
+        <a href="notifications.html" class="sidebar-link">
+          <i data-lucide="bell"></i>
+          <span>Notifications</span>
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="user-avatar-initials">S</div>
+          <div class="user-details">
+            <div class="user-name" id="user-display-name">Loading...</div>
+            <span class="user-role-badge" id="user-display-role" style="color: #34d399;">Technician</span>
+          </div>
+          <button onclick="Auth.logout()" title="Logout" style="background:none;border:none;color:#94a3b8;cursor:pointer;padding:4px;">
+            <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Topbar -->
+      <header class="topbar">
+        <div class="topbar-title">
+          <h1>Maintenance Work Orders</h1>
+          <p>Accept assignments, update repair progress, and record completion</p>
+        </div>
+        <div class="topbar-actions">
+          <a href="notifications.html" class="notification-bell-btn" title="View Notifications">
+            <i data-lucide="bell"></i>
+            <span class="badge-counter" id="unread-notif-count" style="display: none;">0</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <!-- Metric Cards -->
+        <div class="metrics-row">
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #eff6ff; color: #2563eb;">
+              <i data-lucide="clipboard"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="stat-total">0</div>
+              <div class="metric-label">Total Assigned</div>
+            </div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #fffbeb; color: #d97706;">
+              <i data-lucide="bell"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="stat-new">0</div>
+              <div class="metric-label">New Assignments</div>
+            </div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
+              <i data-lucide="activity"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="stat-in-progress">0</div>
+              <div class="metric-label">In Progress</div>
+            </div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #ecfdf5; color: #059669;">
+              <i data-lucide="check-circle-2"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="stat-completed">0</div>
+              <div class="metric-label">Completed</div>
+            </div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-icon-wrap" style="background: #fee2e2; color: #dc2626;">
+              <i data-lucide="alert-triangle"></i>
+            </div>
+            <div class="metric-info">
+              <div class="metric-num" id="stat-overdue">0</div>
+              <div class="metric-label">Overdue Tasks</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task List Card -->
+        <div class="content-card">
+          <div class="card-header-bar">
+            <h2>Assigned Maintenance Tasks</h2>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="btn btn-outline btn-sm" onclick="loadStaffDashboard()">
+                <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Refresh
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Code & Priority</th>
+                  <th>Photo</th>
+                  <th>Task & Equipment</th>
+                  <th>Location</th>
+                  <th>Category</th>
+                  <th>Reported By</th>
+                  <th>Deadline</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="staff-tasks-tbody">
+                <tr>
+                  <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+                    Loading assigned tasks...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Update Task / Repair Modal -->
+  <div class="modal-overlay" id="task-modal">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <div>
+          <span class="complaint-code-tag" id="task-modal-code">CF-2026-XXXX</span>
+          <h3 id="task-modal-title" style="margin-top: 0.35rem;">Manage Work Order</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeTaskModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 0.3rem;">
+            <strong style="color: var(--text-muted);">Location:</strong>
+            <span id="task-modal-location" style="font-weight: 600;">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.88rem;">
+            <strong style="color: var(--text-muted);">Current Status:</strong>
+            <span id="task-modal-status-badge">-</span>
+          </div>
+        </div>
+
+        <form id="task-action-form">
+          <div class="form-group">
+            <label for="task-action-status">Update Task Status *</label>
+            <select id="task-action-status" class="form-control" required>
+              <option value="In Progress">Start Work (In Progress)</option>
+              <option value="Resolved">Complete & Resolve Task</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="task-action-notes">Repair Notes & Execution Details *</label>
+            <textarea id="task-action-notes" class="form-control" rows="3" placeholder="Describe components checked, parts replaced, or troubleshooting performed..." required></textarea>
+          </div>
+
+          <div class="form-group" style="background: #fffbeb; border: 1px solid #fef3c7; padding: 0.85rem; border-radius: var(--radius-md);">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0;">
+              <input type="checkbox" id="task-flag-resources" style="width: 18px; height: 18px;">
+              <span style="font-size: 0.88rem; font-weight: 600; color: #b45309;">
+                Flag Administrator: Additional parts, budget, or external vendor required
+              </span>
+            </label>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeTaskModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="save-task-action-btn">
+          Save Updates
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/staff.js"></script>
+</body>
+</html>

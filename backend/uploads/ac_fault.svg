@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="100%" height="100%">
+  <defs>
+    <linearGradient id="acGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="350" fill="#0f172a" rx="16"/>
+
+  <!-- AC Indoor Unit -->
+  <rect x="90" y="80" width="320" height="110" rx="12" fill="url(#acGrad)" stroke="#94a3b8" stroke-width="3"/>
+  <rect x="110" y="160" width="280" height="18" rx="4" fill="#64748b"/>
+  <!-- Display Panel -->
+  <rect x="330" y="105" width="55" height="30" rx="4" fill="#0f172a"/>
+  <text x="340" y="126" fill="#ef4444" font-family="Courier New, monospace" font-size="16" font-weight="bold">E4</text>
+
+  <!-- Heat Waves (Overheating & Compressor Tripping) -->
+  <path d="M 160 210 Q 180 230 160 250 Q 140 270 160 290" fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 250 210 Q 270 230 250 250 Q 230 270 250 290" fill="none" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+  <path d="M 340 210 Q 360 230 340 250 Q 320 270 340 290" fill="none" stroke="#f97316" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Warning Badge -->
+  <rect x="20" y="20" width="260" height="38" rx="8" fill="#dc2626" opacity="0.95"/>
+  <text x="32" y="44" fill="white" font-family="Segoe UI, sans-serif" font-size="14" font-weight="700">🔥 AC COMPRESSOR OVERHEAT</text>
+  <text x="20" y="335" fill="#94a3b8" font-family="Segoe UI, sans-serif" font-size="13">Location: CSE Building - AI Research Lab 4</text>
+</svg>
