@@ -47,67 +47,121 @@ function formatFileSize(bytes) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
-// Image Preview, Metadata Display & Client Validation
+// Image Preview, Metadata Display & Client Validation (File Explorer / Drag & Drop)
 function setupImagePreview() {
   const fileInput = document.getElementById('fault-image');
+  const dropzone = document.getElementById('upload-dropzone');
   const previewContainer = document.getElementById('image-preview-container');
   const previewImg = document.getElementById('image-preview');
   const filenameEl = document.getElementById('image-filename');
   const filesizeEl = document.getElementById('image-filesize');
   const errorMsg = document.getElementById('image-error-msg');
   const removeBtn = document.getElementById('remove-image-btn');
+  const changeBtn = document.getElementById('change-image-btn');
 
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
   const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
 
+  // 1. Click Dropzone -> Opens Windows File Explorer
+  if (dropzone) {
+    dropzone.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    // Drag & Drop handlers
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.style.borderColor = 'var(--cream-gold)';
+        dropzone.style.background = 'rgba(99, 102, 241, 0.18)';
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.style.borderColor = 'var(--border-cream)';
+        dropzone.style.background = 'var(--bg-surface)';
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files.length > 0) {
+        fileInput.files = dt.files;
+        handleFileSelection(dt.files[0]);
+      }
+    });
+  }
+
+  // 2. Change / Browse Again Button -> Re-opens File Explorer
+  if (changeBtn) {
+    changeBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+  }
+
+  // 3. File Input Change Event (from File Explorer selection)
   fileInput.addEventListener('change', (e) => {
-    const file = e.target.files[0];
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileSelection(e.target.files[0]);
+    }
+  });
+
+  function handleFileSelection(file) {
     errorMsg.style.display = 'none';
     errorMsg.textContent = '';
 
     if (!file) {
       previewContainer.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
       return;
     }
 
-    // 1. Validate File Extension
+    // Validate File Extension and Mime
     const fileExt = '.' + file.name.split('.').pop().toLowerCase();
     if (!allowedExtensions.includes(fileExt) || !allowedTypes.includes(file.type)) {
       errorMsg.textContent = 'Unsupported file format! Only JPG, JPEG, PNG, and WEBP image formats are accepted.';
       errorMsg.style.display = 'block';
       fileInput.value = '';
       previewContainer.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
       return;
     }
 
-    // 2. Validate File Size (Max 5MB)
+    // Validate File Size (Max 5MB)
     const maxSize = 5 * 1024 * 1024; // 5 MB
     if (file.size > maxSize) {
       errorMsg.textContent = `The selected file size (${formatFileSize(file.size)}) exceeds the maximum 5 MB limit. Please select a smaller photo.`;
       errorMsg.style.display = 'block';
       fileInput.value = '';
       previewContainer.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
       return;
     }
 
-    // 3. Render Preview and File Info
+    // Render Preview and File Info
     filenameEl.textContent = file.name;
     filesizeEl.textContent = formatFileSize(file.size);
 
     const reader = new FileReader();
     reader.onload = (event) => {
       previewImg.src = event.target.result;
+      if (dropzone) dropzone.style.display = 'none';
       previewContainer.style.display = 'block';
       lucide.createIcons();
     };
     reader.readAsDataURL(file);
-  });
+  }
 
-  // Remove Selected Image
+  // 4. Remove Selected Image
   if (removeBtn) {
     removeBtn.addEventListener('click', () => {
       fileInput.value = '';
       previewContainer.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
       errorMsg.style.display = 'none';
       previewImg.src = '#';
     });
