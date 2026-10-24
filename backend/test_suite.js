@@ -61,7 +61,7 @@ async function runTests() {
     // 2. Admin Login
     const adminLogin = await request('/auth/login', {
       method: 'POST',
-      body: { email: 'admin@campusfix.edu', password: 'Admin@123' }
+      body: { email: 'admin@vnrvjiet.in', password: 'Admin@123' }
     });
     assert(adminLogin.status === 200 && adminLogin.data.token, 'Admin login succeeds with valid token');
     adminToken = adminLogin.data.token;
@@ -69,7 +69,7 @@ async function runTests() {
     // 3. Staff Login
     const staffLogin = await request('/auth/login', {
       method: 'POST',
-      body: { email: 'staff.mike@campusfix.edu', password: 'Staff@123' }
+      body: { email: 'staff.mike@vnrvjiet.in', password: 'Staff@123' }
     });
     assert(staffLogin.status === 200 && staffLogin.data.user.role === 'staff', 'Staff login succeeds with staff role');
     staffToken = staffLogin.data.token;
@@ -77,12 +77,12 @@ async function runTests() {
     // 4. Invalid Password Handling
     const badLogin = await request('/auth/login', {
       method: 'POST',
-      body: { email: 'admin@campusfix.edu', password: 'WrongPassword' }
+      body: { email: 'admin@vnrvjiet.in', password: 'WrongPassword' }
     });
     assert(badLogin.status === 401, 'Invalid password correctly rejected with 401');
 
     // 5. User Registration & Duplicate Email Check
-    const uniqueEmail = `test.student.${Date.now()}@campusfix.edu`;
+    const uniqueEmail = `test.student.${Date.now()}@vnrvjiet.in`;
     const registerRes = await request('/auth/register', {
       method: 'POST',
       body: {

@@ -138,12 +138,14 @@ function seedDatabase() {
     'INSERT INTO buildings (building_name, building_code) VALUES (?, ?)'
   );
   const buildings = [
-    ['Science & Research Complex', 'SRC'],
-    ['Computer Science & Engineering Building', 'CSE'],
-    ['Central Campus Library', 'LIB'],
-    ['Main Administrative Block', 'ADM'],
-    ['Student Hostel Block A', 'SHA'],
-    ['Sports & Recreation Center', 'SPORTS']
+    ['Dr. A.P.J. Abdul Kalam Block (CSE, IT, AIML, DS Labs)', 'KALAM'],
+    ['Patel Rama Reddy Block (ECE, EEE, EIE Departments)', 'PRR'],
+    ['B. Rama Rao Block (Civil, Mechanical & Auto Workshops)', 'BRR'],
+    ['K.S. Rao Block (Main Administrative & Exam Branch)', 'KSR'],
+    ['Vignana Jyothi Central Library & Auditorium Complex', 'LIB'],
+    ['First Year Academic Block (Freshman Engineering & H&S)', 'FYA'],
+    ['Vignana Jyothi Sports Complex & Indoor Stadium', 'SPORTS'],
+    ['Vignana Jyothi Student Hostels (Boys & Girls Hostels)', 'HOSTEL']
   ];
   for (const b of buildings) {
     insertBuilding.run(b[0], b[1]);
@@ -161,14 +163,14 @@ function seedDatabase() {
     VALUES (?, ?, ?, ?, ?, ?, ?)
   `);
 
-  insertUser.run('Campus Administrator', 'admin@campusfix.edu', '+91 9876543210', adminPass, 'admin', null, 'Campus Administration');
-  insertUser.run('Mike Johnson', 'staff.mike@campusfix.edu', '+91 9876543211', staffPass, 'staff', null, 'Electrical & IT Maintenance');
-  insertUser.run('Sarah Williams', 'staff.sarah@campusfix.edu', '+91 9876543212', staffPass, 'staff', null, 'Plumbing & Facilities');
-  insertUser.run('Prof. Rajesh Sharma', 'prof.sharma@campusfix.edu', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'Computer Science & Engineering');
-  insertUser.run('Alex Morgan', 'student.alex@campusfix.edu', '+91 9876543214', userPass, 'student', 'STU-2024-CS-041', 'Computer Science & Engineering');
-  insertUser.run('Priya Patel', 'student.priya@campusfix.edu', '+91 9876543215', userPass, 'student', 'STU-2024-EC-089', 'Electronics & Communication');
+  insertUser.run('VNRVJIET Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, 'Campus Administration');
+  insertUser.run('Mike Johnson', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, 'Electrical & IT Maintenance');
+  insertUser.run('Sarah Williams', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, 'Plumbing & Facilities');
+  insertUser.run('Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'Computer Science & Engineering');
+  insertUser.run('Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', 'Computer Science & Engineering');
+  insertUser.run('Priya Patel', 'student.priya@vnrvjiet.in', '+91 9876543215', userPass, 'student', '22071A0402', 'Electronics & Communication');
 
-  console.log('Database initialized with default campus buildings and core user roles.');
+  console.log('Database initialized with VNRVJIET campus buildings and core user roles.');
 }
 
 initSchema();
