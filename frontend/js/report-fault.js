@@ -3,21 +3,11 @@
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const user = Auth.requireAuth();
+  const user = Auth.requireAuth(['student', 'faculty', 'admin']);
   if (!user) return;
 
   Auth.renderUserProfile();
   lucide.createIcons();
-
-  // Set correct link for dashboard based on role
-  const dashLink = document.getElementById('nav-dash-link');
-  if (dashLink) {
-    dashLink.href = Auth.getDashboardUrl(user.role);
-  }
-  const roleLabel = document.getElementById('sidebar-role-label');
-  if (roleLabel) {
-    roleLabel.textContent = user.role.toUpperCase();
-  }
 
   await loadBuildings();
   setupImagePreview();

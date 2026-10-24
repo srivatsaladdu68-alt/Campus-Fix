@@ -12,15 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   Auth.renderUserProfile();
   lucide.createIcons();
 
-  const dashLink = document.getElementById('nav-dash-link');
-  if (dashLink) {
-    dashLink.href = Auth.getDashboardUrl(user.role);
-  }
-  const roleLabel = document.getElementById('sidebar-role-label');
-  if (roleLabel) {
-    roleLabel.textContent = user.role.toUpperCase();
-  }
-
   setupFilters();
   await loadComplaints();
 
