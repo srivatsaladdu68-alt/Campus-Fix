@@ -41,30 +41,35 @@ function setupFilters() {
   const resetBtn = document.getElementById('reset-filters-btn');
 
   let debounceTimer;
-  searchInput.addEventListener('input', () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(loadComplaints, 300);
-  });
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(loadComplaints, 300);
+    });
+  }
 
-  statusFilter.addEventListener('change', loadComplaints);
-  categoryFilter.addEventListener('change', loadComplaints);
-  priorityFilter.addEventListener('change', loadComplaints);
+  if (statusFilter) statusFilter.addEventListener('change', loadComplaints);
+  if (categoryFilter) categoryFilter.addEventListener('change', loadComplaints);
+  if (priorityFilter) priorityFilter.addEventListener('change', loadComplaints);
 
-  resetBtn.addEventListener('click', () => {
-    searchInput.value = '';
-    statusFilter.value = '';
-    categoryFilter.value = '';
-    priorityFilter.value = '';
-    loadComplaints();
-  });
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (searchInput) searchInput.value = '';
+      if (statusFilter) statusFilter.value = '';
+      if (categoryFilter) categoryFilter.value = '';
+      if (priorityFilter) priorityFilter.value = '';
+      loadComplaints();
+    });
+  }
 }
 
 // Load Complaints from API
 async function loadComplaints() {
-  const search = document.getElementById('search-input').value.trim();
-  const status = document.getElementById('filter-status').value;
-  const category = document.getElementById('filter-category').value;
-  const priority = document.getElementById('filter-priority').value;
+  const searchInput = document.getElementById('search-input');
+  const search = searchInput ? searchInput.value.trim() : '';
+  const status = document.getElementById('filter-status') ? document.getElementById('filter-status').value : '';
+  const category = document.getElementById('filter-category') ? document.getElementById('filter-category').value : '';
+  const priority = document.getElementById('filter-priority') ? document.getElementById('filter-priority').value : '';
 
   const params = new URLSearchParams();
   if (search) params.append('search', search);

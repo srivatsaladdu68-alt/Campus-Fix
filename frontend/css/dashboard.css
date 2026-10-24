@@ -562,3 +562,20 @@
 .filter-bar input, .filter-bar select {
   max-width: 220px;
 }
+
+.search-input-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.search-input-wrap .search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--cream-dim);
+  pointer-events: none;
+}
+
+.search-input-wrap input {
+  padding-left: 36px !important;
+}
