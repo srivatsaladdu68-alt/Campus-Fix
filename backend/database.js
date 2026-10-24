@@ -144,8 +144,7 @@ function seedDatabase() {
     ['A Block', 'A-BLOCK'],
     ['PG Block', 'PG-BLOCK'],
     ['Canteen', 'CANTEEN'],
-    ['Annapurna Canteen', 'ANNAPURNA'],
-    ['Senti Stage', 'SENTI-STAGE'],
+    ['Synti Stage', 'SYNTI-STAGE'],
     ['Sports Block', 'SPORTS']
   ];
   for (const b of buildings) {
