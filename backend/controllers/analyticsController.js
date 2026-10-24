@@ -19,7 +19,7 @@ function getPublicStats(req, res) {
       WHERE resolved_at IS NOT NULL
     `).get();
 
-    const avgHours = avgTimeRow && avgTimeRow.avg_hours ? Math.round(avgTimeRow.avg_hours * 10) / 10 : 18.5;
+    const avgHours = avgTimeRow && avgTimeRow.avg_hours ? Math.round(avgTimeRow.avg_hours * 10) / 10 : 0;
 
     return res.json({
       success: true,
@@ -31,6 +31,39 @@ function getPublicStats(req, res) {
     });
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Error retrieving public stats.' });
+  }
+}
+
+// Public aggregate charts for live stats page
+function getPublicCharts(req, res) {
+  try {
+    const categories = db.prepare(`
+      SELECT category, COUNT(*) as count
+      FROM faults
+      GROUP BY category
+      ORDER BY count DESC
+    `).all();
+
+    const buildings = db.prepare(`
+      SELECT b.building_name, b.building_code, COUNT(f.fault_id) as count
+      FROM buildings b
+      LEFT JOIN faults f ON b.building_id = f.building_id
+      GROUP BY b.building_id
+      ORDER BY count DESC
+    `).all();
+
+    return res.json({
+      success: true,
+      categories: categories.length > 0 ? categories : [
+        { category: 'Electrical', count: 0 },
+        { category: 'Plumbing', count: 0 },
+        { category: 'Furniture', count: 0 },
+        { category: 'Network/IT', count: 0 }
+      ],
+      buildings: buildings
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Error retrieving public charts.' });
   }
 }
 
@@ -245,6 +278,7 @@ function exportCSV(req, res) {
 
 module.exports = {
   getPublicStats,
+  getPublicCharts,
   getAnalyticsSummary,
   exportCSV
 };

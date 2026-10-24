@@ -35,10 +35,10 @@ async function loadNotificationsList() {
 
   if (res.notifications.length === 0) {
     container.innerHTML = `
-      <div style="text-align: center; color: var(--text-muted); padding: 3rem;">
-        <i data-lucide="bell-off" style="width: 40px; height: 40px; margin-bottom: 0.75rem; color: #cbd5e1;"></i>
-        <div style="font-weight: 600; font-size: 1.05rem;">No notifications right now</div>
-        <p style="font-size: 0.85rem; margin-top: 0.25rem;">You will receive alerts when technicians update your complaints.</p>
+      <div style="text-align: center; color: var(--cream-dim); padding: 3rem;">
+        <i data-lucide="bell-off" style="width: 40px; height: 40px; margin-bottom: 0.75rem; color: var(--cream-dim);"></i>
+        <div style="font-weight: 600; font-size: 1.05rem; color: var(--cream-pure);">No notifications right now</div>
+        <p style="font-size: 0.85rem; margin-top: 0.25rem; color: var(--cream-muted);">You will receive alerts when technicians update your complaints.</p>
       </div>
     `;
     lucide.createIcons();

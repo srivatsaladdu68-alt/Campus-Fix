@@ -77,7 +77,7 @@ async function loadComplaints() {
   const countEl = document.getElementById('results-count');
 
   if (!res || !res.success) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: red;">Failed to load complaints.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #f87171; padding: 2rem;">Failed to load complaints.</td></tr>';
     return;
   }
 
@@ -87,8 +87,8 @@ async function loadComplaints() {
   if (currentFaults.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
-          <p style="font-size: 1rem; font-weight: 600;">No complaints matched your search filters.</p>
+        <td colspan="9" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">
+          <p style="font-size: 1rem; font-weight: 600; color: var(--cream-soft);">No complaints matched your search filters.</p>
         </td>
       </tr>
     `;

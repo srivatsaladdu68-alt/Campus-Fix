@@ -76,7 +76,7 @@
             <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
             Register Staff
           </button>
-          <button class="btn btn-secondary" onclick="exportDataCSV()">
+          <button class="btn btn-gold" onclick="exportDataCSV()">
             <i data-lucide="download" style="width: 16px; height: 16px;"></i>
             Export CSV
           </button>
@@ -91,7 +91,7 @@
           <!-- Metric KPI Boxes -->
           <div class="metrics-row">
             <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: #eff6ff; color: #2563eb;">
+              <div class="metric-icon-wrap" style="background: rgba(99, 102, 241, 0.18); color: var(--electric-indigo-bright); border: 1px solid rgba(99, 102, 241, 0.3);">
                 <i data-lucide="clipboard-list"></i>
               </div>
               <div class="metric-info">
@@ -101,7 +101,7 @@
             </div>
 
             <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: #fffbeb; color: #d97706;">
+              <div class="metric-icon-wrap" style="background: rgba(251, 215, 132, 0.18); color: var(--cream-gold); border: 1px solid rgba(251, 215, 132, 0.3);">
                 <i data-lucide="alert-circle"></i>
               </div>
               <div class="metric-info">
@@ -111,7 +111,7 @@
             </div>
 
             <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: #fee2e2; color: #dc2626;">
+              <div class="metric-icon-wrap" style="background: rgba(248, 113, 113, 0.18); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3);">
                 <i data-lucide="flame"></i>
               </div>
               <div class="metric-info">
@@ -121,7 +121,7 @@
             </div>
 
             <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: #e0f2fe; color: #0284c7;">
+              <div class="metric-icon-wrap" style="background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
                 <i data-lucide="wrench"></i>
               </div>
               <div class="metric-info">
@@ -131,7 +131,7 @@
             </div>
 
             <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: #ecfdf5; color: #059669;">
+              <div class="metric-icon-wrap" style="background: rgba(52, 211, 153, 0.18); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">
                 <i data-lucide="check-circle-2"></i>
               </div>
               <div class="metric-info">
@@ -141,7 +141,7 @@
             </div>
 
             <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: #fdf2f8; color: #db2777;">
+              <div class="metric-icon-wrap" style="background: rgba(232, 121, 249, 0.18); color: #e879f9; border: 1px solid rgba(232, 121, 249, 0.3);">
                 <i data-lucide="timer"></i>
               </div>
               <div class="metric-info">
@@ -151,7 +151,7 @@
             </div>
 
             <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: #fef2f2; color: #dc2626;">
+              <div class="metric-icon-wrap" style="background: rgba(251, 146, 60, 0.18); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.3);">
                 <i data-lucide="clock"></i>
               </div>
               <div class="metric-info">
@@ -162,12 +162,12 @@
           </div>
 
           <!-- Recurring Fault Warning Banner (Phase 2 Intelligent Maintenance) -->
-          <div id="recurring-alert-box" style="display: none; background: #fffbeb; border: 1px solid #fcd34d; border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 2rem;">
+          <div id="recurring-alert-box" style="display: none; background: rgba(251, 215, 132, 0.1); border: 1px solid rgba(251, 215, 132, 0.35); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 2rem;">
             <div style="display: flex; gap: 0.75rem; align-items: start;">
-              <i data-lucide="alert-triangle" style="color: #d97706; width: 24px; height: 24px; flex-shrink: 0;"></i>
+              <i data-lucide="alert-triangle" style="color: var(--cream-gold); width: 24px; height: 24px; flex-shrink: 0;"></i>
               <div style="flex: 1;">
-                <h4 style="color: #92400e; font-size: 0.95rem; font-weight: 700;">Intelligent Maintenance Alert: Recurring Problem Spots Detected</h4>
-                <div id="recurring-list" style="margin-top: 0.4rem; font-size: 0.88rem; color: #b45309;"></div>
+                <h4 style="color: var(--cream-gold); font-size: 0.95rem; font-weight: 700;">Intelligent Maintenance Alert: Recurring Problem Spots Detected</h4>
+                <div id="recurring-list" style="margin-top: 0.4rem; font-size: 0.88rem; color: var(--cream-soft);"></div>
               </div>
             </div>
           </div>
@@ -434,7 +434,7 @@
 
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" onclick="closeAssignModal()">Cancel</button>
-        <button type="button" class="btn btn-secondary" id="confirm-assign-btn">
+        <button type="button" class="btn btn-gold" id="confirm-assign-btn">
           Confirm Assignment
         </button>
       </div>
@@ -470,7 +470,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" onclick="closeStatusModal()">Cancel</button>
-        <button type="button" class="btn btn-primary" id="confirm-status-btn">Save Status</button>
+        <button type="button" class="btn btn-gold" id="confirm-status-btn">Save Status</button>
       </div>
     </div>
   </div>
@@ -490,7 +490,7 @@
           </div>
           <div class="form-group">
             <label for="new-staff-email">Staff Email *</label>
-            <input type="email" id="new-staff-email" class="form-control" placeholder="staff.robert@campusfix.edu" required>
+            <input type="email" id="new-staff-email" class="form-control" placeholder="staff.robert@vnrvjiet.in" required>
           </div>
           <div class="form-group">
             <label for="new-staff-phone">Contact Phone</label>
@@ -504,7 +504,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" onclick="closeAddStaffModal()">Cancel</button>
-        <button type="button" class="btn btn-secondary" id="confirm-add-staff-btn">Create Staff Account</button>
+        <button type="button" class="btn btn-gold" id="confirm-add-staff-btn">Create Staff Account</button>
       </div>
     </div>
   </div>

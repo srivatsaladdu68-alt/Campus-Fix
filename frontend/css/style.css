@@ -24,6 +24,13 @@
   --border-cream-hover: rgba(251, 215, 132, 0.35);
   --border-indigo: rgba(99, 102, 241, 0.3);
 
+  /* Legacy variable fallbacks */
+  --primary: var(--electric-indigo);
+  --primary-light: var(--electric-indigo-bright);
+  --primary-dark: var(--electric-indigo-dark);
+  --text-muted: var(--cream-muted);
+  --border-color: var(--border-cream);
+
   /* Status Badges */
   --status-reported: #fbd784;
   --status-verified: #a5b4fc;
@@ -197,14 +204,16 @@ img {
   transform: translateY(-2px);
 }
 
-.btn-gold {
+.btn-gold,
+.btn-secondary {
   background: var(--cream-gold);
   color: #0b0c1e;
   font-weight: 700;
   box-shadow: 0 4px 18px rgba(251, 215, 132, 0.25);
 }
 
-.btn-gold:hover {
+.btn-gold:hover,
+.btn-secondary:hover {
   background: var(--cream-gold-hover);
   box-shadow: 0 6px 24px rgba(251, 215, 132, 0.4);
   transform: translateY(-2px);

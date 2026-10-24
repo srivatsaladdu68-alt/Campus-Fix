@@ -135,13 +135,13 @@
         const statsRes = await fetch('/api/dashboard/stats');
         if (statsRes.ok) {
           const stats = await statsRes.json();
-          document.getElementById('kpi-total').innerText = stats.total_reported || '24';
-          document.getElementById('kpi-resolved').innerText = stats.resolved || '18';
-          document.getElementById('kpi-in-progress').innerText = stats.in_progress || '4';
-          document.getElementById('kpi-avg-time').innerText = (stats.avg_turnaround_hours || '4.2') + ' hrs';
+          document.getElementById('kpi-total').innerText = stats.total_reported ?? 0;
+          document.getElementById('kpi-resolved').innerText = stats.total_resolved ?? 0;
+          document.getElementById('kpi-in-progress').innerText = stats.in_progress ?? 0;
+          document.getElementById('kpi-avg-time').innerText = (stats.avg_resolution_hours ?? 0) + ' hrs';
         }
 
-        const chartRes = await fetch('/api/analytics/charts');
+        const chartRes = await fetch('/api/analytics/public-charts');
         if (chartRes.ok) {
           const chartData = await chartRes.json();
 
@@ -154,7 +154,7 @@
               labels: chartData.categories.map(c => c.category),
               datasets: [{
                 data: chartData.categories.map(c => c.count),
-                backgroundColor: ['#6366f1', '#fbd784', '#34d399', '#38bdf8', '#fb923c', '#a5b4fc'],
+                backgroundColor: ['#6366f1', '#fbd784', '#34d399', '#38bdf8', '#fb923c', '#a5b4fc', '#e879f9'],
                 borderColor: '#12132b',
                 borderWidth: 3
               }]
@@ -163,7 +163,7 @@
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16 } }
+                legend: { position: 'bottom', labels: { boxWidth: 12, padding: 16, color: '#f4efe6' } }
               }
             }
           });
@@ -174,12 +174,12 @@
           bldChartInstance = new Chart(bldCtx, {
             type: 'bar',
             data: {
-              labels: chartData.buildings.map(b => b.building_name.split(' ')[0]),
+              labels: chartData.buildings.map(b => b.building_code || b.building_name.split(' ')[0]),
               datasets: [{
                 label: 'Reported Faults',
                 data: chartData.buildings.map(b => b.count),
                 backgroundColor: 'rgba(99, 102, 241, 0.75)',
-                borderColor: '#6366f1',
+                borderColor: '#7c7eff',
                 borderWidth: 1.5,
                 borderRadius: 6
               }]
@@ -189,8 +189,14 @@
               maintainAspectRatio: false,
               plugins: { legend: { display: false } },
               scales: {
-                y: { grid: { color: 'rgba(244, 239, 230, 0.08)' } },
-                x: { grid: { display: false } }
+                y: { 
+                  grid: { color: 'rgba(244, 239, 230, 0.08)' },
+                  ticks: { color: '#b0a99c', stepSize: 1 }
+                },
+                x: { 
+                  grid: { display: false },
+                  ticks: { color: '#f4efe6' }
+                }
               }
             }
           });

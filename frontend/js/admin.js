@@ -82,6 +82,9 @@ async function loadAdminOverview() {
 
 // Render Chart.js
 function renderCharts(chartData) {
+  Chart.defaults.color = '#b0a99c';
+  Chart.defaults.font.family = "'Plus Jakarta Sans', system-ui, sans-serif";
+
   // Chart 1: Trends
   const trendCtx = document.getElementById('trendChart').getContext('2d');
   if (trendChartInstance) trendChartInstance.destroy();
@@ -97,17 +100,17 @@ function renderCharts(chartData) {
       datasets: [
         {
           label: 'Faults Reported',
-          data: reportedData.length > 0 ? reportedData : [1],
-          borderColor: '#2563eb',
-          backgroundColor: 'rgba(37, 99, 235, 0.1)',
+          data: reportedData.length > 0 ? reportedData : [0],
+          borderColor: '#7c7eff',
+          backgroundColor: 'rgba(99, 102, 241, 0.15)',
           tension: 0.3,
           fill: true
         },
         {
           label: 'Faults Resolved',
           data: resolvedData.length > 0 ? resolvedData : [0],
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: '#fbd784',
+          backgroundColor: 'rgba(251, 215, 132, 0.15)',
           tension: 0.3,
           fill: true
         }
@@ -116,7 +119,11 @@ function renderCharts(chartData) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: 'top' } }
+      plugins: { legend: { position: 'top', labels: { color: '#f4efe6' } } },
+      scales: {
+        y: { grid: { color: 'rgba(244, 239, 230, 0.08)' }, ticks: { color: '#b0a99c' } },
+        x: { grid: { color: 'rgba(244, 239, 230, 0.04)' }, ticks: { color: '#b0a99c' } }
+      }
     }
   });
 
@@ -132,16 +139,18 @@ function renderCharts(chartData) {
     data: {
       labels: catLabels.length > 0 ? catLabels : ['General'],
       datasets: [{
-        data: catCounts.length > 0 ? catCounts : [1],
+        data: catCounts.length > 0 ? catCounts : [0],
         backgroundColor: [
-          '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#64748b', '#ec4899'
-        ]
+          '#6366f1', '#fbd784', '#34d399', '#38bdf8', '#fb923c', '#a5b4fc', '#e879f9', '#94a3b8'
+        ],
+        borderColor: '#12132b',
+        borderWidth: 2
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, color: '#f4efe6' } } }
     }
   });
 
@@ -149,7 +158,7 @@ function renderCharts(chartData) {
   const buildCtx = document.getElementById('buildingChart').getContext('2d');
   if (buildingChartInstance) buildingChartInstance.destroy();
 
-  const buildLabels = chartData.buildings.map(b => b.building_code || b.building_name);
+  const buildLabels = chartData.buildings.map(b => b.building_code || b.building_name.split(' ')[0]);
   const buildCounts = chartData.buildings.map(b => b.count);
 
   buildingChartInstance = new Chart(buildCtx, {
@@ -159,7 +168,9 @@ function renderCharts(chartData) {
       datasets: [{
         label: 'Reported Faults',
         data: buildCounts,
-        backgroundColor: '#0d9488',
+        backgroundColor: 'rgba(99, 102, 241, 0.75)',
+        borderColor: '#7c7eff',
+        borderWidth: 1.5,
         borderRadius: 6
       }]
     },
@@ -167,7 +178,10 @@ function renderCharts(chartData) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(244, 239, 230, 0.08)' }, ticks: { precision: 0, color: '#b0a99c' } },
+        x: { grid: { display: false }, ticks: { color: '#f4efe6' } }
+      }
     }
   });
 
@@ -187,13 +201,17 @@ function renderCharts(chartData) {
         {
           label: 'Total Assigned',
           data: assignedCounts.length > 0 ? assignedCounts : [0],
-          backgroundColor: '#3b82f6',
+          backgroundColor: 'rgba(99, 102, 241, 0.8)',
+          borderColor: '#7c7eff',
+          borderWidth: 1,
           borderRadius: 6
         },
         {
           label: 'Completed Tasks',
           data: completedCounts.length > 0 ? completedCounts : [0],
-          backgroundColor: '#10b981',
+          backgroundColor: 'rgba(251, 215, 132, 0.8)',
+          borderColor: '#fbd784',
+          borderWidth: 1,
           borderRadius: 6
         }
       ]
@@ -201,8 +219,11 @@ function renderCharts(chartData) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      plugins: { legend: { position: 'top' } },
-      scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+      plugins: { legend: { position: 'top', labels: { color: '#f4efe6' } } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(244, 239, 230, 0.08)' }, ticks: { precision: 0, color: '#b0a99c' } },
+        x: { grid: { display: false }, ticks: { color: '#f4efe6' } }
+      }
     }
   });
 }
@@ -285,28 +306,28 @@ async function loadAllComplaints() {
         <span class="badge badge-verified" style="font-size: 0.72rem; margin-bottom: 2px; display: inline-block;">
           🔧 ${escapeHtml(f.item_name || 'Equipment')}
         </span>
-        <div style="font-weight: 700; color: var(--primary);">${escapeHtml(f.title)}</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted);">${API.formatDate(f.created_at)}</div>
+        <div style="font-weight: 700; color: var(--cream-pure);">${escapeHtml(f.title)}</div>
+        <div style="font-size: 0.78rem; color: var(--cream-muted);">${API.formatDate(f.created_at)}</div>
       </td>
       <td>
-        <div style="font-weight: 600;">${escapeHtml(f.building_name || 'Campus')}</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted);">${escapeHtml(f.room_number)}</div>
+        <div style="font-weight: 600; color: var(--cream-pure);">${escapeHtml(f.building_name || 'Campus')}</div>
+        <div style="font-size: 0.78rem; color: var(--cream-muted);">${escapeHtml(f.room_number)}</div>
       </td>
       <td>${escapeHtml(f.category)}</td>
       <td>${API.getPriorityBadge(f.priority)}</td>
       <td>
-        <div style="font-size: 0.88rem; font-weight: 600;">${escapeHtml(f.reporter_name || 'User')}</div>
-        <div style="font-size: 0.75rem; color: #475569;">
-          ${f.reporter_student_id ? `<span style="font-weight:700;color:#2563eb;">${escapeHtml(f.reporter_student_id)}</span> &bull; ` : ''}${escapeHtml(f.reporter_department || f.reporter_email || '')}
+        <div style="font-size: 0.88rem; font-weight: 600; color: var(--cream-pure);">${escapeHtml(f.reporter_name || 'User')}</div>
+        <div style="font-size: 0.75rem; color: var(--cream-dim);">
+          ${f.reporter_student_id ? `<span style="font-weight:700;color:var(--electric-indigo-bright);">${escapeHtml(f.reporter_student_id)}</span> &bull; ` : ''}${escapeHtml(f.reporter_department || f.reporter_email || '')}
         </div>
       </td>
       <td>
-        ${f.staff_name ? `<span style="font-weight: 600; color: var(--secondary); font-size: 0.85rem;">${escapeHtml(f.staff_name)}</span>` : '<span style="color:#94a3b8;font-size:0.82rem;">Unassigned</span>'}
+        ${f.staff_name ? `<span style="font-weight: 600; color: var(--cream-gold); font-size: 0.85rem;">${escapeHtml(f.staff_name)}</span>` : '<span style="color:var(--cream-dim);font-size:0.82rem;">Unassigned</span>'}
       </td>
       <td>${API.getStatusBadge(f.status)}</td>
       <td>
         <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-          <button class="btn btn-secondary btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign Staff & Deadline">
+          <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign Staff & Deadline">
             <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
           </button>
           <button class="btn btn-outline btn-sm" onclick="openStatusModal(${f.fault_id})" title="Change Status">

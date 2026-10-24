@@ -291,16 +291,16 @@
         const res = await fetch('/api/dashboard/stats');
         if (res.ok) {
           const data = await res.json();
-          document.getElementById('stat-total-reported').innerText = data.total_reported || '24';
-          document.getElementById('stat-total-resolved').innerText = data.resolved || '18';
-          document.getElementById('stat-avg-time').innerText = (data.avg_turnaround_hours || '4.2') + ' hrs';
-          document.getElementById('stat-technicians').innerText = data.active_staff || '6';
+          document.getElementById('stat-total-reported').innerText = data.total_reported ?? 0;
+          document.getElementById('stat-total-resolved').innerText = data.total_resolved ?? 0;
+          document.getElementById('stat-avg-time').innerText = (data.avg_resolution_hours ?? 0) + ' hrs';
+          document.getElementById('stat-technicians').innerText = data.active_technicians ?? 0;
         }
       } catch (err) {
-        document.getElementById('stat-total-reported').innerText = '24';
-        document.getElementById('stat-total-resolved').innerText = '18';
-        document.getElementById('stat-avg-time').innerText = '4.2 hrs';
-        document.getElementById('stat-technicians').innerText = '6';
+        document.getElementById('stat-total-reported').innerText = '0';
+        document.getElementById('stat-total-resolved').innerText = '0';
+        document.getElementById('stat-avg-time').innerText = '0 hrs';
+        document.getElementById('stat-technicians').innerText = '0';
       }
     }
 

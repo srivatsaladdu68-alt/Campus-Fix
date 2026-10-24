@@ -39,9 +39,9 @@ function renderTasks(tasks) {
   if (tasks.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
-          <div style="font-size: 1.1rem; font-weight: 600;">No tasks currently assigned to you!</div>
-          <p style="font-size: 0.85rem; margin-top: 0.35rem;">Check back when the facilities admin assigns new repair tickets.</p>
+        <td colspan="9" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">
+          <div style="font-size: 1.1rem; font-weight: 600; color: var(--cream-pure);">No tasks currently assigned to you!</div>
+          <p style="font-size: 0.85rem; margin-top: 0.35rem; color: var(--cream-muted);">Check back when the facilities admin assigns new repair tickets.</p>
         </td>
       </tr>
     `;
@@ -49,7 +49,7 @@ function renderTasks(tasks) {
   }
 
   tbody.innerHTML = tasks.map(t => `
-    <tr style="${t.is_overdue ? 'background-color: #fff1f2;' : ''}">
+    <tr style="${t.is_overdue ? 'background-color: rgba(248, 113, 113, 0.12);' : ''}">
       <td>
         <span class="complaint-code-tag">${escapeHtml(t.complaint_code)}</span>
         <div style="margin-top: 4px;">${API.getPriorityBadge(t.priority)}</div>
@@ -70,22 +70,22 @@ function renderTasks(tasks) {
         <span class="badge badge-verified" style="font-size: 0.72rem; margin-bottom: 2px; display: inline-block;">
           🔧 ${escapeHtml(t.item_name || 'Equipment')}
         </span>
-        <div style="font-weight: 700; color: var(--primary);">${escapeHtml(t.title)}</div>
-        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+        <div style="font-weight: 700; color: var(--cream-pure);">${escapeHtml(t.title)}</div>
+        <div style="font-size: 0.8rem; color: var(--cream-muted); margin-top: 2px;">
           ${escapeHtml(t.description)}
         </div>
       </td>
       <td>
-        <div style="font-weight: 600;">${escapeHtml(t.building_name || 'Campus')}</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted);">${escapeHtml(t.room_number)} (${escapeHtml(t.floor_number)})</div>
+        <div style="font-weight: 600; color: var(--cream-pure);">${escapeHtml(t.building_name || 'Campus')}</div>
+        <div style="font-size: 0.78rem; color: var(--cream-muted);">${escapeHtml(t.room_number)} (${escapeHtml(t.floor_number)})</div>
       </td>
       <td>${escapeHtml(t.category)}</td>
       <td>
-        <div style="font-weight: 500;">${escapeHtml(t.reporter_name || 'Reporter')}</div>
-        <div style="font-size: 0.78rem; color: var(--text-muted);">${escapeHtml(t.reporter_phone || '')}</div>
+        <div style="font-weight: 500; color: var(--cream-pure);">${escapeHtml(t.reporter_name || 'Reporter')}</div>
+        <div style="font-size: 0.78rem; color: var(--cream-muted);">${escapeHtml(t.reporter_phone || '')}</div>
       </td>
       <td>
-        <div style="font-size: 0.85rem; font-weight: 600; color: ${t.is_overdue ? '#dc2626' : 'var(--text-main)'};">
+        <div style="font-size: 0.85rem; font-weight: 600; color: ${t.is_overdue ? '#f87171' : 'var(--cream-soft)'};">
           ${t.deadline ? API.formatDate(t.deadline) : 'No Deadline'}
         </div>
       </td>

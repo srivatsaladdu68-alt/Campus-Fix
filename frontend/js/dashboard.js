@@ -35,10 +35,10 @@ async function loadDashboardData() {
   if (res.recent_complaints.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
-          <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">No complaints reported yet</div>
-          <p style="font-size: 0.85rem; margin-bottom: 1rem;">Spot an issue on campus? Report it right away to alert facilities.</p>
-          <a href="report-fault.html" class="btn btn-secondary btn-sm">Report a Fault</a>
+        <td colspan="8" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">
+          <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--cream-pure);">No complaints reported yet</div>
+          <p style="font-size: 0.85rem; margin-bottom: 1rem; color: var(--cream-muted);">Spot an issue on campus? Report it right away to alert facilities.</p>
+          <a href="report-fault.html" class="btn btn-gold btn-sm">Report a Fault</a>
         </td>
       </tr>
     `;
