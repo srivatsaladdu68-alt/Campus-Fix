@@ -24,54 +24,73 @@
 
   <!-- Login Card Container -->
   <div class="auth-wrapper">
-    <div class="auth-card">
-      <div class="auth-header">
-        <div class="nav-logo-icon" style="margin: 0 auto 1rem; width: 44px; height: 44px;">
-          <i data-lucide="lock" style="width: 22px; height: 22px;"></i>
-        </div>
-        <h2>Sign In to Campus Fix</h2>
-        <p>Access your campus maintenance dashboard</p>
+    <!-- Centered Header Above Card (Matches Sample Design) -->
+    <div class="auth-page-header">
+      <div class="auth-badge-icon">
+        <i data-lucide="shield-check" style="width: 26px; height: 26px;"></i>
       </div>
+      <h1>Sign In</h1>
+      <p>Access your campus maintenance dashboard and track repairs.</p>
+    </div>
 
+    <!-- Centered Form Card -->
+    <div class="auth-card">
       <form id="login-form">
         <div class="form-group">
           <label for="email">Campus Email</label>
-          <input type="email" id="email" class="form-control" placeholder="student@vnrvjiet.in" required autofocus>
+          <div class="form-control-wrap">
+            <i data-lucide="mail" class="input-icon"></i>
+            <input type="email" id="email" class="form-control" placeholder="student@vnrvjiet.in" required autofocus autocomplete="email">
+          </div>
         </div>
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+          <div class="form-control-wrap">
+            <i data-lucide="lock" class="input-icon"></i>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="toggle-password-btn" id="toggle-pwd-btn" onclick="togglePasswordVisibility()" title="Show/Hide password">
+              <i data-lucide="eye" id="toggle-pwd-icon" style="width: 18px; height: 18px;"></i>
+            </button>
+          </div>
         </div>
 
-        <button type="submit" class="btn btn-gold btn-lg" style="width: 100%; margin-top: 0.5rem;" id="login-btn">
+        <button type="submit" class="btn-auth-submit" id="login-btn">
           <i data-lucide="log-in" style="width: 18px; height: 18px;"></i>
           Sign In
         </button>
       </form>
 
-      <p style="text-align: center; font-size: 0.88rem; margin-top: 1.5rem; color: var(--cream-muted);">
-        Don't have an account? <a href="register.html" style="font-weight: 600; color: var(--cream-gold);">Register as Student / Faculty</a>
-      </p>
+      <!-- Switch to Register Bar -->
+      <div class="auth-switch-bar">
+        <span>Don't have an account?</span>
+        <a href="register.html" class="btn-auth-switch">
+          <i data-lucide="user-plus" style="width: 14px; height: 14px;"></i>
+          Register
+        </a>
+      </div>
 
-      <!-- Quick Demo Account Switcher -->
-      <div class="demo-accounts">
-        <div class="demo-accounts-title">Quick Demo Login (1-Click Test):</div>
-        <div class="demo-btn-group">
-          <button type="button" class="demo-btn" onclick="fillCreds('admin@vnrvjiet.in', 'Admin@123')">
-            Administrator
+      <!-- Quick 1-Click Demo Accounts Switcher -->
+      <div class="demo-accounts-box">
+        <div class="demo-accounts-header">
+          <i data-lucide="zap" style="width: 14px; height: 14px; color: var(--cream-gold);"></i>
+          <span>1-Click Demo Logins</span>
+        </div>
+        <div class="demo-chips-grid">
+          <button type="button" class="demo-role-chip" onclick="fillCreds('admin@vnrvjiet.in', 'Admin@123')">
+            <span class="role-tag-pill admin">Admin</span> Administrator
           </button>
-          <button type="button" class="demo-btn" onclick="fillCreds('staff.mike@vnrvjiet.in', 'Staff@123')">
-            Staff (Electrician)
+          <button type="button" class="demo-role-chip" onclick="fillCreds('staff.mike@vnrvjiet.in', 'Staff@123')">
+            <span class="role-tag-pill staff">Staff</span> Electrician (Mike)
           </button>
-          <button type="button" class="demo-btn" onclick="fillCreds('staff.sarah@vnrvjiet.in', 'Staff@123')">
-            Staff (Plumber)
+          <button type="button" class="demo-role-chip" onclick="fillCreds('staff.sarah@vnrvjiet.in', 'Staff@123')">
+            <span class="role-tag-pill staff">Staff</span> Plumber (Sarah)
           </button>
-          <button type="button" class="demo-btn" onclick="fillCreds('student.alex@vnrvjiet.in', 'Student@123')">
-            Student (Alex)
+          <button type="button" class="demo-role-chip" onclick="fillCreds('student.alex@vnrvjiet.in', 'Student@123')">
+            <span class="role-tag-pill student">Student</span> Alex Morgan
           </button>
-          <button type="button" class="demo-btn" onclick="fillCreds('prof.sharma@vnrvjiet.in', 'Faculty@123')">
-            Faculty (Prof. Sharma)
+          <button type="button" class="demo-role-chip" onclick="fillCreds('prof.sharma@vnrvjiet.in', 'Faculty@123')">
+            <span class="role-tag-pill faculty">Faculty</span> Prof. Sharma
           </button>
         </div>
       </div>
@@ -83,6 +102,19 @@
   <script>
     lucide.createIcons();
     Auth.redirectIfLoggedIn();
+
+    function togglePasswordVisibility() {
+      const pwdInput = document.getElementById('password');
+      const icon = document.getElementById('toggle-pwd-icon');
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        pwdInput.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    }
 
     // Check for expired session query
     const urlParams = new URLSearchParams(window.location.search);

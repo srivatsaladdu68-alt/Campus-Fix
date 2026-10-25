@@ -924,3 +924,323 @@ input::placeholder, textarea::placeholder {
     left: -1rem;
   }
 }
+
+/* ==========================================================================
+   Auth Pages (Login & Register) - Luxury Centered Card Design
+   ========================================================================== */
+
+.auth-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1.5rem 4rem;
+  min-height: calc(100vh - 80px);
+  position: relative;
+  background: radial-gradient(circle at 50% 18%, rgba(99, 102, 241, 0.16) 0%, rgba(11, 12, 30, 0.98) 75%);
+}
+
+.auth-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(251, 215, 132, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Page Header Centered Above the Card */
+.auth-page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.auth-page-header .auth-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(67, 56, 202, 0.4));
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  color: var(--electric-indigo-bright);
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+}
+
+.auth-page-header h1 {
+  font-family: var(--font-serif);
+  font-size: 2.35rem;
+  font-weight: 700;
+  color: var(--cream-pure);
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+
+.auth-page-header p {
+  color: var(--cream-muted);
+  font-size: 0.95rem;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* Centered Card Container */
+.auth-card {
+  width: 100%;
+  max-width: 490px;
+  background: rgba(18, 19, 43, 0.92);
+  border: 1px solid rgba(244, 239, 230, 0.14);
+  border-radius: 20px;
+  padding: 2.75rem 2.5rem 2.25rem;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.65), 0 0 45px rgba(99, 102, 241, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+  z-index: 2;
+  transition: var(--transition);
+}
+
+.auth-card:hover {
+  border-color: rgba(251, 215, 132, 0.25);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.7), 0 0 50px rgba(99, 102, 241, 0.12);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.35rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cream-soft);
+  margin-bottom: 0.55rem;
+}
+
+.form-control-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-control-wrap .input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--cream-dim);
+  pointer-events: none;
+  width: 18px;
+  height: 18px;
+  transition: var(--transition);
+}
+
+.form-control {
+  width: 100%;
+  height: 48px;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(244, 239, 230, 0.14);
+  border-radius: 10px;
+  color: var(--cream-pure);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-control-wrap .form-control {
+  padding-left: 2.75rem;
+  padding-right: 2.75rem;
+}
+
+.form-control:focus {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--electric-indigo);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+.form-control-wrap:focus-within .input-icon {
+  color: var(--electric-indigo-bright);
+}
+
+.form-control::placeholder {
+  color: var(--cream-dim);
+  font-size: 0.9rem;
+}
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23b0a99c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+}
+
+select.form-control option {
+  background-color: #12132b;
+  color: var(--cream-pure);
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 0.85rem;
+  background: none;
+  border: none;
+  color: var(--cream-dim);
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.toggle-password-btn:hover {
+  color: var(--cream-pure);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Auth Submit Button */
+.btn-auth-submit {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, var(--cream-gold), #f59e0b);
+  color: #0b0c1e;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 18px rgba(251, 215, 132, 0.25);
+  margin-top: 1.5rem;
+}
+
+.btn-auth-submit:hover {
+  background: linear-gradient(135deg, var(--cream-gold-hover), #fbbf24);
+  box-shadow: 0 6px 24px rgba(251, 215, 132, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-auth-submit:active {
+  transform: translateY(0);
+}
+
+.btn-auth-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Switch Section (Don't have an account? Register) */
+.auth-switch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(244, 239, 230, 0.1);
+  font-size: 0.9rem;
+  color: var(--cream-muted);
+}
+
+.btn-auth-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #252849;
+  color: var(--cream-pure);
+  border: 1px solid rgba(244, 239, 230, 0.18);
+  border-radius: 8px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.btn-auth-switch:hover {
+  background: var(--cream-gold);
+  color: #0b0c1e;
+  border-color: var(--cream-gold);
+  transform: translateY(-1px);
+}
+
+/* Quick Demo Accounts Box */
+.demo-accounts-box {
+  margin-top: 1.75rem;
+  padding: 1.15rem 1.25rem;
+  background: rgba(11, 12, 30, 0.55);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 12px;
+}
+
+.demo-accounts-header {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cream-gold);
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.demo-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.demo-role-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(244, 239, 230, 0.12);
+  color: var(--cream-soft);
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.demo-role-chip:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--electric-indigo-bright);
+  color: var(--cream-pure);
+  transform: translateY(-1px);
+}
+
+.role-tag-pill {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.role-tag-pill.admin { background: rgba(96, 165, 250, 0.2); color: #60a5fa; }
+.role-tag-pill.staff { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+.role-tag-pill.student { background: rgba(251, 215, 132, 0.2); color: #fbd784; }
+.role-tag-pill.faculty { background: rgba(167, 139, 250, 0.2); color: #c084fc; }
+
