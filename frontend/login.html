@@ -66,10 +66,10 @@
 
       <!-- Switch to Register Bar -->
       <div class="auth-switch-bar">
-        <span>Don't have an account?</span>
+        <span>New to Campus Fix?</span>
         <a href="register.html" class="btn-auth-switch">
           <i data-lucide="user-plus" style="width: 14px; height: 14px;"></i>
-          Register
+          Register Account
         </a>
       </div>
 
@@ -166,7 +166,7 @@
         }, 500);
       } else {
         if (res && res.code === 'USER_NOT_FOUND') {
-          API.showToast("No account found for this email! Click 'Register' below to create one.", 'warning');
+          API.showToast("No account found for this email! Click 'Register Account' below to sign up.", 'warning');
           const regBtn = document.querySelector('.btn-auth-switch');
           if (regBtn) {
             regBtn.style.borderColor = 'var(--cream-gold)';

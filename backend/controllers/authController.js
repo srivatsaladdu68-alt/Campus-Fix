@@ -186,7 +186,7 @@ function login(req, res) {
       return res.status(401).json({
         success: false,
         code: 'USER_NOT_FOUND',
-        message: "No account found with this email. Don't have an account? Please register."
+        message: "No account found with this email address. Please check your credentials or register an account."
       });
     }
 
