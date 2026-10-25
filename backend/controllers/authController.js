@@ -292,15 +292,24 @@ function approveUser(req, res) {
       WHERE user_id = ?
     `).run(notes || 'Approved by Administrator', userId);
 
-    // Welcome notification
+    // Send notification to the user that they are approved successfully
     db.prepare(`
       INSERT INTO notifications (user_id, message)
       VALUES (?, ?)
-    `).run(userId, 'Your account registration has been approved! You now have full access to Campus Fix.');
+    `).run(userId, 'Approved successfully! Your account is active and you can now sign in.');
+
+    // Send confirmation notification to admin
+    const adminId = req.user ? req.user.user_id : null;
+    if (adminId) {
+      db.prepare(`
+        INSERT INTO notifications (user_id, message)
+        VALUES (?, ?)
+      `).run(adminId, `Approved successfully: Registration for ${user.full_name} (${user.role.toUpperCase()}) was verified.`);
+    }
 
     return res.json({
       success: true,
-      message: `Account for ${user.full_name} (${user.role.toUpperCase()}) has been approved and activated.`
+      message: 'Approved successfully.'
     });
   } catch (err) {
     console.error('Approve user error:', err);
@@ -325,9 +334,11 @@ function rejectUser(req, res) {
       WHERE user_id = ?
     `).run(notes || 'Registration rejected by Administrator', userId);
 
+    // If rejected: no notification is sent
+
     return res.json({
       success: true,
-      message: `Account request for ${user.full_name} has been rejected.`
+      message: 'Account rejected.'
     });
   } catch (err) {
     console.error('Reject user error:', err);

@@ -529,10 +529,10 @@ async function loadPendingApprovals() {
         <td><span class="badge" style="background: rgba(251, 215, 132, 0.15); color: var(--cream-gold);">Pending Review</span></td>
         <td>
           <div style="display: flex; gap: 0.5rem;">
-            <button class="btn btn-sm btn-gold" onclick="approveUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
+            <button class="btn btn-sm btn-gold" onclick="approveUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}', this)">
               <i data-lucide="check" style="width: 14px; height: 14px;"></i> Approve
             </button>
-            <button class="btn btn-sm btn-outline" style="border-color: #f87171; color: #f87171;" onclick="rejectUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
+            <button class="btn btn-sm btn-outline" style="border-color: #f87171; color: #f87171;" onclick="rejectUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}', this)">
               <i data-lucide="x" style="width: 14px; height: 14px;"></i> Reject
             </button>
           </div>
@@ -544,33 +544,51 @@ async function loadPendingApprovals() {
   lucide.createIcons();
 }
 
-async function approveUserRegistration(userId, name) {
-  if (!confirm(`Are you satisfied with the verification credentials for ${name}? Click OK to approve and activate their account.`)) {
-    return;
+async function approveUserRegistration(userId, name, btn) {
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = 'Approving...';
   }
 
-  const res = await API.call(`/auth/approve/${userId}`, 'PUT', { notes: 'Verified and approved by Administrator' });
+  const res = await API.call(`/auth/approve/${userId}`, 'PUT', { notes: 'Approved by Administrator' });
   if (res && res.success) {
-    API.showToast(res.message, 'success');
+    API.showToast('Approved successfully', 'success');
     await loadPendingApprovals();
     await loadStaffList();
     renderStaffDirectory();
+    if (typeof Auth !== 'undefined' && Auth.updateNotificationBadge) {
+      Auth.updateNotificationBadge();
+    }
   } else {
     API.showToast(res.message || 'Failed to approve user.', 'error');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i> Approve';
+      lucide.createIcons();
+    }
   }
 }
 
-async function rejectUserRegistration(userId, name) {
-  if (!confirm(`Are you sure you want to reject the registration request for ${name}?`)) {
-    return;
+async function rejectUserRegistration(userId, name, btn) {
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = 'Rejecting...';
   }
 
   const res = await API.call(`/auth/reject/${userId}`, 'PUT', { notes: 'Registration rejected by Administrator' });
   if (res && res.success) {
-    API.showToast(res.message, 'info');
+    API.showToast('Account rejected', 'info');
     await loadPendingApprovals();
+    if (typeof Auth !== 'undefined' && Auth.updateNotificationBadge) {
+      Auth.updateNotificationBadge();
+    }
   } else {
     API.showToast(res.message || 'Failed to reject user.', 'error');
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="x" style="width: 14px; height: 14px;"></i> Reject';
+      lucide.createIcons();
+    }
   }
 }
 
