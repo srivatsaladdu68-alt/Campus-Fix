@@ -116,10 +116,13 @@
       lucide.createIcons();
     }
 
-    // Check for expired session query
+    // Check for query parameters
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('expired')) {
       API.showToast('Your session has expired. Please sign in again.', 'warning');
+    }
+    if (urlParams.get('pending')) {
+      API.showToast('Registration received! Staff accounts require admin approval before sign-in.', 'info');
     }
 
     function fillCreds(email, pass) {
@@ -159,7 +162,20 @@
           window.location.href = redirect;
         }, 500);
       } else {
-        API.showToast(res.message || 'Login failed. Please check credentials.', 'error');
+        if (res && res.code === 'USER_NOT_FOUND') {
+          API.showToast("No account found for this email! Click 'Register' below to create one.", 'warning');
+          const regBtn = document.querySelector('.btn-auth-switch');
+          if (regBtn) {
+            regBtn.style.borderColor = 'var(--cream-gold)';
+            regBtn.style.boxShadow = '0 0 18px rgba(251, 215, 132, 0.45)';
+          }
+        } else if (res && res.code === 'PENDING_APPROVAL') {
+          API.showToast('Your account is currently pending administrator verification. Please await approval.', 'warning');
+        } else if (res && res.code === 'ACCOUNT_REJECTED') {
+          API.showToast('Your registration request was not approved by the administrator.', 'error');
+        } else {
+          API.showToast(res && res.message ? res.message : 'Invalid email or password.', 'error');
+        }
       }
     });
   </script>

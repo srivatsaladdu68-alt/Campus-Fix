@@ -65,11 +65,26 @@
             <label for="role">Campus Role *</label>
             <div class="form-control-wrap">
               <i data-lucide="award" class="input-icon"></i>
-              <select id="role" class="form-control" required>
+              <select id="role" class="form-control" required onchange="handleRoleChange()">
                 <option value="student">Student</option>
                 <option value="faculty">Faculty / Instructor</option>
+                <option value="staff">Maintenance Staff (Technician)</option>
               </select>
             </div>
+          </div>
+        </div>
+
+        <div class="form-group" id="dept-group" style="display: none;">
+          <label for="department">Specialization / Trade *</label>
+          <div class="form-control-wrap">
+            <i data-lucide="wrench" class="input-icon"></i>
+            <select id="department" class="form-control">
+              <option value="Electrical & IT Maintenance">Electrical & IT Maintenance</option>
+              <option value="Plumbing & Sanitation">Plumbing & Sanitation</option>
+              <option value="Carpentry & Furniture">Carpentry & Furniture</option>
+              <option value="Classroom & Lab Equipment">Classroom & Lab Equipment</option>
+              <option value="General Facilities">General Facilities</option>
+            </select>
           </div>
         </div>
 
@@ -91,8 +106,8 @@
           </div>
         </div>
 
-        <div style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 1.25rem; background: rgba(255,255,255,0.03); padding: 0.6rem 0.85rem; border-radius: 8px; border: 1px dashed rgba(244,239,230,0.12);">
-          ℹ️ <strong>Note:</strong> Maintenance Staff and Administrator accounts are provisioned directly by the Campus Facilities Admin.
+        <div id="role-note" style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 1.25rem; background: rgba(255,255,255,0.03); padding: 0.65rem 0.85rem; border-radius: 8px; border: 1px dashed rgba(244,239,230,0.12);">
+          ℹ️ <strong>Instant Access:</strong> Students and Faculty can report and track maintenance faults immediately.
         </div>
 
         <button type="submit" class="btn-auth-submit" id="register-btn">
@@ -118,6 +133,23 @@
     lucide.createIcons();
     Auth.redirectIfLoggedIn();
 
+    function handleRoleChange() {
+      const role = document.getElementById('role').value;
+      const deptGroup = document.getElementById('dept-group');
+      const roleNote = document.getElementById('role-note');
+
+      if (role === 'staff') {
+        deptGroup.style.display = 'block';
+        roleNote.innerHTML = '🛡️ <strong>Admin Approval Required:</strong> Staff accounts require administrative verification by the Campus Facilities Admin before login access is activated.';
+        roleNote.style.borderColor = 'rgba(251, 215, 132, 0.35)';
+      } else {
+        deptGroup.style.display = 'none';
+        roleNote.innerHTML = 'ℹ️ <strong>Instant Access:</strong> Students and Faculty can report and track maintenance faults immediately.';
+        roleNote.style.borderColor = 'rgba(244, 239, 230, 0.12)';
+      }
+      lucide.createIcons();
+    }
+
     const form = document.getElementById('register-form');
     const submitBtn = document.getElementById('register-btn');
 
@@ -128,6 +160,7 @@
       const email = document.getElementById('email').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const role = document.getElementById('role').value;
+      const department = role === 'staff' ? document.getElementById('department').value : undefined;
       const password = document.getElementById('password').value;
       const confirm_password = document.getElementById('confirm_password').value;
 
@@ -154,6 +187,7 @@
         email,
         phone,
         role,
+        department,
         password
       });
 
@@ -162,12 +196,19 @@
       lucide.createIcons();
 
       if (res && res.success) {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.user));
-        API.showToast('Account registered successfully! Welcome.', 'success');
-        setTimeout(() => {
-          window.location.href = Auth.getDashboardUrl(res.user.role);
-        }, 600);
+        if (res.pending_approval) {
+          API.showToast(res.message, 'info');
+          setTimeout(() => {
+            window.location.href = 'login.html?pending=true';
+          }, 2000);
+        } else {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
+          API.showToast('Account registered successfully! Welcome.', 'success');
+          setTimeout(() => {
+            window.location.href = Auth.getDashboardUrl(res.user.role);
+          }, 600);
+        }
       } else {
         API.showToast(res.message || 'Registration failed.', 'error');
       }

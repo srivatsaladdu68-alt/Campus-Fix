@@ -40,8 +40,9 @@
           <span>Reports & CSV Export</span>
         </a>
         <a href="#staff-mgmt" class="sidebar-link" onclick="switchTab('staff-mgmt')">
-          <i data-lucide="users"></i>
-          <span>Staff Directory</span>
+          <i data-lucide="user-check"></i>
+          <span>Staff & Approvals</span>
+          <span class="badge" id="sidebar-pending-badge" style="display: none; margin-left: auto; background: var(--cream-gold); color: #0b0c1e; font-weight: 700; font-size: 0.7rem; padding: 2px 6px; border-radius: 9999px;">0</span>
         </a>
         <a href="notifications.html" class="sidebar-link">
           <i data-lucide="bell"></i>
@@ -356,11 +357,51 @@
           </div>
         </div>
 
-        <!-- TAB 4: Staff Directory Management -->
+        <!-- TAB 4: Staff Directory & Account Approvals -->
         <div id="tab-staff-mgmt" style="display: none;">
+          <!-- Pending Account Registration Requests -->
+          <div class="content-card" style="margin-bottom: 2rem; border-color: rgba(251, 215, 132, 0.25);">
+            <div class="card-header-bar">
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <i data-lucide="user-check" style="width: 22px; height: 22px; color: var(--cream-gold);"></i>
+                <h2>Pending Account Registration Requests</h2>
+              </div>
+              <span class="badge" id="pending-approvals-count" style="background: rgba(251, 215, 132, 0.2); color: var(--cream-gold); font-size: 0.8rem; font-weight: 700;">0 Pending</span>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--cream-muted); margin-bottom: 1.25rem;">
+              Review self-registered maintenance technicians and staff access requests. Approve to grant dashboard credentials or reject unverified applicants.
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Applicant Name</th>
+                    <th>Email Address</th>
+                    <th>Phone</th>
+                    <th>Requested Role</th>
+                    <th>Specialization / Trade</th>
+                    <th>Request Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="pending-approvals-tbody">
+                  <tr>
+                    <td colspan="8" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">Loading pending requests...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Active Staff Directory -->
           <div class="content-card">
             <div class="card-header-bar">
-              <h2>Authorized Campus Maintenance Technicians</h2>
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <i data-lucide="wrench" style="width: 22px; height: 22px; color: var(--electric-indigo-bright);"></i>
+                <h2>Authorized Campus Maintenance Technicians</h2>
+              </div>
               <button class="btn btn-primary btn-sm" onclick="openAddStaffModal()">
                 <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i> Register New Staff
               </button>

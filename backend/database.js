@@ -27,7 +27,9 @@ function initSchema() {
       student_id TEXT,
       department TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      is_active INTEGER DEFAULT 1
+      is_active INTEGER DEFAULT 1,
+      approval_status TEXT DEFAULT 'approved',
+      approval_notes TEXT
     );
 
     CREATE TABLE IF NOT EXISTS buildings (
@@ -123,6 +125,19 @@ function initSchema() {
   `;
 
   db.exec(schema);
+
+  // Safe migration check for existing tables
+  try {
+    const userCols = db.pragma('table_info(users)').map(c => c.name);
+    if (!userCols.includes('approval_status')) {
+      db.exec("ALTER TABLE users ADD COLUMN approval_status TEXT DEFAULT 'approved'");
+    }
+    if (!userCols.includes('approval_notes')) {
+      db.exec("ALTER TABLE users ADD COLUMN approval_notes TEXT");
+    }
+  } catch (err) {
+    console.error('Migration notice:', err.message);
+  }
 }
 
 function seedDatabase() {

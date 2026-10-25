@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   await loadAdminOverview();
   await loadStaffList();
+  await loadPendingApprovals();
   setupComplaintsTableFilters();
 });
 
@@ -42,6 +43,7 @@ function switchTab(tabId) {
     loadAllComplaints();
   } else if (tabId === 'staff-mgmt') {
     renderStaffDirectory();
+    loadPendingApprovals();
   }
 }
 
@@ -462,6 +464,102 @@ function renderStaffDirectory() {
       <td><span class="badge badge-verified">Active Technician</span></td>
     </tr>
   `).join('');
+}
+
+// 6. Pending Account Approvals (Staff & Students)
+let pendingApprovals = [];
+
+async function loadPendingApprovals() {
+  const res = await API.call('/auth/pending-approvals');
+  const tbody = document.getElementById('pending-approvals-tbody');
+  const countBadge = document.getElementById('pending-approvals-count');
+  const sidebarBadge = document.getElementById('sidebar-pending-badge');
+
+  if (!res || !res.success) {
+    if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: red; padding: 2rem;">Failed to load pending requests.</td></tr>';
+    return;
+  }
+
+  pendingApprovals = res.pending || [];
+  const count = pendingApprovals.length;
+
+  if (countBadge) countBadge.textContent = `${count} Pending`;
+  if (sidebarBadge) {
+    if (count > 0) {
+      sidebarBadge.textContent = count;
+      sidebarBadge.style.display = 'inline-block';
+    } else {
+      sidebarBadge.style.display = 'none';
+    }
+  }
+
+  if (!tbody) return;
+
+  if (pendingApprovals.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">
+          <div style="font-size: 1rem; font-weight: 600; color: var(--cream-soft); margin-bottom: 0.25rem;">No pending registration requests!</div>
+          <p style="font-size: 0.82rem; color: var(--cream-muted);">All campus accounts and staff technicians have been verified.</p>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = pendingApprovals.map(u => `
+    <tr>
+      <td style="font-weight: 700; color: var(--cream-pure);">${escapeHtml(u.full_name)}</td>
+      <td>${escapeHtml(u.email)}</td>
+      <td>${escapeHtml(u.phone || 'N/A')}</td>
+      <td><span class="badge" style="background: rgba(99, 102, 241, 0.2); color: var(--electric-indigo-bright); text-transform: uppercase; font-size: 0.74rem; font-weight: 700;">${escapeHtml(u.role)}</span></td>
+      <td><span style="color: var(--cream-gold); font-size: 0.84rem; font-weight: 600;">${escapeHtml(u.department || 'General Facilities')}</span></td>
+      <td style="font-size: 0.8rem; color: var(--cream-muted);">${API.formatDate(u.created_at)}</td>
+      <td><span class="badge" style="background: rgba(251, 215, 132, 0.15); color: var(--cream-gold);">Pending Review</span></td>
+      <td>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-sm btn-gold" onclick="approveUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
+            <i data-lucide="check" style="width: 14px; height: 14px;"></i> Approve
+          </button>
+          <button class="btn btn-sm btn-outline" style="border-color: #f87171; color: #f87171;" onclick="rejectUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
+            <i data-lucide="x" style="width: 14px; height: 14px;"></i> Reject
+          </button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  lucide.createIcons();
+}
+
+async function approveUserRegistration(userId, name) {
+  if (!confirm(`Are you satisfied with the verification credentials for ${name}? Click OK to approve and activate their account.`)) {
+    return;
+  }
+
+  const res = await API.call(`/auth/approve/${userId}`, 'PUT', { notes: 'Verified and approved by Administrator' });
+  if (res && res.success) {
+    API.showToast(res.message, 'success');
+    await loadPendingApprovals();
+    await loadStaffList();
+    renderStaffDirectory();
+  } else {
+    API.showToast(res.message || 'Failed to approve user.', 'error');
+  }
+}
+
+async function rejectUserRegistration(userId, name) {
+  if (!confirm(`Are you sure you want to reject the registration request for ${name}?`)) {
+    return;
+  }
+
+  const res = await API.call(`/auth/reject/${userId}`, 'PUT', { notes: 'Registration rejected by Administrator' });
+  if (res && res.success) {
+    API.showToast(res.message, 'info');
+    await loadPendingApprovals();
+  } else {
+    API.showToast(res.message || 'Failed to reject user.', 'error');
+  }
 }
 
 function openAddStaffModal() {

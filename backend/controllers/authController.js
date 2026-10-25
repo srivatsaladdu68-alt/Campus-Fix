@@ -4,10 +4,10 @@ const db = require('../database');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'campus_fix_super_secret_jwt_key_2026_secure';
 
-// Public Registration (Restricted to student/faculty roles)
+// Public Registration (Student, Faculty, Staff)
 function register(req, res) {
   try {
-    const { full_name, email, phone, password, role } = req.body;
+    const { full_name, email, phone, password, role, department } = req.body;
 
     if (!full_name || !email || !password) {
       return res.status(400).json({ success: false, message: 'Please provide full name, email, and password.' });
@@ -22,9 +22,9 @@ function register(req, res) {
       return res.status(400).json({ success: false, message: 'Password must be at least 6 characters long.' });
     }
 
-    // Role assignment security: public can only register as student or faculty
+    // Role assignment: public can register as student, faculty, or staff
     let assignedRole = 'student';
-    if (role && (role === 'student' || role === 'faculty')) {
+    if (role && ['student', 'faculty', 'staff'].includes(role)) {
       assignedRole = role;
     }
 
@@ -36,9 +36,15 @@ function register(req, res) {
     const salt = bcrypt.genSaltSync(10);
     const password_hash = bcrypt.hashSync(password, salt);
 
+    // If registering as staff: requires admin approval before activation
+    const requiresApproval = (assignedRole === 'staff');
+    const isActive = requiresApproval ? 0 : 1;
+    const approvalStatus = requiresApproval ? 'pending' : 'approved';
+    const deptValue = department ? department.trim() : (assignedRole === 'staff' ? 'General Facilities' : null);
+
     const stmt = db.prepare(`
-      INSERT INTO users (full_name, email, phone, password_hash, role)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO users (full_name, email, phone, password_hash, role, department, is_active, approval_status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const result = stmt.run(
@@ -46,15 +52,45 @@ function register(req, res) {
       email.toLowerCase().trim(),
       phone ? phone.trim() : null,
       password_hash,
-      assignedRole
+      assignedRole,
+      deptValue,
+      isActive,
+      approvalStatus
     );
 
+    const newUserId = result.lastInsertRowid;
+
+    if (requiresApproval) {
+      // Notify Admin of new approval request
+      const admin = db.prepare("SELECT user_id FROM users WHERE role = 'admin' LIMIT 1").get();
+      if (admin) {
+        db.prepare(`
+          INSERT INTO notifications (user_id, message)
+          VALUES (?, ?)
+        `).run(admin.user_id, `New staff access request from ${full_name.trim()} (${deptValue}). Review and approve in Admin Console.`);
+      }
+
+      return res.status(201).json({
+        success: true,
+        pending_approval: true,
+        message: 'Registration submitted! Staff accounts require administrator approval before login access is activated.',
+        user: {
+          user_id: newUserId,
+          full_name: full_name.trim(),
+          email: email.toLowerCase().trim(),
+          role: assignedRole,
+          approval_status: 'pending'
+        }
+      });
+    }
+
     const user = {
-      user_id: result.lastInsertRowid,
+      user_id: newUserId,
       full_name: full_name.trim(),
       email: email.toLowerCase().trim(),
       phone: phone ? phone.trim() : null,
-      role: assignedRole
+      role: assignedRole,
+      approval_status: 'approved'
     };
 
     const token = jwt.sign(
@@ -65,6 +101,7 @@ function register(req, res) {
 
     return res.status(201).json({
       success: true,
+      pending_approval: false,
       message: 'Account successfully registered.',
       token,
       user
@@ -85,13 +122,37 @@ function login(req, res) {
     }
 
     const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email.toLowerCase().trim());
-    if (!user || user.is_active !== 1) {
-      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        code: 'USER_NOT_FOUND',
+        message: "No account found with this email. Don't have an account? Please register."
+      });
+    }
+
+    if (user.approval_status === 'pending' || user.is_active === 0) {
+      return res.status(403).json({
+        success: false,
+        code: 'PENDING_APPROVAL',
+        message: 'Your account registration is currently pending administrator approval. You will receive access once verified.'
+      });
+    }
+
+    if (user.approval_status === 'rejected') {
+      return res.status(403).json({
+        success: false,
+        code: 'ACCOUNT_REJECTED',
+        message: 'Your account registration request was not approved by the administrator.'
+      });
     }
 
     const match = bcrypt.compareSync(password, user.password_hash);
     if (!match) {
-      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+      return res.status(401).json({
+        success: false,
+        code: 'INVALID_PASSWORD',
+        message: 'Incorrect password. Please verify and try again.'
+      });
     }
 
     const token = jwt.sign(
@@ -195,11 +256,91 @@ function listBuildings(req, res) {
   }
 }
 
+// List all pending approvals (Admin)
+function listPendingApprovals(req, res) {
+  try {
+    const pending = db.prepare(`
+      SELECT user_id, full_name, email, phone, role, department, created_at, approval_status
+      FROM users
+      WHERE approval_status = 'pending' OR (is_active = 0 AND approval_status != 'rejected')
+      ORDER BY created_at DESC
+    `).all();
+
+    return res.json({ success: true, pending });
+  } catch (err) {
+    console.error('List pending approvals error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to retrieve pending approvals.' });
+  }
+}
+
+// Approve account request (Admin)
+function approveUser(req, res) {
+  try {
+    const userId = req.params.id;
+    const { notes } = req.body || {};
+
+    const user = db.prepare('SELECT user_id, full_name, email, role FROM users WHERE user_id = ?').get(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    db.prepare(`
+      UPDATE users
+      SET is_active = 1, approval_status = 'approved', approval_notes = ?
+      WHERE user_id = ?
+    `).run(notes || 'Approved by Administrator', userId);
+
+    // Welcome notification
+    db.prepare(`
+      INSERT INTO notifications (user_id, message)
+      VALUES (?, ?)
+    `).run(userId, 'Your account registration has been approved! You now have full access to Campus Fix.');
+
+    return res.json({
+      success: true,
+      message: `Account for ${user.full_name} (${user.role.toUpperCase()}) has been approved and activated.`
+    });
+  } catch (err) {
+    console.error('Approve user error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to approve user.' });
+  }
+}
+
+// Reject account request (Admin)
+function rejectUser(req, res) {
+  try {
+    const userId = req.params.id;
+    const { notes } = req.body || {};
+
+    const user = db.prepare('SELECT user_id, full_name, email, role FROM users WHERE user_id = ?').get(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    db.prepare(`
+      UPDATE users
+      SET is_active = 0, approval_status = 'rejected', approval_notes = ?
+      WHERE user_id = ?
+    `).run(notes || 'Registration rejected by Administrator', userId);
+
+    return res.json({
+      success: true,
+      message: `Account request for ${user.full_name} has been rejected.`
+    });
+  } catch (err) {
+    console.error('Reject user error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to reject user.' });
+  }
+}
+
 module.exports = {
   register,
   login,
   getMe,
   listStaff,
   createStaff,
-  listBuildings
+  listBuildings,
+  listPendingApprovals,
+  approveUser,
+  rejectUser
 };

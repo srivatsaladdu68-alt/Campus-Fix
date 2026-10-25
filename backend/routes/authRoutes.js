@@ -12,8 +12,11 @@ router.get('/buildings', authController.listBuildings);
 // Authenticated user check
 router.get('/me', authenticateToken, authController.getMe);
 
-// Staff management (Admin only)
+// Staff management & Account Approvals (Admin only)
 router.get('/staff', authenticateToken, requireRole(['admin']), authController.listStaff);
 router.post('/staff', authenticateToken, requireRole(['admin']), authController.createStaff);
+router.get('/pending-approvals', authenticateToken, requireRole(['admin']), authController.listPendingApprovals);
+router.put('/approve/:id', authenticateToken, requireRole(['admin']), authController.approveUser);
+router.put('/reject/:id', authenticateToken, requireRole(['admin']), authController.rejectUser);
 
 module.exports = router;
