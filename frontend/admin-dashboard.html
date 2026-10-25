@@ -41,12 +41,13 @@
         </a>
         <a href="#staff-mgmt" class="sidebar-link" onclick="switchTab('staff-mgmt')">
           <i data-lucide="user-check"></i>
-          <span>Staff & Approvals</span>
+          <span>Account Approvals & Staff</span>
           <span class="badge" id="sidebar-pending-badge" style="display: none; margin-left: auto; background: var(--cream-gold); color: #0b0c1e; font-weight: 700; font-size: 0.7rem; padding: 2px 6px; border-radius: 9999px;">0</span>
         </a>
         <a href="notifications.html" class="sidebar-link">
           <i data-lucide="bell"></i>
           <span>Notifications</span>
+          <span class="badge" id="unread-notif-count" style="display: none; margin-left: auto; background: var(--electric-indigo); color: white; font-weight: 700; font-size: 0.7rem; padding: 2px 6px; border-radius: 9999px;">0</span>
         </a>
       </div>
 
@@ -357,7 +358,7 @@
           </div>
         </div>
 
-        <!-- TAB 4: Staff Directory & Account Approvals -->
+        <!-- TAB 4: User Approvals & Staff Directory -->
         <div id="tab-staff-mgmt" style="display: none;">
           <!-- Pending Account Registration Requests -->
           <div class="content-card" style="margin-bottom: 2rem; border-color: rgba(251, 215, 132, 0.25);">
@@ -369,7 +370,7 @@
               <span class="badge" id="pending-approvals-count" style="background: rgba(251, 215, 132, 0.2); color: var(--cream-gold); font-size: 0.8rem; font-weight: 700;">0 Pending</span>
             </div>
             <p style="font-size: 0.88rem; color: var(--cream-muted); margin-bottom: 1.25rem;">
-              Review self-registered maintenance technicians and staff access requests. Approve to grant dashboard credentials or reject unverified applicants.
+              Review self-registered students, faculty, and maintenance technicians. Approve to grant dashboard access or reject unverified applicants to prevent fake accounts.
             </p>
 
             <div class="table-responsive">
@@ -380,7 +381,7 @@
                     <th>Email Address</th>
                     <th>Phone</th>
                     <th>Requested Role</th>
-                    <th>Specialization / Trade</th>
+                    <th>Department / Trade</th>
                     <th>Request Date</th>
                     <th>Status</th>
                     <th>Action</th>

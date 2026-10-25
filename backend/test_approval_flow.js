@@ -102,7 +102,52 @@ async function runApprovalTests() {
     ? '✅ [PASS] 6. Staff successfully logs in after admin approval with full technician access'
     : '❌ [FAIL] 6. Post-approval login failed', postApprovalLogin);
 
-  console.log('\n🏁 ALL APPROVAL WORKFLOW TESTS COMPLETED!');
+  // Test 7: Student registration with pending approval & admin notification
+  const fakeStudentEmail = `fake.applicant.${Date.now()}@vnrvjiet.in`;
+  const registerFakeStudent = await request('/auth/register', {
+    method: 'POST',
+    body: {
+      full_name: 'Suspicious Applicant',
+      email: fakeStudentEmail,
+      phone: '+91 12345 67890',
+      role: 'student',
+      password: 'FakePassword@123'
+    }
+  });
+  const fakeStudentId = registerFakeStudent.data.user?.user_id;
+  console.log(registerFakeStudent.status === 201 && registerFakeStudent.data.pending_approval === true
+    ? '✅ [PASS] 7. Student registration correctly submitted with pending_approval: true'
+    : '❌ [FAIL] 7. Student registration failed', registerFakeStudent);
+
+  // Test 8: Verify admin received in-app notification about registration request
+  const notifRes = await request('/notifications', {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const hasRegNotif = notifRes.data.notifications?.some(n => n.message.includes('registration request') && n.message.includes('Suspicious Applicant'));
+  console.log(notifRes.status === 200 && hasRegNotif
+    ? '✅ [PASS] 8. Admin automatically receives in-app notification when a new user registers'
+    : '❌ [FAIL] 8. Admin notification for registration check failed', notifRes);
+
+  // Test 9: Admin rejects fake applicant
+  const rejectRes = await request(`/auth/reject/${fakeStudentId}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${adminToken}` },
+    body: { notes: 'Unverified student ID - not found in official college roll' }
+  });
+  console.log(rejectRes.status === 200 && rejectRes.data.success
+    ? '✅ [PASS] 9. Admin successfully rejects unverified/fake applicant'
+    : '❌ [FAIL] 9. Admin rejection failed', rejectRes);
+
+  // Test 10: Rejected applicant attempts to log in
+  const rejectedLogin = await request('/auth/login', {
+    method: 'POST',
+    body: { email: fakeStudentEmail, password: 'FakePassword@123' }
+  });
+  console.log(rejectedLogin.status === 403 && rejectedLogin.data.code === 'ACCOUNT_REJECTED'
+    ? '✅ [PASS] 10. Rejected account login correctly blocked with 403 ACCOUNT_REJECTED'
+    : '❌ [FAIL] 10. Rejected login check failed', rejectedLogin);
+
+  console.log('\n🏁 ALL 10 APPROVAL & REJECTION WORKFLOW TESTS COMPLETED!');
 }
 
 runApprovalTests();

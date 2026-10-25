@@ -122,7 +122,7 @@
       API.showToast('Your session has expired. Please sign in again.', 'warning');
     }
     if (urlParams.get('pending')) {
-      API.showToast('Registration received! Staff accounts require admin approval before sign-in.', 'info');
+      API.showToast('Registration received! Your account is pending administrator review and approval before you can sign in.', 'info');
     }
 
     function fillCreds(email, pass) {

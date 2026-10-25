@@ -507,27 +507,39 @@ async function loadPendingApprovals() {
     return;
   }
 
-  tbody.innerHTML = pendingApprovals.map(u => `
-    <tr>
-      <td style="font-weight: 700; color: var(--cream-pure);">${escapeHtml(u.full_name)}</td>
-      <td>${escapeHtml(u.email)}</td>
-      <td>${escapeHtml(u.phone || 'N/A')}</td>
-      <td><span class="badge" style="background: rgba(99, 102, 241, 0.2); color: var(--electric-indigo-bright); text-transform: uppercase; font-size: 0.74rem; font-weight: 700;">${escapeHtml(u.role)}</span></td>
-      <td><span style="color: var(--cream-gold); font-size: 0.84rem; font-weight: 600;">${escapeHtml(u.department || 'General Facilities')}</span></td>
-      <td style="font-size: 0.8rem; color: var(--cream-muted);">${API.formatDate(u.created_at)}</td>
-      <td><span class="badge" style="background: rgba(251, 215, 132, 0.15); color: var(--cream-gold);">Pending Review</span></td>
-      <td>
-        <div style="display: flex; gap: 0.5rem;">
-          <button class="btn btn-sm btn-gold" onclick="approveUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
-            <i data-lucide="check" style="width: 14px; height: 14px;"></i> Approve
-          </button>
-          <button class="btn btn-sm btn-outline" style="border-color: #f87171; color: #f87171;" onclick="rejectUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
-            <i data-lucide="x" style="width: 14px; height: 14px;"></i> Reject
-          </button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = pendingApprovals.map(u => {
+    let roleBadgeColor = 'var(--electric-indigo-bright)';
+    let roleBadgeBg = 'rgba(99, 102, 241, 0.2)';
+    if (u.role === 'faculty') {
+      roleBadgeColor = '#34d399';
+      roleBadgeBg = 'rgba(52, 211, 153, 0.2)';
+    } else if (u.role === 'staff') {
+      roleBadgeColor = 'var(--cream-gold)';
+      roleBadgeBg = 'rgba(251, 215, 132, 0.2)';
+    }
+
+    return `
+      <tr>
+        <td style="font-weight: 700; color: var(--cream-pure);">${escapeHtml(u.full_name)}</td>
+        <td>${escapeHtml(u.email)}</td>
+        <td>${escapeHtml(u.phone || 'N/A')}</td>
+        <td><span class="badge" style="background: ${roleBadgeBg}; color: ${roleBadgeColor}; text-transform: uppercase; font-size: 0.74rem; font-weight: 700;">${escapeHtml(u.role)}</span></td>
+        <td><span style="color: var(--cream-soft); font-size: 0.84rem; font-weight: 500;">${escapeHtml(u.department || (u.role === 'staff' ? 'General Facilities' : 'Campus User'))}</span></td>
+        <td style="font-size: 0.8rem; color: var(--cream-muted);">${API.formatDate(u.created_at)}</td>
+        <td><span class="badge" style="background: rgba(251, 215, 132, 0.15); color: var(--cream-gold);">Pending Review</span></td>
+        <td>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-sm btn-gold" onclick="approveUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
+              <i data-lucide="check" style="width: 14px; height: 14px;"></i> Approve
+            </button>
+            <button class="btn btn-sm btn-outline" style="border-color: #f87171; color: #f87171;" onclick="rejectUserRegistration(${u.user_id}, '${escapeHtml(u.full_name)}')">
+              <i data-lucide="x" style="width: 14px; height: 14px;"></i> Reject
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
 
   lucide.createIcons();
 }

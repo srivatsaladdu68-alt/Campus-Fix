@@ -106,8 +106,8 @@
           </div>
         </div>
 
-        <div id="role-note" style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 1.25rem; background: rgba(255,255,255,0.03); padding: 0.65rem 0.85rem; border-radius: 8px; border: 1px dashed rgba(244,239,230,0.12);">
-          ℹ️ <strong>Instant Access:</strong> Students and Faculty can report and track maintenance faults immediately.
+        <div id="role-note" style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 1.25rem; background: rgba(99, 102, 241, 0.05); padding: 0.75rem 0.95rem; border-radius: 8px; border: 1px dashed rgba(99, 102, 241, 0.35);">
+          🛡️ <strong>Admin Approval Required:</strong> All student, faculty, and staff registrations are reviewed and verified by campus administrators to ensure security and prevent unauthorized or fake accounts.
         </div>
 
         <button type="submit" class="btn-auth-submit" id="register-btn">
@@ -140,12 +140,16 @@
 
       if (role === 'staff') {
         deptGroup.style.display = 'block';
-        roleNote.innerHTML = '🛡️ <strong>Admin Approval Required:</strong> Staff accounts require administrative verification by the Campus Facilities Admin before login access is activated.';
+        roleNote.innerHTML = '🛡️ <strong>Admin Approval Required:</strong> Maintenance technicians are reviewed and approved by the Facilities Administrator before dispatch privileges are activated.';
         roleNote.style.borderColor = 'rgba(251, 215, 132, 0.35)';
+      } else if (role === 'faculty') {
+        deptGroup.style.display = 'none';
+        roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Faculty accounts are verified by campus facilities administration to confirm college staff credentials.';
+        roleNote.style.borderColor = 'rgba(52, 211, 153, 0.35)';
       } else {
         deptGroup.style.display = 'none';
-        roleNote.innerHTML = 'ℹ️ <strong>Instant Access:</strong> Students and Faculty can report and track maintenance faults immediately.';
-        roleNote.style.borderColor = 'rgba(244, 239, 230, 0.12)';
+        roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Student accounts are submitted for administrator verification against campus records to prevent fake registrations.';
+        roleNote.style.borderColor = 'rgba(99, 102, 241, 0.35)';
       }
       lucide.createIcons();
     }

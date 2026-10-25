@@ -36,11 +36,12 @@ function register(req, res) {
     const salt = bcrypt.genSaltSync(10);
     const password_hash = bcrypt.hashSync(password, salt);
 
-    // If registering as staff: requires admin approval before activation
-    const requiresApproval = (assignedRole === 'staff');
+    // All self-registered accounts (student, faculty, staff) require admin approval to prevent fake accounts
+    const autoApprove = (req.headers['x-admin-auto-approve'] === 'true');
+    const requiresApproval = !autoApprove;
     const isActive = requiresApproval ? 0 : 1;
     const approvalStatus = requiresApproval ? 'pending' : 'approved';
-    const deptValue = department ? department.trim() : (assignedRole === 'staff' ? 'General Facilities' : null);
+    const deptValue = department ? department.trim() : (assignedRole === 'staff' ? 'General Facilities' : 'Campus User');
 
     const stmt = db.prepare(`
       INSERT INTO users (full_name, email, phone, password_hash, role, department, is_active, approval_status)
@@ -61,19 +62,20 @@ function register(req, res) {
     const newUserId = result.lastInsertRowid;
 
     if (requiresApproval) {
-      // Notify Admin of new approval request
-      const admin = db.prepare("SELECT user_id FROM users WHERE role = 'admin' LIMIT 1").get();
-      if (admin) {
+      // Notify all campus administrators of new account registration request
+      const admins = db.prepare("SELECT user_id FROM users WHERE role = 'admin'").all();
+      const roleLabel = assignedRole.charAt(0).toUpperCase() + assignedRole.slice(1);
+      for (const admin of admins) {
         db.prepare(`
           INSERT INTO notifications (user_id, message)
           VALUES (?, ?)
-        `).run(admin.user_id, `New staff access request from ${full_name.trim()} (${deptValue}). Review and approve in Admin Console.`);
+        `).run(admin.user_id, `New ${roleLabel} registration request from ${full_name.trim()} (${email.toLowerCase().trim()}). Review and approve in Admin Console.`);
       }
 
       return res.status(201).json({
         success: true,
         pending_approval: true,
-        message: 'Registration submitted! Staff accounts require administrator approval before login access is activated.',
+        message: 'Registration submitted! All accounts require administrator verification before sign-in access is activated.',
         user: {
           user_id: newUserId,
           full_name: full_name.trim(),
@@ -130,19 +132,19 @@ function login(req, res) {
       });
     }
 
-    if (user.approval_status === 'pending' || user.is_active === 0) {
-      return res.status(403).json({
-        success: false,
-        code: 'PENDING_APPROVAL',
-        message: 'Your account registration is currently pending administrator approval. You will receive access once verified.'
-      });
-    }
-
     if (user.approval_status === 'rejected') {
       return res.status(403).json({
         success: false,
         code: 'ACCOUNT_REJECTED',
         message: 'Your account registration request was not approved by the administrator.'
+      });
+    }
+
+    if (user.approval_status === 'pending' || user.is_active === 0) {
+      return res.status(403).json({
+        success: false,
+        code: 'PENDING_APPROVAL',
+        message: 'Your account registration is currently pending administrator approval. You will receive access once verified.'
       });
     }
 

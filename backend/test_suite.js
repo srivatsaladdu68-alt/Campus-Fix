@@ -81,7 +81,7 @@ async function runTests() {
     });
     assert(badLogin.status === 401, 'Invalid password correctly rejected with 401');
 
-    // 5. User Registration & Duplicate Email Check
+    // 5. User Registration & Admin Approval Workflow
     const uniqueEmail = `test.student.${Date.now()}@vnrvjiet.in`;
     const registerRes = await request('/auth/register', {
       method: 'POST',
@@ -93,8 +93,31 @@ async function runTests() {
         role: 'student'
       }
     });
-    assert(registerRes.status === 201 && registerRes.data.token, 'Student account registration succeeds');
-    studentToken = registerRes.data.token;
+    assert(registerRes.status === 201 && registerRes.data.pending_approval === true, 'Student account registration submitted with pending_approval: true');
+    const newStudentId = registerRes.data.user.user_id;
+
+    // Verify unapproved login attempt is blocked
+    const unapprovedLogin = await request('/auth/login', {
+      method: 'POST',
+      body: { email: uniqueEmail, password: 'Password@123' }
+    });
+    assert(unapprovedLogin.status === 403 && unapprovedLogin.data.code === 'PENDING_APPROVAL', 'Pre-approval login blocked with 403 PENDING_APPROVAL');
+
+    // Admin approves student
+    const approveRes = await request(`/auth/approve/${newStudentId}`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${adminToken}` },
+      body: { notes: 'Verified VNRVJIET student credentials' }
+    });
+    assert(approveRes.status === 200 && approveRes.data.success, 'Admin approves student registration request');
+
+    // Student logs in after admin approval
+    const approvedLogin = await request('/auth/login', {
+      method: 'POST',
+      body: { email: uniqueEmail, password: 'Password@123' }
+    });
+    assert(approvedLogin.status === 200 && approvedLogin.data.token, 'Student logs in successfully after approval');
+    studentToken = approvedLogin.data.token;
 
     const dupRegister = await request('/auth/register', {
       method: 'POST',
