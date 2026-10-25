@@ -174,18 +174,17 @@ function seedDatabase() {
   const facultyPass = bcrypt.hashSync('Faculty@123', salt);
 
   const insertUser = db.prepare(`
-    INSERT INTO users (full_name, email, phone, password_hash, role, student_id, department)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO users (full_name, email, phone, password_hash, role, student_id, roll_number, staff_id, department, approval_status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved')
   `);
 
-  insertUser.run('VNRVJIET Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, 'Campus Administration');
-  insertUser.run('Mike Johnson', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, 'Electrical & IT Maintenance');
-  insertUser.run('Sarah Williams', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, 'Plumbing & Facilities');
-  insertUser.run('Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'Computer Science & Engineering');
-  insertUser.run('Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', 'Computer Science & Engineering');
-  insertUser.run('Priya Patel', 'student.priya@vnrvjiet.in', '+91 9876543215', userPass, 'student', '22071A0402', 'Electronics & Communication');
+  insertUser.run('Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration');
+  insertUser.run('Mike Johnson (Electrician)', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance');
+  insertUser.run('Sarah Williams (Plumber)', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities');
+  insertUser.run('Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering');
+  insertUser.run('Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering');
 
-  console.log('Database initialized with VNRVJIET campus buildings and core user roles.');
+  console.log('Database initialized with VNRVJIET campus buildings and 5 core demo user accounts.');
 }
 
 initSchema();
