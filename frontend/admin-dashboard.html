@@ -378,9 +378,10 @@
                 <thead>
                   <tr>
                     <th>Applicant Name</th>
+                    <th>Roll No / Staff ID</th>
                     <th>Email Address</th>
                     <th>Phone</th>
-                    <th>Requested Role</th>
+                    <th>Role</th>
                     <th>Department / Trade</th>
                     <th>Request Date</th>
                     <th>Status</th>
@@ -389,7 +390,7 @@
                 </thead>
                 <tbody id="pending-approvals-tbody">
                   <tr>
-                    <td colspan="8" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">Loading pending requests...</td>
+                    <td colspan="9" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">Loading pending requests...</td>
                   </tr>
                 </tbody>
               </table>
@@ -413,14 +414,15 @@
                 <thead>
                   <tr>
                     <th>Staff Name</th>
+                    <th>Staff ID</th>
                     <th>Email Address</th>
                     <th>Phone</th>
-                    <th>Role</th>
+                    <th>Department / Trade</th>
                   </tr>
                 </thead>
                 <tbody id="staff-directory-tbody">
                   <tr>
-                    <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading technicians...</td>
+                    <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading technicians...</td>
                   </tr>
                 </tbody>
               </table>
@@ -529,6 +531,20 @@
           <div class="form-group">
             <label for="new-staff-name">Staff Full Name *</label>
             <input type="text" id="new-staff-name" class="form-control" placeholder="e.g. Robert Smith (HVAC)" required>
+          </div>
+          <div class="form-group">
+            <label for="new-staff-id">Staff ID *</label>
+            <input type="text" id="new-staff-id" class="form-control" placeholder="e.g. STF-HVAC-01" style="text-transform: uppercase;" required>
+          </div>
+          <div class="form-group">
+            <label for="new-staff-dept">Specialization / Trade *</label>
+            <select id="new-staff-dept" class="form-control">
+              <option value="Electrical & IT Maintenance">Electrical & IT Maintenance</option>
+              <option value="Plumbing & Sanitation">Plumbing & Sanitation</option>
+              <option value="Carpentry & Furniture">Carpentry & Furniture</option>
+              <option value="Classroom & Lab Equipment">Classroom & Lab Equipment</option>
+              <option value="General Facilities">General Facilities</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="new-staff-email">Staff Email *</label>

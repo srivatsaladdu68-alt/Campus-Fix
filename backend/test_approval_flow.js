@@ -42,7 +42,9 @@ async function runApprovalTests() {
     : '❌ [FAIL] 1. Random email login failed', randomLogin);
 
   // Test 2: Staff registration
+  // Test 2: Staff registration with staff_id
   const staffEmail = `new.electrician.${Date.now()}@vnrvjiet.in`;
+  const staffIdCode = `STF-ELEC-${Date.now().toString().slice(-4)}`;
   const registerStaff = await request('/auth/register', {
     method: 'POST',
     body: {
@@ -50,14 +52,29 @@ async function runApprovalTests() {
       email: staffEmail,
       phone: '+91 98888 77777',
       role: 'staff',
+      staff_id: staffIdCode,
       department: 'Electrical & IT Maintenance',
       password: 'StaffPassword@123'
     }
   });
   const staffUserId = registerStaff.data.user?.user_id;
-  console.log(registerStaff.status === 201 && registerStaff.data.pending_approval === true
-    ? '✅ [PASS] 2. Staff self-registration successfully submitted with pending_approval: true'
+  console.log(registerStaff.status === 201 && registerStaff.data.pending_approval === true && registerStaff.data.user?.staff_id === staffIdCode
+    ? '✅ [PASS] 2. Staff self-registration successfully submitted with staff_id & pending_approval: true'
     : '❌ [FAIL] 2. Staff registration failed', registerStaff);
+
+  // Test 2b: Staff registration without staff_id is rejected (400)
+  const noStaffIdRes = await request('/auth/register', {
+    method: 'POST',
+    body: {
+      full_name: 'Invalid Staff',
+      email: `no.id.${Date.now()}@vnrvjiet.in`,
+      role: 'staff',
+      password: 'StaffPassword@123'
+    }
+  });
+  console.log(noStaffIdRes.status === 400
+    ? '✅ [PASS] 2b. Staff registration without staff_id rejected with 400'
+    : '❌ [FAIL] 2b. Staff without staff_id check failed', noStaffIdRes);
 
   // Test 3: Attempt to log in before admin approval
   const preApprovalLogin = await request('/auth/login', {
@@ -78,9 +95,9 @@ async function runApprovalTests() {
   const pendingList = await request('/auth/pending-approvals', {
     headers: { Authorization: `Bearer ${adminToken}` }
   });
-  const foundInPending = pendingList.data.pending?.some(u => u.email === staffEmail);
+  const foundInPending = pendingList.data.pending?.some(u => u.email === staffEmail && u.staff_id === staffIdCode);
   console.log(pendingList.status === 200 && foundInPending
-    ? '✅ [PASS] 4. Admin successfully retrieves pending approval list containing new staff applicant'
+    ? '✅ [PASS] 4. Admin successfully retrieves pending approval list containing staff with staff_id'
     : '❌ [FAIL] 4. Admin pending approvals retrieval failed', pendingList);
 
   // Test 5: Admin approves staff applicant
@@ -102,22 +119,38 @@ async function runApprovalTests() {
     ? '✅ [PASS] 6. Staff successfully logs in after admin approval with full technician access'
     : '❌ [FAIL] 6. Post-approval login failed', postApprovalLogin);
 
-  // Test 7: Student registration with pending approval & admin notification
+  // Test 7: Student registration with roll_number & pending approval
   const fakeStudentEmail = `fake.applicant.${Date.now()}@vnrvjiet.in`;
+  const fakeStudentRoll = `22071A${Date.now().toString().slice(-4)}`;
   const registerFakeStudent = await request('/auth/register', {
     method: 'POST',
     body: {
       full_name: 'Suspicious Applicant',
       email: fakeStudentEmail,
+      roll_number: fakeStudentRoll,
       phone: '+91 12345 67890',
       role: 'student',
       password: 'FakePassword@123'
     }
   });
   const fakeStudentId = registerFakeStudent.data.user?.user_id;
-  console.log(registerFakeStudent.status === 201 && registerFakeStudent.data.pending_approval === true
-    ? '✅ [PASS] 7. Student registration correctly submitted with pending_approval: true'
+  console.log(registerFakeStudent.status === 201 && registerFakeStudent.data.pending_approval === true && registerFakeStudent.data.user?.roll_number === fakeStudentRoll
+    ? '✅ [PASS] 7. Student registration correctly submitted with roll_number & pending_approval: true'
     : '❌ [FAIL] 7. Student registration failed', registerFakeStudent);
+
+  // Test 7b: Student registration without roll_number is rejected (400)
+  const noRollStudentRes = await request('/auth/register', {
+    method: 'POST',
+    body: {
+      full_name: 'Invalid Student',
+      email: `no.roll.${Date.now()}@vnrvjiet.in`,
+      role: 'student',
+      password: 'StudentPassword@123'
+    }
+  });
+  console.log(noRollStudentRes.status === 400
+    ? '✅ [PASS] 7b. Student registration without roll_number rejected with 400'
+    : '❌ [FAIL] 7b. Student without roll_number check failed', noRollStudentRes);
 
   // Test 8: Verify admin received in-app notification about registration request
   const notifRes = await request('/notifications', {

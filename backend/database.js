@@ -135,6 +135,16 @@ function initSchema() {
     if (!userCols.includes('approval_notes')) {
       db.exec("ALTER TABLE users ADD COLUMN approval_notes TEXT");
     }
+    if (!userCols.includes('roll_number')) {
+      db.exec("ALTER TABLE users ADD COLUMN roll_number TEXT");
+    }
+    if (!userCols.includes('staff_id')) {
+      db.exec("ALTER TABLE users ADD COLUMN staff_id TEXT");
+    }
+    // Backfill existing student roll numbers and staff IDs
+    db.exec("UPDATE users SET roll_number = student_id WHERE role = 'student' AND (roll_number IS NULL OR roll_number = '') AND student_id IS NOT NULL");
+    db.exec("UPDATE users SET staff_id = 'STF-ELEC-01' WHERE email = 'staff.mike@vnrvjiet.in' AND staff_id IS NULL");
+    db.exec("UPDATE users SET staff_id = 'STF-PLUM-02' WHERE email = 'staff.sarah@vnrvjiet.in' AND staff_id IS NULL");
   } catch (err) {
     console.error('Migration notice:', err.message);
   }

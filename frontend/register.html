@@ -74,6 +74,24 @@
           </div>
         </div>
 
+        <!-- Student Roll Number (Shown when Student is selected) -->
+        <div class="form-group" id="student-roll-group">
+          <label for="roll_number">Student Roll Number *</label>
+          <div class="form-control-wrap">
+            <i data-lucide="hash" class="input-icon"></i>
+            <input type="text" id="roll_number" class="form-control" placeholder="e.g. 22071A0501" style="text-transform: uppercase;">
+          </div>
+        </div>
+
+        <!-- Staff ID (Shown when Staff is selected) -->
+        <div class="form-group" id="staff-id-group" style="display: none;">
+          <label for="staff_id">Staff ID / Technician ID *</label>
+          <div class="form-control-wrap">
+            <i data-lucide="badge-check" class="input-icon"></i>
+            <input type="text" id="staff_id" class="form-control" placeholder="e.g. STF-ELEC-102" style="text-transform: uppercase;">
+          </div>
+        </div>
+
         <div class="form-group" id="dept-group" style="display: none;">
           <label for="department">Specialization / Trade *</label>
           <div class="form-control-wrap">
@@ -136,19 +154,27 @@
     function handleRoleChange() {
       const role = document.getElementById('role').value;
       const deptGroup = document.getElementById('dept-group');
+      const studentRollGroup = document.getElementById('student-roll-group');
+      const staffIdGroup = document.getElementById('staff-id-group');
       const roleNote = document.getElementById('role-note');
 
       if (role === 'staff') {
         deptGroup.style.display = 'block';
-        roleNote.innerHTML = '🛡️ <strong>Admin Approval Required:</strong> Maintenance technicians are reviewed and approved by the Facilities Administrator before dispatch privileges are activated.';
+        staffIdGroup.style.display = 'block';
+        studentRollGroup.style.display = 'none';
+        roleNote.innerHTML = '🛡️ <strong>Admin Approval Required:</strong> Maintenance technicians with verified Staff ID are reviewed and approved by the Facilities Administrator.';
         roleNote.style.borderColor = 'rgba(251, 215, 132, 0.35)';
       } else if (role === 'faculty') {
         deptGroup.style.display = 'none';
+        staffIdGroup.style.display = 'none';
+        studentRollGroup.style.display = 'none';
         roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Faculty accounts are verified by campus facilities administration to confirm college staff credentials.';
         roleNote.style.borderColor = 'rgba(52, 211, 153, 0.35)';
       } else {
         deptGroup.style.display = 'none';
-        roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Student accounts are submitted for administrator verification against campus records to prevent fake registrations.';
+        staffIdGroup.style.display = 'none';
+        studentRollGroup.style.display = 'block';
+        roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Student Roll Number will be verified against official college records by the administrator.';
         roleNote.style.borderColor = 'rgba(99, 102, 241, 0.35)';
       }
       lucide.createIcons();
@@ -164,12 +190,24 @@
       const email = document.getElementById('email').value.trim();
       const phone = document.getElementById('phone').value.trim();
       const role = document.getElementById('role').value;
+      const roll_number = document.getElementById('roll_number').value.trim().toUpperCase();
+      const staff_id = document.getElementById('staff_id').value.trim().toUpperCase();
       const department = role === 'staff' ? document.getElementById('department').value : undefined;
       const password = document.getElementById('password').value;
       const confirm_password = document.getElementById('confirm_password').value;
 
       if (!full_name || !email || !password) {
         API.showToast('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      if (role === 'student' && !roll_number) {
+        API.showToast('Please enter your Student Roll Number.', 'error');
+        return;
+      }
+
+      if (role === 'staff' && !staff_id) {
+        API.showToast('Please enter your Staff ID.', 'error');
         return;
       }
 
@@ -191,6 +229,8 @@
         email,
         phone,
         role,
+        roll_number: role === 'student' ? roll_number : undefined,
+        staff_id: role === 'staff' ? staff_id : undefined,
         department,
         password
       });

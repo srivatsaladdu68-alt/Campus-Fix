@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'campus_fix_super_secret_jwt_key_20
 // Public Registration (Student, Faculty, Staff)
 function register(req, res) {
   try {
-    const { full_name, email, phone, password, role, department } = req.body;
+    const { full_name, email, phone, password, role, department, roll_no, roll_number, staff_id } = req.body;
 
     if (!full_name || !email || !password) {
       return res.status(400).json({ success: false, message: 'Please provide full name, email, and password.' });
@@ -28,9 +28,36 @@ function register(req, res) {
       assignedRole = role;
     }
 
-    const existing = db.prepare('SELECT user_id FROM users WHERE email = ?').get(email.toLowerCase().trim());
-    if (existing) {
+    const studentRollNo = (roll_number || roll_no || req.body.student_id || '').trim().toUpperCase();
+    const staffIdVal = (staff_id || '').trim().toUpperCase();
+
+    // Specific validation based on user request:
+    // If student -> require Roll No
+    // If staff -> require Staff ID
+    if (assignedRole === 'student' && !studentRollNo) {
+      return res.status(400).json({ success: false, message: 'Student Roll Number is required for student registration.' });
+    }
+    if (assignedRole === 'staff' && !staffIdVal) {
+      return res.status(400).json({ success: false, message: 'Staff ID is required for maintenance staff registration.' });
+    }
+
+    const existingEmail = db.prepare('SELECT user_id FROM users WHERE email = ?').get(email.toLowerCase().trim());
+    if (existingEmail) {
       return res.status(409).json({ success: false, message: 'An account with this email already exists.' });
+    }
+
+    if (assignedRole === 'student' && studentRollNo) {
+      const existingRoll = db.prepare('SELECT user_id FROM users WHERE roll_number = ? OR student_id = ?').get(studentRollNo, studentRollNo);
+      if (existingRoll) {
+        return res.status(409).json({ success: false, message: 'An account with this Student Roll Number is already registered.' });
+      }
+    }
+
+    if (assignedRole === 'staff' && staffIdVal) {
+      const existingStaff = db.prepare('SELECT user_id FROM users WHERE staff_id = ?').get(staffIdVal);
+      if (existingStaff) {
+        return res.status(409).json({ success: false, message: 'An account with this Staff ID is already registered.' });
+      }
     }
 
     const salt = bcrypt.genSaltSync(10);
@@ -44,8 +71,11 @@ function register(req, res) {
     const deptValue = department ? department.trim() : (assignedRole === 'staff' ? 'General Facilities' : 'Campus User');
 
     const stmt = db.prepare(`
-      INSERT INTO users (full_name, email, phone, password_hash, role, department, is_active, approval_status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO users (
+        full_name, email, phone, password_hash, role, department, is_active, approval_status,
+        student_id, roll_number, staff_id
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const result = stmt.run(
@@ -56,7 +86,10 @@ function register(req, res) {
       assignedRole,
       deptValue,
       isActive,
-      approvalStatus
+      approvalStatus,
+      assignedRole === 'student' ? studentRollNo : null,
+      assignedRole === 'student' ? studentRollNo : null,
+      assignedRole === 'staff' ? staffIdVal : null
     );
 
     const newUserId = result.lastInsertRowid;
@@ -65,11 +98,12 @@ function register(req, res) {
       // Notify all campus administrators of new account registration request
       const admins = db.prepare("SELECT user_id FROM users WHERE role = 'admin'").all();
       const roleLabel = assignedRole.charAt(0).toUpperCase() + assignedRole.slice(1);
+      const idTag = assignedRole === 'student' ? ` [Roll No: ${studentRollNo}]` : (assignedRole === 'staff' ? ` [Staff ID: ${staffIdVal}]` : '');
       for (const admin of admins) {
         db.prepare(`
           INSERT INTO notifications (user_id, message)
           VALUES (?, ?)
-        `).run(admin.user_id, `New ${roleLabel} registration request from ${full_name.trim()} (${email.toLowerCase().trim()}). Review and approve in Admin Console.`);
+        `).run(admin.user_id, `New ${roleLabel} registration request from ${full_name.trim()}${idTag} (${email.toLowerCase().trim()}). Review and approve in Admin Console.`);
       }
 
       return res.status(201).json({
@@ -81,6 +115,8 @@ function register(req, res) {
           full_name: full_name.trim(),
           email: email.toLowerCase().trim(),
           role: assignedRole,
+          roll_number: assignedRole === 'student' ? studentRollNo : null,
+          staff_id: assignedRole === 'staff' ? staffIdVal : null,
           approval_status: 'pending'
         }
       });
@@ -195,7 +231,7 @@ function getMe(req, res) {
 function listStaff(req, res) {
   try {
     const staff = db.prepare(`
-      SELECT user_id, full_name, email, phone, role
+      SELECT user_id, full_name, email, phone, role, department, staff_id
       FROM users
       WHERE role = 'staff' AND is_active = 1
       ORDER BY full_name ASC
@@ -211,7 +247,7 @@ function listStaff(req, res) {
 // Admin creates an authorized staff member
 function createStaff(req, res) {
   try {
-    const { full_name, email, phone, password } = req.body;
+    const { full_name, email, phone, password, staff_id, department } = req.body;
 
     if (!full_name || !email || !password) {
       return res.status(400).json({ success: false, message: 'Name, email, and password are required.' });
@@ -222,19 +258,23 @@ function createStaff(req, res) {
       return res.status(409).json({ success: false, message: 'An account with this email already exists.' });
     }
 
+    const staffIdVal = (staff_id || `STF-${Date.now().toString().slice(-4)}`).trim().toUpperCase();
+
     const salt = bcrypt.genSaltSync(10);
     const password_hash = bcrypt.hashSync(password, salt);
 
     const stmt = db.prepare(`
-      INSERT INTO users (full_name, email, phone, password_hash, role)
-      VALUES (?, ?, ?, ?, 'staff')
+      INSERT INTO users (full_name, email, phone, password_hash, role, staff_id, department, is_active, approval_status)
+      VALUES (?, ?, ?, ?, 'staff', ?, ?, 1, 'approved')
     `);
 
     const result = stmt.run(
       full_name.trim(),
       email.toLowerCase().trim(),
       phone ? phone.trim() : null,
-      password_hash
+      password_hash,
+      staffIdVal,
+      department ? department.trim() : 'General Facilities'
     );
 
     return res.status(201).json({
@@ -262,7 +302,8 @@ function listBuildings(req, res) {
 function listPendingApprovals(req, res) {
   try {
     const pending = db.prepare(`
-      SELECT user_id, full_name, email, phone, role, department, created_at, approval_status
+      SELECT user_id, full_name, email, phone, role, department, created_at, approval_status,
+             COALESCE(roll_number, student_id) as roll_number, staff_id
       FROM users
       WHERE approval_status = 'pending' OR (is_active = 0 AND approval_status != 'rejected')
       ORDER BY created_at DESC

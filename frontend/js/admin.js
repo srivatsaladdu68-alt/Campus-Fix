@@ -452,16 +452,21 @@ document.getElementById('confirm-status-btn').addEventListener('click', async ()
 function renderStaffDirectory() {
   const tbody = document.getElementById('staff-directory-tbody');
   if (staffMembers.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">No staff registered yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No staff registered yet.</td></tr>';
     return;
   }
 
   tbody.innerHTML = staffMembers.map(s => `
     <tr>
-      <td style="font-weight: 700; color: var(--primary);">${escapeHtml(s.full_name)}</td>
+      <td style="font-weight: 700; color: var(--cream-pure);">${escapeHtml(s.full_name)}</td>
+      <td>
+        <span style="font-family: monospace; font-weight: 700; color: var(--cream-gold); background: rgba(251, 215, 132, 0.1); padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(251, 215, 132, 0.2);">
+          ${escapeHtml(s.staff_id || 'STF-GEN')}
+        </span>
+      </td>
       <td>${escapeHtml(s.email)}</td>
       <td>${escapeHtml(s.phone || 'N/A')}</td>
-      <td><span class="badge badge-verified">Active Technician</span></td>
+      <td><span style="color: var(--cream-soft); font-size: 0.84rem;">${escapeHtml(s.department || 'General Facilities')}</span></td>
     </tr>
   `).join('');
 }
@@ -476,7 +481,7 @@ async function loadPendingApprovals() {
   const sidebarBadge = document.getElementById('sidebar-pending-badge');
 
   if (!res || !res.success) {
-    if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: red; padding: 2rem;">Failed to load pending requests.</td></tr>';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: red; padding: 2rem;">Failed to load pending requests.</td></tr>';
     return;
   }
 
@@ -498,7 +503,7 @@ async function loadPendingApprovals() {
   if (pendingApprovals.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">
+        <td colspan="9" style="text-align: center; color: var(--cream-dim); padding: 2.5rem;">
           <div style="font-size: 1rem; font-weight: 600; color: var(--cream-soft); margin-bottom: 0.25rem;">No pending registration requests!</div>
           <p style="font-size: 0.82rem; color: var(--cream-muted);">All campus accounts and staff technicians have been verified.</p>
         </td>
@@ -518,9 +523,16 @@ async function loadPendingApprovals() {
       roleBadgeBg = 'rgba(251, 215, 132, 0.2)';
     }
 
+    const idVal = u.roll_number || u.staff_id || '—';
+
     return `
       <tr>
         <td style="font-weight: 700; color: var(--cream-pure);">${escapeHtml(u.full_name)}</td>
+        <td>
+          <span style="font-family: monospace; font-weight: 700; color: var(--cream-gold); background: rgba(251, 215, 132, 0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(251, 215, 132, 0.25);">
+            ${escapeHtml(idVal)}
+          </span>
+        </td>
         <td>${escapeHtml(u.email)}</td>
         <td>${escapeHtml(u.phone || 'N/A')}</td>
         <td><span class="badge" style="background: ${roleBadgeBg}; color: ${roleBadgeColor}; text-transform: uppercase; font-size: 0.74rem; font-weight: 700;">${escapeHtml(u.role)}</span></td>
@@ -603,6 +615,8 @@ function closeAddStaffModal() {
 
 document.getElementById('confirm-add-staff-btn').addEventListener('click', async () => {
   const full_name = document.getElementById('new-staff-name').value.trim();
+  const staff_id = document.getElementById('new-staff-id') ? document.getElementById('new-staff-id').value.trim().toUpperCase() : '';
+  const department = document.getElementById('new-staff-dept') ? document.getElementById('new-staff-dept').value : 'General Facilities';
   const email = document.getElementById('new-staff-email').value.trim();
   const phone = document.getElementById('new-staff-phone').value.trim();
   const password = document.getElementById('new-staff-password').value;
@@ -612,8 +626,15 @@ document.getElementById('confirm-add-staff-btn').addEventListener('click', async
     return;
   }
 
+  if (!staff_id) {
+    API.showToast('Please enter a Staff ID.', 'error');
+    return;
+  }
+
   const res = await API.call('/auth/staff', 'POST', {
     full_name,
+    staff_id,
+    department,
     email,
     phone,
     password

@@ -83,11 +83,13 @@ async function runTests() {
 
     // 5. User Registration & Admin Approval Workflow
     const uniqueEmail = `test.student.${Date.now()}@vnrvjiet.in`;
+    const uniqueRoll = `22071A${Date.now().toString().slice(-4)}`;
     const registerRes = await request('/auth/register', {
       method: 'POST',
       body: {
         full_name: 'Test Student',
         email: uniqueEmail,
+        roll_number: uniqueRoll,
         phone: '+91 99999 11111',
         password: 'Password@123',
         role: 'student'
@@ -124,6 +126,7 @@ async function runTests() {
       body: {
         full_name: 'Duplicate Student',
         email: uniqueEmail,
+        roll_number: `22071A9999`,
         password: 'Password@123',
         role: 'student'
       }
