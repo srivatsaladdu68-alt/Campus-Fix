@@ -180,7 +180,46 @@ async function runApprovalTests() {
     ? '✅ [PASS] 10. Rejected account login correctly blocked with 403 ACCOUNT_REJECTED'
     : '❌ [FAIL] 10. Rejected login check failed', rejectedLogin);
 
-  console.log('\n🏁 ALL 10 APPROVAL & REJECTION WORKFLOW TESTS COMPLETED!');
+  // Test 11: Faculty registration with faculty_id & academic department
+  const facultyEmail = `prof.test.${Date.now()}@vnrvjiet.in`;
+  const facultyIdCode = `FAC-CSE-${Date.now().toString().slice(-4)}`;
+  const registerFaculty = await request('/auth/register', {
+    method: 'POST',
+    body: {
+      full_name: 'Dr. Ramesh Kumar',
+      email: facultyEmail,
+      role: 'faculty',
+      faculty_id: facultyIdCode,
+      department: 'Computer Science & Engineering',
+      phone: '+91 94444 33333',
+      password: 'FacultyPassword@123'
+    }
+  });
+  const facultyUserId = registerFaculty.data.user?.user_id;
+  console.log(registerFaculty.status === 201 && registerFaculty.data.pending_approval === true && registerFaculty.data.user?.staff_id === facultyIdCode
+    ? '✅ [PASS] 11. Faculty registration successfully submitted with faculty_id & academic department'
+    : '❌ [FAIL] 11. Faculty registration failed', registerFaculty);
+
+  // Admin approves faculty
+  const approveFaculty = await request(`/auth/approve/${facultyUserId}`, {
+    method: 'PUT',
+    headers: { Authorization: `Bearer ${adminToken}` },
+    body: { notes: 'Verified faculty CSE credentials' }
+  });
+  console.log(approveFaculty.status === 200 && approveFaculty.data.success
+    ? '✅ [PASS] 11b. Admin successfully approves faculty account'
+    : '❌ [FAIL] 11b. Faculty approval failed', approveFaculty);
+
+  // Faculty logs in after approval
+  const facultyLogin = await request('/auth/login', {
+    method: 'POST',
+    body: { email: facultyEmail, password: 'FacultyPassword@123' }
+  });
+  console.log(facultyLogin.status === 200 && facultyLogin.data.token && facultyLogin.data.user.role === 'faculty'
+    ? '✅ [PASS] 11c. Faculty successfully logs in with valid faculty credentials'
+    : '❌ [FAIL] 11c. Faculty login failed', facultyLogin);
+
+  console.log('\n🏁 ALL APPROVAL, FACULTY, STAFF & STUDENT WORKFLOW TESTS COMPLETED!');
 }
 
 runApprovalTests();

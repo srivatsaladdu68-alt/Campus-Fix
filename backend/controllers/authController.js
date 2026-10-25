@@ -30,15 +30,17 @@ function register(req, res) {
 
     const studentRollNo = (roll_number || roll_no || req.body.student_id || '').trim().toUpperCase();
     const staffIdVal = (staff_id || '').trim().toUpperCase();
+    const facultyIdVal = (req.body.faculty_id || req.body.employee_id || roll_number || staff_id || '').trim().toUpperCase();
 
-    // Specific validation based on user request:
-    // If student -> require Roll No
-    // If staff -> require Staff ID
+    // Specific validation based on role:
     if (assignedRole === 'student' && !studentRollNo) {
       return res.status(400).json({ success: false, message: 'Student Roll Number is required for student registration.' });
     }
     if (assignedRole === 'staff' && !staffIdVal) {
       return res.status(400).json({ success: false, message: 'Staff ID is required for maintenance staff registration.' });
+    }
+    if (assignedRole === 'faculty' && !facultyIdVal) {
+      return res.status(400).json({ success: false, message: 'Faculty / Employee ID is required for faculty registration.' });
     }
 
     const existingEmail = db.prepare('SELECT user_id FROM users WHERE email = ?').get(email.toLowerCase().trim());
@@ -60,6 +62,13 @@ function register(req, res) {
       }
     }
 
+    if (assignedRole === 'faculty' && facultyIdVal) {
+      const existingFaculty = db.prepare('SELECT user_id FROM users WHERE student_id = ? OR staff_id = ?').get(facultyIdVal, facultyIdVal);
+      if (existingFaculty) {
+        return res.status(409).json({ success: false, message: 'An account with this Faculty ID is already registered.' });
+      }
+    }
+
     const salt = bcrypt.genSaltSync(10);
     const password_hash = bcrypt.hashSync(password, salt);
 
@@ -68,7 +77,15 @@ function register(req, res) {
     const requiresApproval = !autoApprove;
     const isActive = requiresApproval ? 0 : 1;
     const approvalStatus = requiresApproval ? 'pending' : 'approved';
-    const deptValue = department ? department.trim() : (assignedRole === 'staff' ? 'General Facilities' : 'Campus User');
+
+    let deptValue = 'General Facilities';
+    if (assignedRole === 'staff') {
+      deptValue = department ? department.trim() : 'General Facilities';
+    } else if (assignedRole === 'faculty') {
+      deptValue = (department || req.body.faculty_department || 'Computer Science & Engineering').trim();
+    } else {
+      deptValue = department ? department.trim() : 'Student Body';
+    }
 
     const stmt = db.prepare(`
       INSERT INTO users (
@@ -87,9 +104,9 @@ function register(req, res) {
       deptValue,
       isActive,
       approvalStatus,
+      assignedRole === 'student' ? studentRollNo : (assignedRole === 'faculty' ? facultyIdVal : null),
       assignedRole === 'student' ? studentRollNo : null,
-      assignedRole === 'student' ? studentRollNo : null,
-      assignedRole === 'staff' ? staffIdVal : null
+      assignedRole === 'staff' ? staffIdVal : (assignedRole === 'faculty' ? facultyIdVal : null)
     );
 
     const newUserId = result.lastInsertRowid;
@@ -98,7 +115,12 @@ function register(req, res) {
       // Notify all campus administrators of new account registration request
       const admins = db.prepare("SELECT user_id FROM users WHERE role = 'admin'").all();
       const roleLabel = assignedRole.charAt(0).toUpperCase() + assignedRole.slice(1);
-      const idTag = assignedRole === 'student' ? ` [Roll No: ${studentRollNo}]` : (assignedRole === 'staff' ? ` [Staff ID: ${staffIdVal}]` : '');
+      const idTag = assignedRole === 'student' 
+        ? ` [Roll No: ${studentRollNo}]` 
+        : (assignedRole === 'staff' 
+          ? ` [Staff ID: ${staffIdVal}]` 
+          : ` [Faculty ID: ${facultyIdVal}]`);
+
       for (const admin of admins) {
         db.prepare(`
           INSERT INTO notifications (user_id, message)
@@ -115,8 +137,8 @@ function register(req, res) {
           full_name: full_name.trim(),
           email: email.toLowerCase().trim(),
           role: assignedRole,
-          roll_number: assignedRole === 'student' ? studentRollNo : null,
-          staff_id: assignedRole === 'staff' ? staffIdVal : null,
+          roll_number: assignedRole === 'student' ? studentRollNo : (assignedRole === 'faculty' ? facultyIdVal : null),
+          staff_id: assignedRole === 'staff' ? staffIdVal : (assignedRole === 'faculty' ? facultyIdVal : null),
           approval_status: 'pending'
         }
       });

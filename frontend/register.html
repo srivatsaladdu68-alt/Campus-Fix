@@ -44,23 +44,7 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="email">Campus Email Address *</label>
-          <div class="form-control-wrap">
-            <i data-lucide="mail" class="input-icon"></i>
-            <input type="email" id="email" class="form-control" placeholder="student@vnrvjiet.in" required autocomplete="email">
-          </div>
-        </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <div class="form-control-wrap">
-              <i data-lucide="phone" class="input-icon"></i>
-              <input type="tel" id="phone" class="form-control" placeholder="+91 98765 43210" autocomplete="tel">
-            </div>
-          </div>
-
           <div class="form-group">
             <label for="role">Campus Role *</label>
             <div class="form-control-wrap">
@@ -72,6 +56,25 @@
               </select>
             </div>
           </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <div class="form-control-wrap">
+              <i data-lucide="phone" class="input-icon"></i>
+              <input type="tel" id="phone" class="form-control" placeholder="+91 98765 43210" autocomplete="tel">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email" id="email-label">Campus Email Address *</label>
+          <div class="form-control-wrap">
+            <i data-lucide="mail" class="input-icon"></i>
+            <input type="email" id="email" class="form-control" placeholder="student.alex@vnrvjiet.in" required autocomplete="email">
+          </div>
+          <small id="email-hint" style="display: block; margin-top: 0.35rem; font-size: 0.74rem; color: var(--cream-muted);">
+            Use your official student email (e.g. <code>student@vnrvjiet.in</code>)
+          </small>
         </div>
 
         <!-- Student Roll Number (Shown when Student is selected) -->
@@ -83,7 +86,33 @@
           </div>
         </div>
 
-        <!-- Staff ID (Shown when Staff is selected) -->
+        <!-- Faculty ID & Academic Department (Shown when Faculty is selected) -->
+        <div class="form-group" id="faculty-id-group" style="display: none;">
+          <label for="faculty_id">Faculty / Employee ID *</label>
+          <div class="form-control-wrap">
+            <i data-lucide="award" class="input-icon"></i>
+            <input type="text" id="faculty_id" class="form-control" placeholder="e.g. FAC-CSE-102" style="text-transform: uppercase;">
+          </div>
+        </div>
+
+        <div class="form-group" id="faculty-dept-group" style="display: none;">
+          <label for="faculty_department">Academic Department *</label>
+          <div class="form-control-wrap">
+            <i data-lucide="book-open" class="input-icon"></i>
+            <select id="faculty_department" class="form-control">
+              <option value="Computer Science & Engineering">Computer Science & Engineering (CSE)</option>
+              <option value="Information Technology">Information Technology (IT)</option>
+              <option value="Electronics & Communication">Electronics & Communication (ECE)</option>
+              <option value="Electrical & Electronics">Electrical & Electronics (EEE)</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Automobile Engineering">Automobile Engineering</option>
+              <option value="Humanities & Sciences">Humanities & Sciences (H&S)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Staff ID & Trade (Shown when Staff is selected) -->
         <div class="form-group" id="staff-id-group" style="display: none;">
           <label for="staff_id">Staff ID / Technician ID *</label>
           <div class="form-control-wrap">
@@ -153,27 +182,43 @@
 
     function handleRoleChange() {
       const role = document.getElementById('role').value;
+      const emailInput = document.getElementById('email');
+      const emailHint = document.getElementById('email-hint');
       const deptGroup = document.getElementById('dept-group');
       const studentRollGroup = document.getElementById('student-roll-group');
       const staffIdGroup = document.getElementById('staff-id-group');
+      const facultyIdGroup = document.getElementById('faculty-id-group');
+      const facultyDeptGroup = document.getElementById('faculty-dept-group');
       const roleNote = document.getElementById('role-note');
 
       if (role === 'staff') {
+        emailInput.placeholder = 'staff.mike@vnrvjiet.in';
+        emailHint.innerHTML = 'Use your facility staff email (e.g. <code>staff.name@vnrvjiet.in</code>)';
         deptGroup.style.display = 'block';
         staffIdGroup.style.display = 'block';
         studentRollGroup.style.display = 'none';
-        roleNote.innerHTML = '🛡️ <strong>Admin Approval Required:</strong> Maintenance technicians with verified Staff ID are reviewed and approved by the Facilities Administrator.';
+        facultyIdGroup.style.display = 'none';
+        facultyDeptGroup.style.display = 'none';
+        roleNote.innerHTML = '🛡️ <strong>Admin Approval Required:</strong> Maintenance staff with verified Staff ID are reviewed and approved by the Facilities Administrator.';
         roleNote.style.borderColor = 'rgba(251, 215, 132, 0.35)';
       } else if (role === 'faculty') {
+        emailInput.placeholder = 'prof.sharma@vnrvjiet.in';
+        emailHint.innerHTML = 'Use your official faculty / department email (e.g. <code>prof.name@vnrvjiet.in</code>)';
         deptGroup.style.display = 'none';
         staffIdGroup.style.display = 'none';
         studentRollGroup.style.display = 'none';
-        roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Faculty accounts are verified by campus facilities administration to confirm college staff credentials.';
+        facultyIdGroup.style.display = 'block';
+        facultyDeptGroup.style.display = 'block';
+        roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Faculty registrations with Faculty ID are verified against college employee records by the campus administrator.';
         roleNote.style.borderColor = 'rgba(52, 211, 153, 0.35)';
       } else {
+        emailInput.placeholder = 'student.alex@vnrvjiet.in';
+        emailHint.innerHTML = 'Use your official student email (e.g. <code>student@vnrvjiet.in</code>)';
         deptGroup.style.display = 'none';
         staffIdGroup.style.display = 'none';
         studentRollGroup.style.display = 'block';
+        facultyIdGroup.style.display = 'none';
+        facultyDeptGroup.style.display = 'none';
         roleNote.innerHTML = '🛡️ <strong>Admin Verification:</strong> Student Roll Number will be verified against official college records by the administrator.';
         roleNote.style.borderColor = 'rgba(99, 102, 241, 0.35)';
       }
@@ -192,7 +237,15 @@
       const role = document.getElementById('role').value;
       const roll_number = document.getElementById('roll_number').value.trim().toUpperCase();
       const staff_id = document.getElementById('staff_id').value.trim().toUpperCase();
-      const department = role === 'staff' ? document.getElementById('department').value : undefined;
+      const faculty_id = document.getElementById('faculty_id') ? document.getElementById('faculty_id').value.trim().toUpperCase() : '';
+      
+      let department = undefined;
+      if (role === 'staff') {
+        department = document.getElementById('department').value;
+      } else if (role === 'faculty') {
+        department = document.getElementById('faculty_department').value;
+      }
+
       const password = document.getElementById('password').value;
       const confirm_password = document.getElementById('confirm_password').value;
 
@@ -208,6 +261,11 @@
 
       if (role === 'staff' && !staff_id) {
         API.showToast('Please enter your Staff ID.', 'error');
+        return;
+      }
+
+      if (role === 'faculty' && !faculty_id) {
+        API.showToast('Please enter your Faculty / Employee ID.', 'error');
         return;
       }
 
@@ -230,7 +288,8 @@
         phone,
         role,
         roll_number: role === 'student' ? roll_number : undefined,
-        staff_id: role === 'staff' ? staff_id : undefined,
+        staff_id: role === 'staff' ? staff_id : (role === 'faculty' ? faculty_id : undefined),
+        faculty_id: role === 'faculty' ? faculty_id : undefined,
         department,
         password
       });
