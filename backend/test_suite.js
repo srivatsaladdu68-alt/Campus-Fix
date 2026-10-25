@@ -236,21 +236,6 @@ async function runTests() {
     const csvRes = await request(`/analytics/export?token=${adminToken}`);
     assert(csvRes.status === 200 && csvRes.data.includes('Complaint Code,Title,Category'), 'Admin CSV export generates valid downloadable spreadsheet data');
 
-    // 18. IoT Sensor Telemetry & Auto Alert Ingestion
-    const iotRes = await request('/iot/events', {
-      method: 'POST',
-      body: {
-        device_id: 'IOT-WATER-99',
-        location: 'Science Complex Restroom 3',
-        event_type: 'water_leak',
-        measured_value: 9.8,
-        threshold_value: 4.0,
-        alert_status: 'TRIGGERED',
-        auto_create_fault: true
-      }
-    });
-    assert(iotRes.status === 201 && iotRes.data.auto_fault_id !== null, 'IoT telemetry event ingested with automated fault ticket creation');
-
     console.log('\n========================================================');
     console.log(`TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
     console.log('========================================================');

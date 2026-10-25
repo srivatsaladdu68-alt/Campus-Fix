@@ -12,7 +12,6 @@ const faultRoutes = require('./routes/faultRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const analyticsRoutes = require('./routes/analyticsRoutes');
-const iotRoutes = require('./routes/iotRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -39,7 +38,6 @@ app.use('/api/faults', faultRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/analytics', analyticsRoutes);
-app.use('/api/iot', iotRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

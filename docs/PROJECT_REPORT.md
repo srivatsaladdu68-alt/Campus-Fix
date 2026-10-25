@@ -28,7 +28,6 @@ graph TD
         DashRoute["/api/dashboard (Aggregated KPIs)"]
         NotifRoute["/api/notifications (In-App Alerts)"]
         AnalyticsRoute["/api/analytics (Charts, CSV Export)"]
-        IoTRoute["/api/iot (Telemetry Ingestion)"]
     end
 
     ClientLayers -->|REST HTTP / JSON| ExpressBackend
@@ -40,7 +39,6 @@ graph TD
         HistoryTbl[("fault_history (Audit Trail)")]
         NotifTbl[("notifications")]
         MaintTbl[("maintenance_records")]
-        IoTTbl[("iot_sensor_events")]
     end
 
     ExpressBackend --> SQLiteDatabase
@@ -61,7 +59,6 @@ erDiagram
     faults ||--o{ fault_history : "logs"
     faults ||--o{ notifications : "triggers"
     faults ||--o{ maintenance_records : "documents"
-    faults ||--o| iot_sensor_events : "generated_from"
 
     users {
         int user_id PK
@@ -128,18 +125,6 @@ erDiagram
         datetime started_at
         datetime completed_at
     }
-
-    iot_sensor_events {
-        int event_id PK
-        string device_id
-        string location
-        string event_type
-        float measured_value
-        float threshold_value
-        string alert_status
-        int fault_id FK
-        datetime created_at
-    }
 ```
 
 ---
@@ -178,10 +163,6 @@ stateDiagram-v2
 3. **Recurring Failure Hotspot Detection:**
    - Aggregates rooms experiencing $\ge 2$ historical complaints in the same facility category.
    - Alerts facilities directors to inspect systemic infrastructure problems.
-4. **Future IoT Event Telemetry Interface:**
-   - Dedicated REST endpoint `POST /api/iot/events`.
-   - Supports automated device logging for power fluctuations, water leaks, and overheating.
-   - Automatically generates a critical priority work order if measured values exceed safe thresholds.
 
 ---
 

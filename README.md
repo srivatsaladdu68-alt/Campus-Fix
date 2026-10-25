@@ -28,8 +28,6 @@ A modern, responsive, and secure full-stack web application designed for college
   - Intelligent maintenance: automatic overdue task detection & recurring problem spot warnings.
   - Filtered reports and one-click **CSV data export**.
   - Maintenance staff account registration and management.
-- **Future IoT Extensibility:**
-  - Ingestion API (`POST /api/iot/events`) for automatic sensor telemetry (water leaks, temperature spikes, power fluctuations, network offline) with automated fault ticket dispatch.
 
 ---
 
@@ -94,8 +92,7 @@ campus-fix/
 │   │   ├── faultRoutes.js       # /api/faults
 │   │   ├── dashboardRoutes.js   # /api/dashboard
 │   │   ├── notificationRoutes.js# /api/notifications
-│   │   ├── analyticsRoutes.js   # /api/analytics
-│   │   └── iotRoutes.js         # /api/iot
+│   │   └── analyticsRoutes.js   # /api/analytics
 │   ├── services/
 │   │   └── notificationService.js # In-app notification dispatcher
 │   ├── data/

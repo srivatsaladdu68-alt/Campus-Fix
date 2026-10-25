@@ -102,19 +102,6 @@ function initSchema() {
       FOREIGN KEY (staff_id) REFERENCES users(user_id) ON DELETE CASCADE
     );
 
-    CREATE TABLE IF NOT EXISTS iot_sensor_events (
-      event_id INTEGER PRIMARY KEY AUTOINCREMENT,
-      device_id TEXT NOT NULL,
-      location TEXT NOT NULL,
-      event_type TEXT NOT NULL,
-      measured_value REAL NOT NULL,
-      threshold_value REAL NOT NULL,
-      alert_status TEXT NOT NULL,
-      fault_id INTEGER,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (fault_id) REFERENCES faults(fault_id) ON DELETE SET NULL
-    );
-
     CREATE INDEX IF NOT EXISTS idx_faults_status ON faults(status);
     CREATE INDEX IF NOT EXISTS idx_faults_reported_by ON faults(reported_by);
     CREATE INDEX IF NOT EXISTS idx_faults_assigned_to ON faults(assigned_to);
@@ -145,6 +132,9 @@ function initSchema() {
     db.exec("UPDATE users SET roll_number = student_id WHERE role = 'student' AND (roll_number IS NULL OR roll_number = '') AND student_id IS NOT NULL");
     db.exec("UPDATE users SET staff_id = 'STF-ELEC-01' WHERE email = 'staff.mike@vnrvjiet.in' AND staff_id IS NULL");
     db.exec("UPDATE users SET staff_id = 'STF-PLUM-02' WHERE email = 'staff.sarah@vnrvjiet.in' AND staff_id IS NULL");
+
+    // Remove iot_sensor_events table if present
+    db.exec("DROP TABLE IF EXISTS iot_sensor_events");
   } catch (err) {
     console.error('Migration notice:', err.message);
   }

@@ -13,9 +13,8 @@ db.exec(`
   DELETE FROM fault_history;
   DELETE FROM maintenance_records;
   DELETE FROM notifications;
-  DELETE FROM iot_sensor_events;
   DELETE FROM faults;
-  DELETE FROM sqlite_sequence WHERE name IN ('faults', 'fault_history', 'maintenance_records', 'notifications', 'iot_sensor_events');
+  DELETE FROM sqlite_sequence WHERE name IN ('faults', 'fault_history', 'maintenance_records', 'notifications');
 `);
 
 db.pragma('foreign_keys = ON');

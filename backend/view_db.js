@@ -41,7 +41,7 @@ if (arg === 'users') {
   console.log('📊 CAMPUS FIX DATABASE OVERVIEW (campus_fix.db)');
   console.log('=======================================================');
 
-  const tables = ['users', 'faults', 'fault_history', 'buildings', 'notifications', 'maintenance_records', 'iot_sensor_events'];
+  const tables = ['users', 'faults', 'fault_history', 'buildings', 'notifications', 'maintenance_records'];
   const summary = tables.map(table => {
     try {
       const count = db.prepare(`SELECT COUNT(*) as count FROM ${table}`).get().count;
