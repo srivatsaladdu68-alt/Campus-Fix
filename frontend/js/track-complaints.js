@@ -138,7 +138,7 @@ async function loadComplaints() {
           <button class="btn btn-outline btn-sm" onclick="openDetailModal(${f.fault_id})" title="View Details">
             <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
           </button>
-          ${Auth.getUser()?.role === 'admin' ? `
+          ${(Auth.getUser()?.role === 'admin' && !['Closed', 'Resolved'].includes(f.status)) ? `
             <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign technician or update deadline' : 'Assign maintenance technician'}">
               <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
             </button>
@@ -200,9 +200,10 @@ function renderDetailModal(data) {
     </div>
   `;
 
-  // Technician details + Direct Admin Assign Button
+  // Technician details + Direct Admin Assign Button (hidden if already Completed or Closed)
+  const isFinished = ['Closed', 'Resolved'].includes(f.status);
   const staffDisplay = f.staff_name ? `<span style="color: var(--cream-gold); font-weight: 700;">${escapeHtml(f.staff_name)}</span> <span style="color: var(--cream-muted);">(${escapeHtml(f.staff_phone || 'Staff')})</span>` : '<span style="color: #94a3b8; font-style: italic;">Unassigned</span>';
-  const assignInlineBtn = isAdmin ? `
+  const assignInlineBtn = (isAdmin && !isFinished) ? `
     <button type="button" class="btn btn-gold btn-sm" style="margin-left: 0.75rem; padding: 3px 10px; font-size: 0.75rem; vertical-align: middle;" onclick="openAssignModal(${f.fault_id})">
       <i data-lucide="user-check" style="width: 13px; height: 13px;"></i> ${f.assigned_to ? 'Reassign Staff' : 'Assign Technician'}
     </button>
@@ -260,7 +261,7 @@ function renderDetailModal(data) {
   const footer = document.getElementById('modal-footer-actions');
   let footerHtml = '<button type="button" class="btn btn-outline" onclick="closeDetailModal()">Close</button>';
 
-  if (isAdmin) {
+  if (isAdmin && !isFinished) {
     footerHtml = `
       <button type="button" class="btn btn-gold" onclick="openAssignModal(${f.fault_id})">
         <i data-lucide="user-check" style="width: 16px; height: 16px;"></i> ${f.assigned_to ? 'Reassign Staff' : 'Assign Maintenance Staff'}
@@ -315,9 +316,15 @@ function renderTimeline(currentStatus) {
 
     if (currentIndex >= idx) {
       if (currentIndex === idx) {
-        stateClass = 'active';
-        dotContent = '●';
-        badgeHtml = '<span class="timeline-active-pill">Current</span>';
+        if (currentStatus === 'Closed') {
+          stateClass = 'completed active-completed';
+          dotContent = '✓';
+          badgeHtml = '<span class="timeline-active-pill" style="background: rgba(52, 211, 153, 0.22); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.5);">Completed</span>';
+        } else {
+          stateClass = 'active';
+          dotContent = '●';
+          badgeHtml = '<span class="timeline-active-pill">Current</span>';
+        }
       } else {
         stateClass = 'completed';
         dotContent = '✓';

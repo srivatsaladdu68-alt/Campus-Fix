@@ -362,9 +362,11 @@ async function loadAllComplaints() {
       <td>${API.getStatusBadge(f.status)}</td>
       <td>
         <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-          <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign Staff & Deadline">
-            <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
-          </button>
+          ${!['Closed', 'Resolved'].includes(f.status) ? `
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign Staff & Deadline' : 'Assign Staff & Deadline'}">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
+            </button>
+          ` : ''}
           <button class="btn btn-outline btn-sm" onclick="openStatusModal(${f.fault_id})" title="Change Status">
             <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Status
           </button>

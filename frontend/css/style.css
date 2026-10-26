@@ -868,6 +868,33 @@ input::placeholder, textarea::placeholder {
   box-shadow: 0 0 12px rgba(52, 211, 153, 0.45);
 }
 
+.timeline-step.active-completed .timeline-dot {
+  background: #065f46;
+  border-color: #34d399;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(52, 211, 153, 0.75);
+  transform: scale(1.15);
+  animation: pulseCompletedStep 2s infinite ease-in-out;
+}
+
+.timeline-step.active-completed .timeline-step-num {
+  color: #34d399;
+}
+
+.timeline-step.active-completed .timeline-label {
+  color: #34d399;
+  font-weight: 700;
+}
+
+@keyframes pulseCompletedStep {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(52, 211, 153, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(52, 211, 153, 0.9);
+  }
+}
+
 /* Active / Current Step */
 .timeline-step.active .timeline-step-num {
   color: var(--cream-gold, #fbd784);

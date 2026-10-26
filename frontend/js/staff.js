@@ -91,15 +91,21 @@ function renderTasks(tasks) {
       </td>
       <td>${API.getStatusBadge(t.status)}</td>
       <td>
-        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
           ${t.status === 'Assigned' ? `
             <button class="btn btn-secondary btn-sm" onclick="startTaskQuick(${t.fault_id})">
               <i data-lucide="play" style="width: 14px; height: 14px;"></i> Start
             </button>
           ` : ''}
-          <button class="btn btn-outline btn-sm" onclick="openTaskModal(${t.fault_id})">
-            <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i> Update
-          </button>
+          ${t.status === 'Closed' ? `
+            <span class="badge" style="background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.4); padding: 5px 12px; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 5px;">
+              <i data-lucide="check-circle-2" style="width: 15px; height: 15px; color: #34d399;"></i> Completed
+            </span>
+          ` : `
+            <button class="btn btn-outline btn-sm" onclick="openTaskModal(${t.fault_id})">
+              <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i> Update
+            </button>
+          `}
         </div>
       </td>
     </tr>
