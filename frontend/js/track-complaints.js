@@ -138,9 +138,9 @@ async function loadComplaints() {
           <button class="btn btn-outline btn-sm" onclick="openDetailModal(${f.fault_id})" title="View Details">
             <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
           </button>
-          ${(Auth.getUser()?.role === 'admin' && !['Closed', 'Resolved'].includes(f.status)) ? `
-            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign technician or update deadline' : 'Assign maintenance technician'}">
-              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
+          ${(Auth.getUser()?.role === 'admin' && !['Closed', 'Resolved'].includes(f.status) && !f.assigned_to) ? `
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign maintenance technician">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
             </button>
           ` : ''}
         </div>
@@ -200,12 +200,12 @@ function renderDetailModal(data) {
     </div>
   `;
 
-  // Technician details + Direct Admin Assign Button (hidden if already Completed or Closed)
+  // Technician details + Direct Admin Assign Button (hidden if already Completed, Closed, or Assigned)
   const isFinished = ['Closed', 'Resolved'].includes(f.status);
   const staffDisplay = f.staff_name ? `<span style="color: var(--cream-gold); font-weight: 700;">${escapeHtml(f.staff_name)}</span> <span style="color: var(--cream-muted);">(${escapeHtml(f.staff_phone || 'Staff')})</span>` : '<span style="color: #94a3b8; font-style: italic;">Unassigned</span>';
-  const assignInlineBtn = (isAdmin && !isFinished) ? `
+  const assignInlineBtn = (isAdmin && !isFinished && !f.assigned_to) ? `
     <button type="button" class="btn btn-gold btn-sm" style="margin-left: 0.75rem; padding: 3px 10px; font-size: 0.75rem; vertical-align: middle;" onclick="openAssignModal(${f.fault_id})">
-      <i data-lucide="user-check" style="width: 13px; height: 13px;"></i> ${f.assigned_to ? 'Reassign Staff' : 'Assign Technician'}
+      <i data-lucide="user-check" style="width: 13px; height: 13px;"></i> Assign Technician
     </button>
   ` : '';
   document.getElementById('modal-staff').innerHTML = `${staffDisplay} ${assignInlineBtn}`;
@@ -261,10 +261,10 @@ function renderDetailModal(data) {
   const footer = document.getElementById('modal-footer-actions');
   let footerHtml = '<button type="button" class="btn btn-outline" onclick="closeDetailModal()">Close</button>';
 
-  if (isAdmin && !isFinished) {
+  if (isAdmin && !isFinished && !f.assigned_to) {
     footerHtml = `
       <button type="button" class="btn btn-gold" onclick="openAssignModal(${f.fault_id})">
-        <i data-lucide="user-check" style="width: 16px; height: 16px;"></i> ${f.assigned_to ? 'Reassign Staff' : 'Assign Maintenance Staff'}
+        <i data-lucide="user-check" style="width: 16px; height: 16px;"></i> Assign Maintenance Staff
       </button>
       ${footerHtml}
     `;
@@ -406,7 +406,7 @@ function openAssignModal(faultId) {
   const faultName = fault.item_name || fault.title;
 
   document.getElementById('assign-modal-code').textContent = fault.complaint_code;
-  document.getElementById('assign-modal-title').textContent = `${isAssigned ? 'Reassign Staff' : 'Assign Staff'}: ${faultName}`;
+  document.getElementById('assign-modal-title').textContent = `Assign Staff: ${faultName}`;
   document.getElementById('assign-priority-select').value = fault.priority || 'Medium';
 
   // Current Assignment status banner

@@ -382,9 +382,9 @@ async function loadAllComplaints() {
       <td>${API.getStatusBadge(f.status)}</td>
       <td>
         <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-          ${!['Closed', 'Resolved'].includes(f.status) ? `
-            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign Staff & Deadline' : 'Assign Staff & Deadline'}">
-              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
+          ${(!['Closed', 'Resolved'].includes(f.status) && !f.assigned_to) ? `
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign Staff & Deadline">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
             </button>
           ` : ''}
           <button class="btn btn-outline btn-sm" onclick="openStatusModal(${f.fault_id})" title="Change Status">
@@ -417,10 +417,9 @@ function openAssignModal(faultId) {
   if (!fault) return;
 
   selectedFaultForAction = fault;
-  const isAssigned = !!fault.assigned_to;
   const titleEl = document.getElementById('assign-modal-title');
   if (titleEl) {
-    titleEl.textContent = `${isAssigned ? 'Reassign Staff' : 'Assign Maintenance Staff'}: ${fault.item_name || fault.title}`;
+    titleEl.textContent = `Assign Maintenance Staff: ${fault.item_name || fault.title}`;
   }
   document.getElementById('assign-modal-code').textContent = fault.complaint_code;
   document.getElementById('assign-priority-select').value = fault.priority || 'Medium';
@@ -444,7 +443,7 @@ function openAssignModal(faultId) {
 
   const confirmBtn = document.getElementById('confirm-assign-btn');
   if (confirmBtn) {
-    confirmBtn.textContent = isAssigned ? 'Update Assignment' : 'Confirm Assignment';
+    confirmBtn.textContent = 'Confirm Assignment';
   }
 
   document.getElementById('assign-modal').classList.add('open');
