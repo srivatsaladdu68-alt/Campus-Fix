@@ -8,10 +8,18 @@ router.get('/', authenticateToken, (req, res) => {
   try {
     const userId = req.user.user_id;
     const notifications = db.prepare(`
-      SELECT notification_id, fault_id, message, is_read, created_at
-      FROM notifications
-      WHERE user_id = ?
-      ORDER BY created_at DESC
+      SELECT 
+        n.notification_id, 
+        n.fault_id, 
+        n.message, 
+        n.is_read, 
+        n.created_at,
+        f.status AS fault_status,
+        f.complaint_code
+      FROM notifications n
+      LEFT JOIN faults f ON n.fault_id = f.fault_id
+      WHERE n.user_id = ?
+      ORDER BY n.created_at DESC
       LIMIT 50
     `).all(userId);
 

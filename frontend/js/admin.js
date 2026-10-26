@@ -22,11 +22,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadStaffList();
   await loadPendingApprovals();
   setupComplaintsTableFilters();
+
+  // Route to the requested tab based on URL hash (e.g. #reports, #staff-mgmt, #complaints)
+  const initialHash = (window.location.hash || '').replace('#', '');
+  const validTabs = ['overview', 'complaints', 'reports', 'staff-mgmt'];
+  if (initialHash && validTabs.includes(initialHash)) {
+    switchTab(initialHash);
+  } else {
+    switchTab('overview');
+  }
+
+  // Handle in-page hash changes
+  window.addEventListener('hashchange', () => {
+    const newHash = (window.location.hash || '').replace('#', '');
+    if (newHash && validTabs.includes(newHash)) {
+      switchTab(newHash);
+    }
+  });
 });
 
 // Tab Switching
 function switchTab(tabId) {
   const tabs = ['overview', 'complaints', 'reports', 'staff-mgmt'];
+  if (!tabs.includes(tabId)) tabId = 'overview';
+
   tabs.forEach(t => {
     const el = document.getElementById(`tab-${t}`);
     if (el) el.style.display = t === tabId ? 'block' : 'none';
@@ -36,7 +55,8 @@ function switchTab(tabId) {
     link.classList.remove('active');
   });
 
-  const activeLink = document.querySelector(`.sidebar-link[href="#${tabId}"]`);
+  const activeLink = document.querySelector(`.sidebar-link[href="#${tabId}"]`) || 
+                     document.querySelector(`.sidebar-link[href="admin-dashboard.html#${tabId}"]`);
   if (activeLink) activeLink.classList.add('active');
 
   if (tabId === 'complaints') {

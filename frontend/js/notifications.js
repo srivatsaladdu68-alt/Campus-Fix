@@ -39,14 +39,16 @@ async function loadNotificationsList() {
   container.innerHTML = res.notifications.map(n => `
     <div style="padding: 1.15rem 1.35rem; background: ${n.is_read ? 'var(--bg-deep)' : 'rgba(99, 102, 241, 0.15)'}; border: 1px solid ${n.is_read ? 'var(--border-cream)' : 'var(--electric-indigo)'}; border-radius: var(--radius-md); display: flex; align-items: start; justify-content: space-between; gap: 1rem; transition: var(--transition);">
       <div style="flex: 1;">
-        <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.4rem;">
+        <div style="display: flex; align-items: center; gap: 0.65rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
           ${!n.is_read ? '<span style="width: 8px; height: 8px; border-radius: 50%; background: var(--electric-indigo-bright); box-shadow: 0 0 8px var(--electric-indigo); display: inline-block;"></span>' : ''}
           <span style="font-weight: ${n.is_read ? '500' : '700'}; color: var(--cream-pure); font-size: 0.95rem;">
             ${escapeHtml(n.message)}
           </span>
+          ${n.fault_status ? API.getStatusBadge(n.fault_status) : ''}
         </div>
         <div style="font-size: 0.8rem; color: var(--cream-muted);">
-          ${API.formatDate(n.created_at)}
+          <span>${API.formatDate(n.created_at)}</span>
+          ${n.complaint_code ? `<span style="margin-left: 8px; color: var(--cream-gold); font-weight: 600;">[${escapeHtml(n.complaint_code)}]</span>` : ''}
         </div>
       </div>
       <div style="display: flex; align-items: center; gap: 0.6rem;">
@@ -56,7 +58,7 @@ async function loadNotificationsList() {
           </button>
         ` : ''}
         ${n.fault_id ? `
-          <a href="track-complaints.html?code=${n.fault_id}" class="btn btn-gold btn-sm" title="View Complaint">
+          <a href="track-complaints.html?code=${encodeURIComponent(n.complaint_code || n.fault_id)}" class="btn btn-gold btn-sm" onclick="markOneRead(${n.notification_id})" title="View Complaint">
             View
           </a>
         ` : ''}

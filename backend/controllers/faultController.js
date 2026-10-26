@@ -401,6 +401,13 @@ function updateStatus(req, res) {
       );
     }
 
+    if (req.user.role !== 'admin') {
+      notifyAdmins(
+        faultId,
+        `Complaint [${fault.complaint_code}] "${fault.title}" was marked as "${status}" by ${req.user.full_name}.`
+      );
+    }
+
     return res.json({
       success: true,
       message: `Status updated to ${status}.`,

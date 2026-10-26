@@ -166,7 +166,7 @@ function renderSidebarNav(user) {
         <i data-lucide="layout-dashboard"></i>
         <span>Analytics Overview</span>
       </a>
-      <a href="track-complaints.html" class="sidebar-link ${isAllComplaints ? 'active' : ''}">
+      <a href="admin-dashboard.html#complaints" class="sidebar-link">
         <i data-lucide="list-checks"></i>
         <span>All Complaints</span>
       </a>
