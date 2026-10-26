@@ -142,51 +142,123 @@ function initSchema() {
 
 function seedDatabase() {
   const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
-  if (userCount > 0) {
-    return;
+  if (userCount === 0) {
+    console.log('Seeding initial database users and buildings...');
+
+    // 1. Seed Buildings
+    const insertBuilding = db.prepare(
+      'INSERT INTO buildings (building_name, building_code) VALUES (?, ?)'
+    );
+    const buildings = [
+      ['E Block', 'E-BLOCK'],
+      ['D Block', 'D-BLOCK'],
+      ['C Block', 'C-BLOCK'],
+      ['A Block', 'A-BLOCK'],
+      ['PG Block', 'PG-BLOCK'],
+      ['Canteen', 'CANTEEN'],
+      ['Synti Stage', 'SYNTI-STAGE'],
+      ['Sports Block', 'SPORTS']
+    ];
+    for (const b of buildings) {
+      insertBuilding.run(b[0], b[1]);
+    }
+
+    // 2. Seed Users
+    const salt = bcrypt.genSaltSync(10);
+    const adminPass = bcrypt.hashSync('Admin@123', salt);
+    const staffPass = bcrypt.hashSync('Staff@123', salt);
+    const userPass = bcrypt.hashSync('Student@123', salt);
+    const facultyPass = bcrypt.hashSync('Faculty@123', salt);
+
+    const insertUser = db.prepare(`
+      INSERT INTO users (full_name, email, phone, password_hash, role, student_id, roll_number, staff_id, department, approval_status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved')
+    `);
+
+    insertUser.run('Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration');
+    insertUser.run('Mike Johnson (Electrician)', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance');
+    insertUser.run('Sarah Williams (Plumber)', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities');
+    insertUser.run('David Miller (Carpenter)', 'staff.david@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance');
+    insertUser.run('Kevin Brown (WiFi & Network Tech)', 'staff.kevin@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure');
+    insertUser.run('Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering');
+    insertUser.run('Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering');
+
+    console.log('Database initialized with VNRVJIET campus buildings and 5 core demo user accounts.');
   }
 
-  console.log('Seeding initial database data...');
+  // 3. Seed Initial Demo Complaints (if missing)
+  const studentUser = db.prepare("SELECT user_id FROM users WHERE role = 'student' LIMIT 1").get();
+  const elecStaff = db.prepare("SELECT user_id FROM users WHERE staff_id = 'STF-ELEC-01'").get();
+  const carpStaff = db.prepare("SELECT user_id FROM users WHERE staff_id = 'STF-CARP-03'").get();
+  const plumStaff = db.prepare("SELECT user_id FROM users WHERE staff_id = 'STF-PLUM-02'").get();
 
-  // 1. Seed Buildings
-  const insertBuilding = db.prepare(
-    'INSERT INTO buildings (building_name, building_code) VALUES (?, ?)'
-  );
-  const buildings = [
-    ['E Block', 'E-BLOCK'],
-    ['D Block', 'D-BLOCK'],
-    ['C Block', 'C-BLOCK'],
-    ['A Block', 'A-BLOCK'],
-    ['PG Block', 'PG-BLOCK'],
-    ['Canteen', 'CANTEEN'],
-    ['Synti Stage', 'SYNTI-STAGE'],
-    ['Sports Block', 'SPORTS']
-  ];
-  for (const b of buildings) {
-    insertBuilding.run(b[0], b[1]);
-  }
-
-  // 2. Seed Users
-  const salt = bcrypt.genSaltSync(10);
-  const adminPass = bcrypt.hashSync('Admin@123', salt);
-  const staffPass = bcrypt.hashSync('Staff@123', salt);
-  const userPass = bcrypt.hashSync('Student@123', salt);
-  const facultyPass = bcrypt.hashSync('Faculty@123', salt);
-
-  const insertUser = db.prepare(`
-    INSERT INTO users (full_name, email, phone, password_hash, role, student_id, roll_number, staff_id, department, approval_status)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved')
+  const insertFault = db.prepare(`
+    INSERT INTO faults (complaint_code, reported_by, title, item_name, description, category, building_id, floor_number, room_number, priority, status, assigned_to, deadline, created_at, updated_at, resolved_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '-2 days'), datetime('now', '-1 hours'), datetime('now', '-1 hours'))
   `);
 
-  insertUser.run('Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration');
-  insertUser.run('Mike Johnson (Electrician)', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance');
-  insertUser.run('Sarah Williams (Plumber)', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities');
-  insertUser.run('David Miller (Carpenter)', 'staff.david@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance');
-  insertUser.run('Kevin Brown (WiFi & Network Tech)', 'staff.kevin@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure');
-  insertUser.run('Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering');
-  insertUser.run('Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering');
+  const insertHistory = db.prepare(`
+    INSERT INTO fault_history (fault_id, changed_by, old_status, new_status, notes, changed_at)
+    VALUES (?, ?, ?, ?, ?, datetime('now', '-1 hours'))
+  `);
 
-  console.log('Database initialized with VNRVJIET campus buildings and 5 core demo user accounts.');
+  const demoTickets = [
+    {
+      code: 'CF-2026-1124',
+      user: studentUser ? studentUser.user_id : 5,
+      title: 'Electric',
+      item: 'Regulator',
+      desc: 'Regulator not working',
+      cat: 'Electrical',
+      bldg: 1,
+      floor: '2',
+      room: '214',
+      priority: 'Medium',
+      status: 'Closed',
+      staff: elecStaff ? elecStaff.user_id : 2,
+      deadline: '2026-10-30 10:00:00'
+    },
+    {
+      code: 'CF-2026-4790',
+      user: studentUser ? studentUser.user_id : 5,
+      title: 'Chair',
+      item: 'Chair',
+      desc: 'Broken chair hydraulic cylinder or tilted base',
+      cat: 'Furniture',
+      bldg: 2,
+      floor: '3',
+      room: '302',
+      priority: 'Medium',
+      status: 'Closed',
+      staff: carpStaff ? carpStaff.user_id : 4,
+      deadline: '2026-10-29 15:35:00'
+    },
+    {
+      code: 'CF-2026-3633',
+      user: studentUser ? studentUser.user_id : 5,
+      title: 'Tap',
+      item: 'Tap',
+      desc: 'Continuous tap leakage in washroom',
+      cat: 'Washroom',
+      bldg: 4,
+      floor: '1',
+      room: '121',
+      priority: 'High',
+      status: 'Closed',
+      staff: plumStaff ? plumStaff.user_id : 3,
+      deadline: '2026-10-28 15:58:00'
+    }
+  ];
+
+  for (const t of demoTickets) {
+    const existing = db.prepare('SELECT fault_id FROM faults WHERE complaint_code = ?').get(t.code);
+    if (!existing) {
+      const res = insertFault.run(t.code, t.user, t.title, t.item, t.desc, t.cat, t.bldg, t.floor, t.room, t.priority, t.status, t.staff, t.deadline);
+      insertHistory.run(res.lastInsertRowid, t.user, null, 'Reported', 'Complaint submitted by user');
+      insertHistory.run(res.lastInsertRowid, t.staff, 'In Progress', 'Closed', 'Completed and verified resolved');
+      console.log(`Seeded demo complaint ${t.code} (${t.title}).`);
+    }
+  }
 }
 
 initSchema();
