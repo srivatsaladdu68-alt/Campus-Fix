@@ -239,14 +239,34 @@ function setupFormSubmit() {
     lucide.createIcons();
 
     if (res && res.success) {
+      API.showToast(`Complaint registered successfully! Code: ${res.complaint_code}`, 'success');
       document.getElementById('modal-complaint-code').textContent = res.complaint_code;
       document.getElementById('modal-track-link').href = `track-complaints.html?code=${res.complaint_code}`;
-      document.getElementById('success-modal').classList.add('open');
+      const modal = document.getElementById('success-modal');
+      if (modal) {
+        modal.classList.add('open', 'active');
+      }
+      form.reset();
+      // Reset image preview if any
+      const previewContainer = document.getElementById('image-preview-container');
+      const dropzone = document.getElementById('upload-dropzone');
+      if (previewContainer) previewContainer.style.display = 'none';
+      if (dropzone) dropzone.style.display = 'block';
       lucide.createIcons();
     } else {
       API.showToast(res.message || 'Failed to submit complaint.', 'error');
     }
   });
+
+  // Click outside modal to close
+  const successModal = document.getElementById('success-modal');
+  if (successModal) {
+    successModal.addEventListener('click', (e) => {
+      if (e.target === successModal) {
+        successModal.classList.remove('open', 'active');
+      }
+    });
+  }
 }
 
 function quickFillEquipment(itemName, category, title, priority) {

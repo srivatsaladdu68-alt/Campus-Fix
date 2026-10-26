@@ -75,6 +75,21 @@ async function apiCall(endpoint, method = 'GET', data = null, isFormData = false
     }
 
     const result = await response.json();
+
+    if (response.status === 403 && result.message && result.message.includes('no longer exists')) {
+      const publicPages = ['/', '/index.html', '/login.html', '/register.html'];
+      const currentPath = window.location.pathname;
+      if (!publicPages.includes(currentPath)) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        showToast('Your session has expired or account was reset. Please sign in again.', 'warning');
+        setTimeout(() => {
+          window.location.href = '/login.html?expired=1';
+        }, 1200);
+        return result;
+      }
+    }
+
     return result;
   } catch (err) {
     console.error(`API Error on ${method} ${endpoint}:`, err);

@@ -795,12 +795,15 @@ input::placeholder, textarea::placeholder {
   transition: var(--transition);
 }
 
-.modal-overlay.active {
+.modal-overlay.active,
+.modal-overlay.open {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
-.modal-box {
+.modal-box,
+.modal-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-cream);
   border-radius: var(--radius-lg);
@@ -811,6 +814,49 @@ input::placeholder, textarea::placeholder {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
   max-height: 90vh;
   overflow-y: auto;
+  animation: modalPop 0.22s ease-out;
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(244, 239, 230, 0.08);
+}
+
+.modal-header h3 {
+  font-family: var(--font-serif);
+  color: var(--cream-pure);
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.modal-body {
+  color: var(--cream-soft);
+  font-size: 0.92rem;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(244, 239, 230, 0.08);
 }
 
 .modal-close {
