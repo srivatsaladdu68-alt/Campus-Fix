@@ -104,6 +104,10 @@ async function loadAdminOverview() {
 
 // Render Chart.js
 function renderCharts(chartData) {
+  if (!chartData) return;
+  const trendEl = document.getElementById('trendChart');
+  if (!trendEl) return;
+
   Chart.defaults.color = '#b0a99c';
   Chart.defaults.font.family = "'Plus Jakarta Sans', system-ui, sans-serif";
 
