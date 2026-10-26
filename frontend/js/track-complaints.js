@@ -259,7 +259,7 @@ function renderTimeline(currentStatus) {
 
   if (currentStatus === 'Rejected') {
     timelineEl.innerHTML = `
-      <div style="text-align: center; width: 100%; color: #dc2626; font-weight: 700; padding: 1rem; background: #fee2e2; border-radius: var(--radius-md);">
+      <div style="text-align: center; width: 100%; color: #f87171; font-weight: 700; padding: 1.25rem; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: var(--radius-md);">
         ⚠️ This complaint was reviewed and marked as REJECTED by Administration.
       </div>
     `;
@@ -268,7 +268,7 @@ function renderTimeline(currentStatus) {
 
   if (currentStatus === 'Reopened') {
     timelineEl.innerHTML = `
-      <div style="text-align: center; width: 100%; color: #c2410c; font-weight: 700; padding: 1rem; background: #ffedd5; border-radius: var(--radius-md);">
+      <div style="text-align: center; width: 100%; color: #fb923c; font-weight: 700; padding: 1.25rem; background: rgba(251, 146, 60, 0.12); border: 1px solid rgba(251, 146, 60, 0.35); border-radius: var(--radius-md);">
         🔄 Complaint has been REOPENED and returned to high-priority maintenance queue.
       </div>
     `;
@@ -279,22 +279,26 @@ function renderTimeline(currentStatus) {
 
   timelineEl.innerHTML = steps.map((step, idx) => {
     let stateClass = '';
-    let icon = idx + 1;
+    let dotContent = idx + 1;
+    let badgeHtml = '';
 
     if (currentIndex >= idx) {
       if (currentIndex === idx) {
         stateClass = 'active';
-        icon = '●';
+        dotContent = '●';
+        badgeHtml = '<span class="timeline-active-pill">Current</span>';
       } else {
         stateClass = 'completed';
-        icon = '✓';
+        dotContent = '✓';
       }
     }
 
     return `
       <div class="timeline-step ${stateClass}">
-        <div class="timeline-dot">${icon}</div>
+        <span class="timeline-step-num">Step ${idx + 1}</span>
+        <div class="timeline-dot">${dotContent}</div>
         <div class="timeline-label">${step}</div>
+        ${badgeHtml}
       </div>
     `;
   }).join('');
