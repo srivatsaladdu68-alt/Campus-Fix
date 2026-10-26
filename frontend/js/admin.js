@@ -84,6 +84,10 @@ async function loadAdminOverview() {
   document.getElementById('admin-overdue').textContent = res.stats.overdue;
   document.getElementById('admin-avg-time').textContent = `${res.stats.avg_resolution_hours} hrs`;
 
+  const staffCount = (res.charts && res.charts.staff) ? res.charts.staff.length : 0;
+  const staffEl = document.getElementById('admin-active-staff');
+  if (staffEl) staffEl.textContent = staffCount;
+
   // Recurring Faults Alert
   const recurringBox = document.getElementById('recurring-alert-box');
   const recurringList = document.getElementById('recurring-list');

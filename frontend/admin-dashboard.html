@@ -85,75 +85,117 @@
 
         <!-- TAB 1: Analytics Overview -->
         <div id="tab-overview">
-          <!-- Metric KPI Boxes -->
-          <div class="metrics-row">
-            <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: rgba(99, 102, 241, 0.18); color: var(--electric-indigo-bright); border: 1px solid rgba(99, 102, 241, 0.3);">
-                <i data-lucide="clipboard-list"></i>
+          <!-- Metric KPI Boxes Grid (Balanced 4x2 full-screen coverage) -->
+          <div class="metrics-row overview-metrics-grid">
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(99, 102, 241, 0.18); color: var(--electric-indigo-bright); border: 1px solid rgba(99, 102, 241, 0.3);">
+                  <i data-lucide="clipboard-list"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(99, 102, 241, 0.15); color: var(--electric-indigo-bright);">Total</span>
               </div>
-              <div class="metric-info">
+              <div class="overview-card-content">
                 <div class="metric-num" id="admin-total-faults">0</div>
                 <div class="metric-label">Total Faults</div>
+                <div class="metric-hint">Lifetime complaints logged in system</div>
               </div>
             </div>
 
-            <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: rgba(251, 215, 132, 0.18); color: var(--cream-gold); border: 1px solid rgba(251, 215, 132, 0.3);">
-                <i data-lucide="alert-circle"></i>
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(251, 215, 132, 0.18); color: var(--cream-gold); border: 1px solid rgba(251, 215, 132, 0.3);">
+                  <i data-lucide="alert-circle"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(251, 215, 132, 0.15); color: var(--cream-gold);">Pending</span>
               </div>
-              <div class="metric-info">
+              <div class="overview-card-content">
                 <div class="metric-num" id="admin-open-complaints">0</div>
                 <div class="metric-label">Open Complaints</div>
+                <div class="metric-hint">Awaiting technician assignment or review</div>
               </div>
             </div>
 
-            <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: rgba(248, 113, 113, 0.18); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3);">
-                <i data-lucide="flame"></i>
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(248, 113, 113, 0.18); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3);">
+                  <i data-lucide="flame"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(248, 113, 113, 0.15); color: #f87171;">Urgent</span>
               </div>
-              <div class="metric-info">
+              <div class="overview-card-content">
                 <div class="metric-num" id="admin-critical-faults">0</div>
                 <div class="metric-label">Critical Issues</div>
+                <div class="metric-hint">Safety risks & high-priority repairs</div>
               </div>
             </div>
 
-            <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
-                <i data-lucide="wrench"></i>
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(56, 189, 248, 0.18); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3);">
+                  <i data-lucide="wrench"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">Active</span>
               </div>
-              <div class="metric-info">
+              <div class="overview-card-content">
                 <div class="metric-num" id="admin-in-progress">0</div>
                 <div class="metric-label">In Progress</div>
+                <div class="metric-hint">Currently assigned & being worked on</div>
               </div>
             </div>
 
-            <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: rgba(52, 211, 153, 0.18); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">
-                <i data-lucide="check-circle-2"></i>
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(52, 211, 153, 0.18); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3);">
+                  <i data-lucide="check-circle-2"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(52, 211, 153, 0.15); color: #34d399;">Closed</span>
               </div>
-              <div class="metric-info">
+              <div class="overview-card-content">
                 <div class="metric-num" id="admin-resolved">0</div>
                 <div class="metric-label">Resolved Fixed</div>
+                <div class="metric-hint">Verified & closed campus complaints</div>
               </div>
             </div>
 
-            <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: rgba(232, 121, 249, 0.18); color: #e879f9; border: 1px solid rgba(232, 121, 249, 0.3);">
-                <i data-lucide="timer"></i>
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(232, 121, 249, 0.18); color: #e879f9; border: 1px solid rgba(232, 121, 249, 0.3);">
+                  <i data-lucide="timer"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(232, 121, 249, 0.15); color: #e879f9;">Turnaround</span>
               </div>
-              <div class="metric-info">
+              <div class="overview-card-content">
                 <div class="metric-num" id="admin-avg-time">0 hrs</div>
                 <div class="metric-label">Avg Repair Time</div>
+                <div class="metric-hint">Average facility SLA turnaround speed</div>
               </div>
             </div>
 
-            <div class="metric-box">
-              <div class="metric-icon-wrap" style="background: rgba(251, 146, 60, 0.18); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.3);">
-                <i data-lucide="clock"></i>
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(251, 146, 60, 0.18); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.3);">
+                  <i data-lucide="clock"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(251, 146, 60, 0.15); color: #fb923c;">SLA</span>
               </div>
-              <div class="metric-info">
+              <div class="overview-card-content">
                 <div class="metric-num" id="admin-overdue">0</div>
                 <div class="metric-label">Overdue Tickets</div>
+                <div class="metric-hint">Complaints past target completion deadline</div>
+              </div>
+            </div>
+
+            <div class="metric-box overview-card">
+              <div class="overview-card-header">
+                <div class="metric-icon-wrap" style="background: rgba(45, 212, 191, 0.18); color: #2dd4bf; border: 1px solid rgba(45, 212, 191, 0.3);">
+                  <i data-lucide="users"></i>
+                </div>
+                <span class="overview-pill" style="background: rgba(45, 212, 191, 0.15); color: #2dd4bf;">Staff</span>
+              </div>
+              <div class="overview-card-content">
+                <div class="metric-num" id="admin-active-staff">0</div>
+                <div class="metric-label">Active Technicians</div>
+                <div class="metric-hint">On-duty electricians, plumbers & staff</div>
               </div>
             </div>
           </div>

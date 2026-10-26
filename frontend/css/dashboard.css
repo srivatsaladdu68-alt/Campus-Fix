@@ -418,6 +418,91 @@
   margin-top: 0.2rem;
 }
 
+/* Overview Balanced 4x2 Grid (Fills space without ragged gaps) */
+.overview-metrics-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 1.5rem !important;
+  margin-bottom: 2rem !important;
+}
+
+@media (max-width: 1280px) {
+  .overview-metrics-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .overview-metrics-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.overview-card {
+  min-height: 210px !important;
+  padding: 1.85rem 1.75rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border-cream) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-subtle) !important;
+  transition: var(--transition) !important;
+}
+
+.overview-card:hover {
+  border-color: var(--border-cream-hover) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 28px -5px rgba(0, 0, 0, 0.45) !important;
+}
+
+.overview-card-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.overview-pill {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 3px 10px !important;
+  border-radius: 9999px !important;
+}
+
+.overview-card-content {
+  width: 100% !important;
+  margin-top: 1.25rem !important;
+}
+
+.overview-card .metric-num {
+  font-family: var(--font-serif) !important;
+  font-size: 2.75rem !important;
+  font-weight: 700 !important;
+  color: var(--cream-pure) !important;
+  line-height: 1 !important;
+  margin-bottom: 0.45rem !important;
+}
+
+.overview-card .metric-label {
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  color: var(--cream-pure) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+.overview-card .metric-hint {
+  font-size: 0.78rem !important;
+  color: var(--cream-muted) !important;
+  margin-top: 0.35rem !important;
+  line-height: 1.35 !important;
+}
+
 /* KPI Cards Grid */
 .kpi-grid {
   display: grid;
