@@ -675,52 +675,6 @@ async function rejectUserRegistration(userId, name, btn) {
   }
 }
 
-function openAddStaffModal() {
-  document.getElementById('add-staff-form').reset();
-  document.getElementById('add-staff-modal').classList.add('open');
-}
-
-function closeAddStaffModal() {
-  document.getElementById('add-staff-modal').classList.remove('open');
-}
-
-document.getElementById('confirm-add-staff-btn').addEventListener('click', async () => {
-  const full_name = document.getElementById('new-staff-name').value.trim();
-  const staff_id = document.getElementById('new-staff-id') ? document.getElementById('new-staff-id').value.trim().toUpperCase() : '';
-  const department = document.getElementById('new-staff-dept') ? document.getElementById('new-staff-dept').value : 'General Facilities';
-  const email = document.getElementById('new-staff-email').value.trim();
-  const phone = document.getElementById('new-staff-phone').value.trim();
-  const password = document.getElementById('new-staff-password').value;
-
-  if (!full_name || !email || !password) {
-    API.showToast('Please enter name, email, and password.', 'error');
-    return;
-  }
-
-  if (!staff_id) {
-    API.showToast('Please enter a Staff ID.', 'error');
-    return;
-  }
-
-  const res = await API.call('/auth/staff', 'POST', {
-    full_name,
-    staff_id,
-    department,
-    email,
-    phone,
-    password
-  });
-
-  if (res && res.success) {
-    API.showToast('Maintenance staff created successfully!', 'success');
-    closeAddStaffModal();
-    await loadStaffList();
-    renderStaffDirectory();
-  } else {
-    API.showToast(res.message || 'Failed to register staff.', 'error');
-  }
-});
-
 // 6. CSV Export Functionality
 function exportDataCSV() {
   const token = localStorage.getItem('token');

@@ -425,11 +425,11 @@
             <div class="card-header-bar">
               <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <i data-lucide="wrench" style="width: 22px; height: 22px; color: var(--electric-indigo-bright);"></i>
-                <h2>Authorized Campus Maintenance Technicians</h2>
+                <div>
+                  <h2 style="margin-bottom: 0.15rem;">Authorized Campus Maintenance Technicians</h2>
+                  <p style="font-size: 0.82rem; color: var(--cream-muted); margin: 0;">Technicians registered via portal and approved by Administration</p>
+                </div>
               </div>
-              <button class="btn btn-primary btn-sm" onclick="openAddStaffModal()">
-                <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i> Register New Staff
-              </button>
             </div>
 
             <div class="table-responsive">
@@ -538,54 +538,6 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-outline" onclick="closeStatusModal()">Cancel</button>
         <button type="button" class="btn btn-gold" id="confirm-status-btn">Save Status</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Register Staff Member Modal (Admin only) -->
-  <div class="modal-overlay" id="add-staff-modal">
-    <div class="modal-card" style="max-width: 500px;">
-      <div class="modal-header">
-        <h3>Register Maintenance Staff</h3>
-        <button class="modal-close-btn" onclick="closeAddStaffModal()">✕</button>
-      </div>
-      <div class="modal-body">
-        <form id="add-staff-form">
-          <div class="form-group">
-            <label for="new-staff-name">Staff Full Name *</label>
-            <input type="text" id="new-staff-name" class="form-control" placeholder="e.g. Robert Smith (HVAC)" required>
-          </div>
-          <div class="form-group">
-            <label for="new-staff-id">Staff ID *</label>
-            <input type="text" id="new-staff-id" class="form-control" placeholder="e.g. STF-HVAC-01" style="text-transform: uppercase;" required>
-          </div>
-          <div class="form-group">
-            <label for="new-staff-dept">Specialization / Trade *</label>
-            <select id="new-staff-dept" class="form-control">
-              <option value="Electrical & IT Maintenance">Electrical & IT Maintenance</option>
-              <option value="Plumbing & Sanitation">Plumbing & Sanitation</option>
-              <option value="Carpentry & Furniture">Carpentry & Furniture</option>
-              <option value="Classroom & Lab Equipment">Classroom & Lab Equipment</option>
-              <option value="General Facilities">General Facilities</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="new-staff-email">Staff Email *</label>
-            <input type="email" id="new-staff-email" class="form-control" placeholder="staff.robert@vnrvjiet.in" required>
-          </div>
-          <div class="form-group">
-            <label for="new-staff-phone">Contact Phone</label>
-            <input type="tel" id="new-staff-phone" class="form-control" placeholder="+91 98765 00000">
-          </div>
-          <div class="form-group">
-            <label for="new-staff-password">Initial Password *</label>
-            <input type="password" id="new-staff-password" class="form-control" placeholder="At least 6 characters" required>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline" onclick="closeAddStaffModal()">Cancel</button>
-        <button type="button" class="btn btn-gold" id="confirm-add-staff-btn">Create Staff Account</button>
       </div>
     </div>
   </div>
