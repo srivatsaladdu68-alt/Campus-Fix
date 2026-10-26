@@ -270,8 +270,8 @@ function renderDetailModal(data) {
     `;
   }
 
-  // Reopen button visible if status is Resolved or Closed and user is reporter or admin
-  if (['Resolved', 'Closed'].includes(f.status) && (isAdmin || user.user_id === f.reported_by)) {
+  // Once completed (Closed), only keep the Close button - no reopen needed
+  if (f.status === 'Resolved' && (isAdmin || user.user_id === f.reported_by)) {
     footerHtml += `
       <button type="button" class="btn btn-primary" style="background: var(--status-reopened);" onclick="openReopenModal()">
         <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Reopen Complaint
