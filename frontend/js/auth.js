@@ -166,21 +166,23 @@ function renderSidebarNav(user) {
         <i data-lucide="layout-dashboard"></i>
         <span>Analytics Overview</span>
       </a>
-      <a href="admin-dashboard.html#complaints" class="sidebar-link">
-        <i data-lucide="list-checks"></i>
-        <span>All Complaints</span>
+      <a href="admin-dashboard.html#complaints" class="sidebar-link ${isAllComplaints ? 'active' : ''}">
+        <i data-lucide="user-check"></i>
+        <span>Assign Staff & Tickets</span>
       </a>
       <a href="admin-dashboard.html#reports" class="sidebar-link">
         <i data-lucide="file-spreadsheet"></i>
         <span>Reports & CSV Export</span>
       </a>
       <a href="admin-dashboard.html#staff-mgmt" class="sidebar-link">
-        <i data-lucide="users"></i>
-        <span>Staff Directory</span>
+        <i data-lucide="user-check"></i>
+        <span>Account Approvals & Staff</span>
+        <span class="badge" id="sidebar-pending-badge" style="display: none; margin-left: auto; background: var(--cream-gold); color: #0b0c1e; font-weight: 700; font-size: 0.7rem; padding: 2px 6px; border-radius: 9999px;">0</span>
       </a>
       <a href="notifications.html" class="sidebar-link ${isNotif ? 'active' : ''}">
         <i data-lucide="bell"></i>
         <span>Notifications</span>
+        <span class="badge" id="unread-notif-count" style="display: none; margin-left: auto; background: var(--electric-indigo); color: white; font-weight: 700; font-size: 0.7rem; padding: 2px 6px; border-radius: 9999px;">0</span>
       </a>
     `;
   } else {
