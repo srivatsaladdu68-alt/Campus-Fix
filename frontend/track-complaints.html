@@ -264,6 +264,12 @@
       </div>
 
       <div class="modal-body">
+        <div id="assign-current-staff-box" style="display: none; padding: 0.65rem 0.95rem; background: rgba(251, 215, 132, 0.12); border: 1px solid rgba(251, 215, 132, 0.35); border-radius: var(--radius-sm); margin-bottom: 1rem; font-size: 0.86rem; color: var(--cream-pure);">
+          <i data-lucide="info" style="width: 15px; height: 15px; display: inline-block; vertical-align: middle; margin-right: 5px; color: var(--cream-gold);"></i>
+          <strong>Current Status:</strong> <span id="assign-current-status-tag" class="badge badge-assigned" style="margin: 0 4px; padding: 2px 7px; font-size: 0.75rem;">Assigned</span>
+          &bull; <strong>Assigned Technician:</strong> <span id="assign-current-staff-name" style="color: var(--cream-gold); font-weight: 700;">-</span>
+        </div>
+
         <form id="assign-form">
           <div class="form-group">
             <label for="assign-staff-select">Assign Technician *</label>

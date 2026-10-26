@@ -139,8 +139,8 @@ async function loadComplaints() {
             <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
           </button>
           ${Auth.getUser()?.role === 'admin' ? `
-            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign Staff & Deadline">
-              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign technician or update deadline' : 'Assign maintenance technician'}">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
             </button>
           ` : ''}
         </div>
@@ -395,10 +395,33 @@ function openAssignModal(faultId) {
   if (!fault) return;
 
   selectedFault = fault;
+  const isAssigned = !!fault.assigned_to;
+  const faultName = fault.item_name || fault.title;
+
   document.getElementById('assign-modal-code').textContent = fault.complaint_code;
-  document.getElementById('assign-modal-title').textContent = `Assign Staff: ${fault.item_name || fault.title}`;
+  document.getElementById('assign-modal-title').textContent = `${isAssigned ? 'Reassign Staff' : 'Assign Staff'}: ${faultName}`;
   document.getElementById('assign-priority-select').value = fault.priority || 'Medium';
 
+  // Current Assignment status banner
+  const currentBox = document.getElementById('assign-current-staff-box');
+  const currentNameEl = document.getElementById('assign-current-staff-name');
+  const currentStatusEl = document.getElementById('assign-current-status-tag');
+  if (currentBox) {
+    if (isAssigned) {
+      currentBox.style.display = 'block';
+      let staffName = fault.staff_name;
+      if (!staffName && staffMembers.length > 0) {
+        const found = staffMembers.find(s => s.user_id === fault.assigned_to);
+        if (found) staffName = found.full_name;
+      }
+      if (currentNameEl) currentNameEl.textContent = staffName || `Technician ID #${fault.assigned_to}`;
+      if (currentStatusEl) currentStatusEl.textContent = fault.status || 'Assigned';
+    } else {
+      currentBox.style.display = 'none';
+    }
+  }
+
+  // Target deadline
   if (fault.deadline) {
     try {
       const d = new Date(fault.deadline);
@@ -419,9 +442,15 @@ function openAssignModal(faultId) {
     staffSelect.value = fault.assigned_to || '';
   }
 
+  // Button label
+  const btn = document.getElementById('confirm-assign-btn');
+  if (btn) {
+    btn.innerHTML = `<i data-lucide="user-check" style="width: 16px; height: 16px;"></i> ${isAssigned ? 'Update Assignment' : 'Confirm Assignment'}`;
+  }
+
   document.getElementById('assign-notes').value = '';
   document.getElementById('assign-modal').classList.add('open');
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 }
 
 function closeAssignModal() {
@@ -432,7 +461,10 @@ function closeAssignModal() {
 const confirmAssignBtn = document.getElementById('confirm-assign-btn');
 if (confirmAssignBtn) {
   confirmAssignBtn.addEventListener('click', async () => {
-    if (!selectedFault) return;
+    if (!selectedFault) {
+      API.showToast('No complaint selected for assignment.', 'error');
+      return;
+    }
     const staffId = document.getElementById('assign-staff-select').value;
     const priority = document.getElementById('assign-priority-select').value;
     const deadline = document.getElementById('assign-deadline').value;
@@ -443,30 +475,47 @@ if (confirmAssignBtn) {
       return;
     }
 
+    const currentFaultId = selectedFault.fault_id;
     confirmAssignBtn.disabled = true;
-    confirmAssignBtn.innerHTML = 'Assigning...';
+    confirmAssignBtn.innerHTML = '<span style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;margin-right:6px;vertical-align:middle;"></span> Assigning...';
 
-    const resAssign = await API.call(`/faults/${selectedFault.fault_id}/assign`, 'PATCH', {
-      staff_id: staffId,
-      deadline: deadline || undefined,
-      notes: notes || undefined
-    });
+    try {
+      const resAssign = await API.call(`/faults/${currentFaultId}/assign`, 'PATCH', {
+        staff_id: parseInt(staffId),
+        deadline: deadline ? deadline.replace('T', ' ') + ':00' : undefined,
+        notes: notes || undefined
+      });
 
-    if (priority && priority !== selectedFault.priority) {
-      await API.call(`/faults/${selectedFault.fault_id}/priority`, 'PATCH', { priority });
-    }
+      if (priority && priority !== selectedFault.priority) {
+        await API.call(`/faults/${currentFaultId}/priority`, 'PATCH', { priority });
+      }
 
-    confirmAssignBtn.disabled = false;
-    confirmAssignBtn.innerHTML = '<i data-lucide="user-check" style="width: 16px; height: 16px;"></i> Confirm Assignment';
-    lucide.createIcons();
+      if (resAssign && resAssign.success) {
+        // 1. Immediately close the assign modal
+        closeAssignModal();
+        document.getElementById('assign-notes').value = '';
 
-    if (resAssign && resAssign.success) {
-      API.showToast('Technician assigned successfully!', 'success');
-      closeAssignModal();
-      closeDetailModal();
-      await loadComplaints();
-    } else {
-      API.showToast(resAssign.message || 'Failed to assign technician.', 'error');
+        // 2. Show prominent success toast
+        API.showToast(resAssign.message || 'Technician assigned successfully!', 'success');
+
+        // 3. Refresh table
+        await loadComplaints();
+
+        // 4. If detail modal was open, refresh it so user immediately sees the technician & updated status stepper!
+        const detailModal = document.getElementById('detail-modal');
+        if (detailModal && detailModal.classList.contains('open')) {
+          await openDetailModal(currentFaultId);
+        }
+      } else {
+        API.showToast(resAssign ? resAssign.message : 'Failed to assign technician.', 'error');
+      }
+    } catch (err) {
+      console.error('Assignment error:', err);
+      API.showToast('Error during technician assignment: ' + err.message, 'error');
+    } finally {
+      confirmAssignBtn.disabled = false;
+      confirmAssignBtn.innerHTML = '<i data-lucide="user-check" style="width: 16px; height: 16px;"></i> Confirm Assignment';
+      if (window.lucide) lucide.createIcons();
     }
   });
 }

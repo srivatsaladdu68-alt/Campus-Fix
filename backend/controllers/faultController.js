@@ -438,7 +438,10 @@ function assignStaff(req, res) {
 
     let targetDeadline = fault.deadline;
     if (deadline) {
-      targetDeadline = deadline;
+      targetDeadline = String(deadline).replace('T', ' ');
+      if (targetDeadline.length === 16) {
+        targetDeadline += ':00';
+      }
     }
 
     db.prepare(`

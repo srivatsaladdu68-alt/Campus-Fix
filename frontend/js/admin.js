@@ -395,12 +395,34 @@ function openAssignModal(faultId) {
   if (!fault) return;
 
   selectedFaultForAction = fault;
+  const isAssigned = !!fault.assigned_to;
+  const titleEl = document.getElementById('assign-modal-title');
+  if (titleEl) {
+    titleEl.textContent = `${isAssigned ? 'Reassign Staff' : 'Assign Maintenance Staff'}: ${fault.item_name || fault.title}`;
+  }
   document.getElementById('assign-modal-code').textContent = fault.complaint_code;
-  document.getElementById('assign-priority-select').value = fault.priority;
+  document.getElementById('assign-priority-select').value = fault.priority || 'Medium';
+
+  if (fault.deadline) {
+    try {
+      const d = new Date(fault.deadline);
+      const localIso = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById('assign-deadline').value = localIso;
+    } catch(e) {}
+  } else {
+    document.getElementById('assign-deadline').value = '';
+  }
+
   if (fault.assigned_to) {
     document.getElementById('assign-staff-select').value = fault.assigned_to;
   } else {
     document.getElementById('assign-staff-select').value = '';
+  }
+  document.getElementById('assign-notes').value = '';
+
+  const confirmBtn = document.getElementById('confirm-assign-btn');
+  if (confirmBtn) {
+    confirmBtn.textContent = isAssigned ? 'Update Assignment' : 'Confirm Assignment';
   }
 
   document.getElementById('assign-modal').classList.add('open');
@@ -410,40 +432,54 @@ function closeAssignModal() {
   document.getElementById('assign-modal').classList.remove('open');
 }
 
-document.getElementById('confirm-assign-btn').addEventListener('click', async () => {
-  if (!selectedFaultForAction) return;
+const adminConfirmAssignBtn = document.getElementById('confirm-assign-btn');
+if (adminConfirmAssignBtn) {
+  adminConfirmAssignBtn.addEventListener('click', async () => {
+    if (!selectedFaultForAction) return;
 
-  const staffId = document.getElementById('assign-staff-select').value;
-  const priority = document.getElementById('assign-priority-select').value;
-  const deadline = document.getElementById('assign-deadline').value;
-  const notes = document.getElementById('assign-notes').value.trim();
+    const staffId = document.getElementById('assign-staff-select').value;
+    const priority = document.getElementById('assign-priority-select').value;
+    const deadline = document.getElementById('assign-deadline').value;
+    const notes = document.getElementById('assign-notes').value.trim();
 
-  if (!staffId) {
-    API.showToast('Please select a maintenance staff member.', 'error');
-    return;
-  }
+    if (!staffId) {
+      API.showToast('Please select a maintenance staff member.', 'error');
+      return;
+    }
 
-  // 1. Assign Staff
-  const resAssign = await API.call(`/faults/${selectedFaultForAction.fault_id}/assign`, 'PATCH', {
-    staff_id: parseInt(staffId),
-    deadline: deadline ? deadline.replace('T', ' ') + ':00' : null,
-    notes: notes || undefined
+    adminConfirmAssignBtn.disabled = true;
+    adminConfirmAssignBtn.textContent = 'Assigning...';
+
+    try {
+      // 1. Assign Staff
+      const resAssign = await API.call(`/faults/${selectedFaultForAction.fault_id}/assign`, 'PATCH', {
+        staff_id: parseInt(staffId),
+        deadline: deadline ? deadline.replace('T', ' ') + ':00' : undefined,
+        notes: notes || undefined
+      });
+
+      // 2. Update priority if modified
+      if (priority !== selectedFaultForAction.priority) {
+        await API.call(`/faults/${selectedFaultForAction.fault_id}/priority`, 'PATCH', { priority });
+      }
+
+      if (resAssign && resAssign.success) {
+        closeAssignModal();
+        API.showToast(resAssign.message || 'Staff assigned successfully!', 'success');
+        await loadAdminOverview();
+        await loadAllComplaints();
+      } else {
+        API.showToast(resAssign ? resAssign.message : 'Failed to assign staff.', 'error');
+      }
+    } catch (err) {
+      console.error('Admin assignment error:', err);
+      API.showToast('Error assigning staff: ' + err.message, 'error');
+    } finally {
+      adminConfirmAssignBtn.disabled = false;
+      adminConfirmAssignBtn.textContent = 'Confirm Assignment';
+    }
   });
-
-  // 2. Update priority if modified
-  if (priority !== selectedFaultForAction.priority) {
-    await API.call(`/faults/${selectedFaultForAction.fault_id}/priority`, 'PATCH', { priority });
-  }
-
-  if (resAssign && resAssign.success) {
-    API.showToast('Staff assigned successfully!', 'success');
-    closeAssignModal();
-    await loadAdminOverview();
-    await loadAllComplaints();
-  } else {
-    API.showToast(resAssign.message || 'Failed to assign staff.', 'error');
-  }
-});
+}
 
 // 4. Status Update Modal
 function openStatusModal(faultId) {
