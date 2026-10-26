@@ -141,11 +141,10 @@ function initSchema() {
 }
 
 function seedDatabase() {
-  const userCount = db.prepare('SELECT COUNT(*) as count FROM users').get().count;
-  if (userCount === 0) {
-    console.log('Seeding initial database users and buildings...');
-
-    // 1. Seed Buildings
+  // 1. Seed Buildings if none exist
+  const bldgCount = db.prepare('SELECT COUNT(*) as count FROM buildings').get().count;
+  if (bldgCount === 0) {
+    console.log('Seeding initial campus buildings...');
     const insertBuilding = db.prepare(
       'INSERT INTO buildings (building_name, building_code) VALUES (?, ?)'
     );
@@ -162,31 +161,38 @@ function seedDatabase() {
     for (const b of buildings) {
       insertBuilding.run(b[0], b[1]);
     }
-
-    // 2. Seed Users
-    const salt = bcrypt.genSaltSync(10);
-    const adminPass = bcrypt.hashSync('Admin@123', salt);
-    const staffPass = bcrypt.hashSync('Staff@123', salt);
-    const userPass = bcrypt.hashSync('Student@123', salt);
-    const facultyPass = bcrypt.hashSync('Faculty@123', salt);
-
-    const insertUser = db.prepare(`
-      INSERT INTO users (full_name, email, phone, password_hash, role, student_id, roll_number, staff_id, department, approval_status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved')
-    `);
-
-    insertUser.run('Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration');
-    insertUser.run('Mike Johnson (Electrician)', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance');
-    insertUser.run('Sarah Williams (Plumber)', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities');
-    insertUser.run('David Miller (Carpenter)', 'staff.david@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance');
-    insertUser.run('Kevin Brown (WiFi & Network Tech)', 'staff.kevin@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure');
-    insertUser.run('Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering');
-    insertUser.run('Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering');
-
-    console.log('Database initialized with VNRVJIET campus buildings and 5 core demo user accounts.');
   }
 
-  // 3. Seed Initial Demo Complaints (if missing)
+  // 2. Ensure all 7 core users exist (Admin, 4 Technicians, Faculty, Student)
+  const salt = bcrypt.genSaltSync(10);
+  const adminPass = bcrypt.hashSync('Admin@123', salt);
+  const staffPass = bcrypt.hashSync('Staff@123', salt);
+  const userPass = bcrypt.hashSync('Student@123', salt);
+  const facultyPass = bcrypt.hashSync('Faculty@123', salt);
+
+  const insertUser = db.prepare(`
+    INSERT INTO users (full_name, email, phone, password_hash, role, student_id, roll_number, staff_id, department, approval_status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'approved')
+  `);
+
+  const coreUsers = [
+    ['Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration'],
+    ['Mike Johnson (Electrician)', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance'],
+    ['Sarah Williams (Plumber)', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities'],
+    ['David Miller (Carpenter)', 'staff.david@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance'],
+    ['Kevin Brown (WiFi & Network Tech)', 'staff.kevin@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure'],
+    ['Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
+    ['Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering']
+  ];
+
+  for (const u of coreUsers) {
+    const exists = db.prepare('SELECT user_id FROM users WHERE email = ?').get(u[1]);
+    if (!exists) {
+      insertUser.run(...u);
+    }
+  }
+
+  // 3. Ensure the 3 canonical completed demo complaints exist
   const studentUser = db.prepare("SELECT user_id FROM users WHERE role = 'student' LIMIT 1").get();
   const elecStaff = db.prepare("SELECT user_id FROM users WHERE staff_id = 'STF-ELEC-01'").get();
   const carpStaff = db.prepare("SELECT user_id FROM users WHERE staff_id = 'STF-CARP-03'").get();
@@ -259,6 +265,9 @@ function seedDatabase() {
       console.log(`Seeded demo complaint ${t.code} (${t.title}).`);
     }
   }
+
+  // Clean any non-canonical orphan complaints so Live Stats cleanly matches the 3 completed faults
+  db.exec("DELETE FROM faults WHERE complaint_code NOT IN ('CF-2026-1124', 'CF-2026-4790', 'CF-2026-3633')");
 }
 
 initSchema();
