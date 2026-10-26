@@ -4,6 +4,7 @@
 
 let currentFaults = [];
 let selectedFault = null;
+let staffMembers = [];
 
 document.addEventListener('DOMContentLoaded', async () => {
   const user = Auth.requireAuth();
@@ -14,6 +15,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   setupFilters();
   await loadComplaints();
+
+  // If Admin, pre-fetch technician staff list for instant assignment
+  if (user && user.role === 'admin') {
+    await loadStaffList();
+  }
 
   // Check if URL has ?code=CF-2026-XXXX
   const urlParams = new URLSearchParams(window.location.search);
@@ -125,12 +131,19 @@ async function loadComplaints() {
       <td>${API.getPriorityBadge(f.priority)}</td>
       <td>${API.getStatusBadge(f.status)}</td>
       <td>
-        ${f.staff_name ? `<span style="font-weight: 600; font-size: 0.85rem; color: var(--secondary);">${escapeHtml(f.staff_name)}</span>` : '<span style="color: #94a3b8; font-size: 0.82rem;">Unassigned</span>'}
+        ${f.staff_name ? `<span style="font-weight: 600; font-size: 0.85rem; color: var(--cream-gold);">${escapeHtml(f.staff_name)}</span>` : '<span style="color: #94a3b8; font-size: 0.82rem;">Unassigned</span>'}
       </td>
       <td>
-        <button class="btn btn-outline btn-sm" onclick="openDetailModal(${f.fault_id})">
-          <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
-        </button>
+        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+          <button class="btn btn-outline btn-sm" onclick="openDetailModal(${f.fault_id})" title="View Details">
+            <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
+          </button>
+          ${Auth.getUser()?.role === 'admin' ? `
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign Staff & Deadline">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
+            </button>
+          ` : ''}
+        </div>
       </td>
     </tr>
   `).join('');
@@ -162,6 +175,8 @@ async function openDetailModal(faultId) {
 function renderDetailModal(data) {
   const f = data.fault;
   selectedFault = f;
+  const user = Auth.getUser();
+  const isAdmin = user && user.role === 'admin';
 
   document.getElementById('modal-code').textContent = f.complaint_code;
   document.getElementById('modal-title').textContent = f.title;
@@ -176,16 +191,24 @@ function renderDetailModal(data) {
   const phone = f.reporter_phone ? ` &bull; <strong>Phone:</strong> ${escapeHtml(f.reporter_phone)}` : '';
 
   document.getElementById('modal-reporter-full').innerHTML = `
-    <div style="font-weight: 700; color: var(--primary); font-size: 0.95rem;">
+    <div style="font-weight: 700; color: var(--cream-pure); font-size: 0.95rem;">
       ${escapeHtml(f.reporter_name || 'Campus Member')} 
-      <span class="user-role-badge" style="background:#e0e7ff;color:#3730a3;font-size:0.72rem;margin-left:6px;">${roleLabel}</span>
+      <span class="user-role-badge" style="background: rgba(99, 102, 241, 0.2); color: var(--electric-indigo-bright); font-size:0.72rem; margin-left:6px; padding: 2px 8px; border-radius: 4px;">${roleLabel}</span>
     </div>
-    <div style="font-size: 0.85rem; color: #475569; margin-top: 3px;">
+    <div style="font-size: 0.85rem; color: var(--cream-muted); margin-top: 3px;">
       <strong>Email:</strong> ${escapeHtml(f.reporter_email || 'N/A')}${rollNo}${dept}${phone}
     </div>
   `;
 
-  document.getElementById('modal-staff').textContent = f.staff_name ? `${f.staff_name} (${f.staff_phone || 'Staff'})` : 'Unassigned';
+  // Technician details + Direct Admin Assign Button
+  const staffDisplay = f.staff_name ? `<span style="color: var(--cream-gold); font-weight: 700;">${escapeHtml(f.staff_name)}</span> <span style="color: var(--cream-muted);">(${escapeHtml(f.staff_phone || 'Staff')})</span>` : '<span style="color: #94a3b8; font-style: italic;">Unassigned</span>';
+  const assignInlineBtn = isAdmin ? `
+    <button type="button" class="btn btn-gold btn-sm" style="margin-left: 0.75rem; padding: 3px 10px; font-size: 0.75rem; vertical-align: middle;" onclick="openAssignModal(${f.fault_id})">
+      <i data-lucide="user-check" style="width: 13px; height: 13px;"></i> ${f.assigned_to ? 'Reassign Staff' : 'Assign Technician'}
+    </button>
+  ` : '';
+  document.getElementById('modal-staff').innerHTML = `${staffDisplay} ${assignInlineBtn}`;
+
   document.getElementById('modal-description').textContent = f.description;
 
   // Handle Photo or No Image Message
@@ -233,13 +256,21 @@ function renderDetailModal(data) {
     historyList.innerHTML = '<div style="color: var(--cream-dim, #94a3b8); font-size: 0.85rem; padding: 0.5rem 0;">No history records found.</div>';
   }
 
-  // Setup Modal Footer Actions (e.g. Reopen Button)
+  // Setup Modal Footer Actions (e.g. Admin Assign Button & Reopen Button)
   const footer = document.getElementById('modal-footer-actions');
-  const user = Auth.getUser();
   let footerHtml = '<button type="button" class="btn btn-outline" onclick="closeDetailModal()">Close</button>';
 
+  if (isAdmin) {
+    footerHtml = `
+      <button type="button" class="btn btn-gold" onclick="openAssignModal(${f.fault_id})">
+        <i data-lucide="user-check" style="width: 16px; height: 16px;"></i> ${f.assigned_to ? 'Reassign Staff' : 'Assign Maintenance Staff'}
+      </button>
+      ${footerHtml}
+    `;
+  }
+
   // Reopen button visible if status is Resolved or Closed and user is reporter or admin
-  if (['Resolved', 'Closed'].includes(f.status) && (user.role === 'admin' || user.user_id === f.reported_by)) {
+  if (['Resolved', 'Closed'].includes(f.status) && (isAdmin || user.user_id === f.reported_by)) {
     footerHtml += `
       <button type="button" class="btn btn-primary" style="background: var(--status-reopened);" onclick="openReopenModal()">
         <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Reopen Complaint
@@ -337,6 +368,108 @@ document.getElementById('confirm-reopen-btn').addEventListener('click', async ()
     API.showToast(res.message || 'Failed to reopen complaint.', 'error');
   }
 });
+
+// ==========================================
+// Admin Staff Assignment Operations
+// ==========================================
+async function loadStaffList() {
+  const user = Auth.getUser();
+  if (!user || user.role !== 'admin') return;
+
+  const res = await API.call('/auth/staff');
+  if (res && res.success) {
+    staffMembers = res.staff || [];
+    const select = document.getElementById('assign-staff-select');
+    if (select) {
+      select.innerHTML = '<option value="">Select Technician...</option>' + 
+        staffMembers.map(s => `<option value="${s.user_id}">${escapeHtml(s.full_name)} (${s.department || s.email})</option>`).join('');
+    }
+  }
+}
+
+function openAssignModal(faultId) {
+  const user = Auth.getUser();
+  if (!user || user.role !== 'admin') return;
+
+  const fault = (currentFaults && currentFaults.find(f => f.fault_id === faultId)) || selectedFault;
+  if (!fault) return;
+
+  selectedFault = fault;
+  document.getElementById('assign-modal-code').textContent = fault.complaint_code;
+  document.getElementById('assign-modal-title').textContent = `Assign Staff: ${fault.item_name || fault.title}`;
+  document.getElementById('assign-priority-select').value = fault.priority || 'Medium';
+
+  if (fault.deadline) {
+    try {
+      const d = new Date(fault.deadline);
+      const localIso = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+      document.getElementById('assign-deadline').value = localIso;
+    } catch(e) {}
+  } else {
+    document.getElementById('assign-deadline').value = '';
+  }
+
+  // Populate staff dropdown if empty
+  const staffSelect = document.getElementById('assign-staff-select');
+  if (staffSelect) {
+    if (staffSelect.options.length <= 1 && staffMembers.length > 0) {
+      staffSelect.innerHTML = '<option value="">Select Technician...</option>' + 
+        staffMembers.map(s => `<option value="${s.user_id}">${escapeHtml(s.full_name)} (${s.department || s.email})</option>`).join('');
+    }
+    staffSelect.value = fault.assigned_to || '';
+  }
+
+  document.getElementById('assign-notes').value = '';
+  document.getElementById('assign-modal').classList.add('open');
+  lucide.createIcons();
+}
+
+function closeAssignModal() {
+  const modal = document.getElementById('assign-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+const confirmAssignBtn = document.getElementById('confirm-assign-btn');
+if (confirmAssignBtn) {
+  confirmAssignBtn.addEventListener('click', async () => {
+    if (!selectedFault) return;
+    const staffId = document.getElementById('assign-staff-select').value;
+    const priority = document.getElementById('assign-priority-select').value;
+    const deadline = document.getElementById('assign-deadline').value;
+    const notes = document.getElementById('assign-notes').value.trim();
+
+    if (!staffId) {
+      API.showToast('Please select a maintenance staff member to assign.', 'error');
+      return;
+    }
+
+    confirmAssignBtn.disabled = true;
+    confirmAssignBtn.innerHTML = 'Assigning...';
+
+    const resAssign = await API.call(`/faults/${selectedFault.fault_id}/assign`, 'PATCH', {
+      staff_id: staffId,
+      deadline: deadline || undefined,
+      notes: notes || undefined
+    });
+
+    if (priority && priority !== selectedFault.priority) {
+      await API.call(`/faults/${selectedFault.fault_id}/priority`, 'PATCH', { priority });
+    }
+
+    confirmAssignBtn.disabled = false;
+    confirmAssignBtn.innerHTML = '<i data-lucide="user-check" style="width: 16px; height: 16px;"></i> Confirm Assignment';
+    lucide.createIcons();
+
+    if (resAssign && resAssign.success) {
+      API.showToast('Technician assigned successfully!', 'success');
+      closeAssignModal();
+      closeDetailModal();
+      await loadComplaints();
+    } else {
+      API.showToast(resAssign.message || 'Failed to assign technician.', 'error');
+    }
+  });
+}
 
 function escapeHtml(str) {
   if (!str) return '';

@@ -282,6 +282,39 @@ async function loadAllComplaints() {
   allComplaints = res.faults || [];
   countEl.textContent = `${allComplaints.length} complaints`;
 
+  // Render Unassigned Quick-Dispatch box on Overview Tab
+  const unassignedBox = document.getElementById('unassigned-dispatch-box');
+  const unassignedList = document.getElementById('unassigned-quick-list');
+  if (unassignedBox && unassignedList) {
+    const unassigned = allComplaints.filter(f => !f.assigned_to && !['Resolved', 'Closed', 'Rejected'].includes(f.status));
+    if (unassigned.length > 0) {
+      unassignedBox.style.display = 'block';
+      unassignedList.innerHTML = unassigned.slice(0, 5).map(f => `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); padding: 0.85rem 1.15rem; border-radius: var(--radius-sm); border: 1px solid var(--border-cream); flex-wrap: wrap; gap: 0.75rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span class="complaint-code-tag">${escapeHtml(f.complaint_code)}</span>
+            <div>
+              <div style="font-weight: 700; color: var(--cream-pure); font-size: 0.95rem;">${escapeHtml(f.title)}</div>
+              <div style="font-size: 0.8rem; color: var(--cream-muted); margin-top: 2px;">
+                🔧 ${escapeHtml(f.item_name || f.category)} &bull; ${escapeHtml(f.building_name)} (${escapeHtml(f.room_number)}) &bull; ${API.getPriorityBadge(f.priority)}
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign Technician
+            </button>
+            <a href="track-complaints.html?code=${encodeURIComponent(f.complaint_code)}" class="btn btn-outline btn-sm" title="View Full Details">
+              <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+            </a>
+          </div>
+        </div>
+      `).join('');
+    } else {
+      unassignedBox.style.display = 'none';
+    }
+  }
+
   if (allComplaints.length === 0) {
     tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">No complaints match the filter.</td></tr>';
     return;

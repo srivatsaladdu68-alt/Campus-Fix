@@ -252,6 +252,57 @@
     </div>
   </div>
 
+  <!-- Admin Assign Staff & Priority Modal -->
+  <div class="modal-overlay" id="assign-modal">
+    <div class="modal-card" style="max-width: 550px;">
+      <div class="modal-header">
+        <div>
+          <span class="complaint-code-tag" id="assign-modal-code">CF-2026-XXXX</span>
+          <h3 id="assign-modal-title" style="margin-top: 0.35rem; color: var(--cream-pure);">Assign Maintenance Staff</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeAssignModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <form id="assign-form">
+          <div class="form-group">
+            <label for="assign-staff-select">Assign Technician *</label>
+            <select id="assign-staff-select" class="form-control" required>
+              <option value="">Select Technician...</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="assign-priority-select">Adjust Urgency Priority</label>
+            <select id="assign-priority-select" class="form-control">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="assign-deadline">Target Completion Deadline</label>
+            <input type="datetime-local" id="assign-deadline" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="assign-notes">Admin Dispatch Note</label>
+            <textarea id="assign-notes" class="form-control" rows="2" placeholder="e.g. Please check during evening break to avoid class interruption"></textarea>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeAssignModal()">Cancel</button>
+        <button type="button" class="btn btn-gold" id="confirm-assign-btn">
+          <i data-lucide="user-check" style="width: 16px; height: 16px;"></i> Confirm Assignment
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/track-complaints.js"></script>

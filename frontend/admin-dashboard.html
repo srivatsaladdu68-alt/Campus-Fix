@@ -31,9 +31,9 @@
           <i data-lucide="layout-dashboard"></i>
           <span>Analytics Overview</span>
         </a>
-        <a href="#complaints" class="sidebar-link" onclick="switchTab('complaints')">
-          <i data-lucide="list-checks"></i>
-          <span>All Complaints</span>
+        <a href="#complaints" class="sidebar-link" id="nav-complaints-link" onclick="switchTab('complaints')">
+          <i data-lucide="user-check"></i>
+          <span>Assign Staff & Tickets</span>
         </a>
         <a href="#reports" class="sidebar-link" onclick="switchTab('reports')">
           <i data-lucide="file-spreadsheet"></i>
@@ -74,11 +74,15 @@
           <p>Real-time campus fault intelligence, workload dispatch, and facility diagnostics</p>
         </div>
         <div class="topbar-actions">
+          <button class="btn btn-gold" onclick="switchTab('complaints')">
+            <i data-lucide="user-check" style="width: 16px; height: 16px;"></i>
+            Assign Staff
+          </button>
           <button class="btn btn-outline" onclick="openAddStaffModal()">
             <i data-lucide="user-plus" style="width: 16px; height: 16px;"></i>
             Register Staff
           </button>
-          <button class="btn btn-gold" onclick="exportDataCSV()">
+          <button class="btn btn-outline" onclick="exportDataCSV()">
             <i data-lucide="download" style="width: 16px; height: 16px;"></i>
             Export CSV
           </button>
@@ -171,6 +175,25 @@
                 <h4 style="color: var(--cream-gold); font-size: 0.95rem; font-weight: 700;">Intelligent Maintenance Alert: Recurring Problem Spots Detected</h4>
                 <div id="recurring-list" style="margin-top: 0.4rem; font-size: 0.88rem; color: var(--cream-soft);"></div>
               </div>
+            </div>
+          </div>
+
+          <!-- Unassigned Complaints Quick-Dispatch Box (Direct on Overview Tab) -->
+          <div id="unassigned-dispatch-box" style="display: none; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(251, 215, 132, 0.4); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
+              <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(251, 215, 132, 0.2); display: flex; align-items: center; justify-content: center; color: var(--cream-gold);">
+                  <i data-lucide="user-plus" style="width: 18px; height: 18px;"></i>
+                </div>
+                <div>
+                  <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--cream-pure); margin: 0;">Unassigned Complaints Requiring Staff Dispatch</h3>
+                  <p style="font-size: 0.8rem; color: var(--cream-muted); margin: 0;">Technician has not yet been assigned to these active complaints</p>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="switchTab('complaints')">View All Tickets &rarr;</button>
+            </div>
+            <div id="unassigned-quick-list" style="display: flex; flex-direction: column; gap: 0.65rem;">
+              <!-- Populated by JS -->
             </div>
           </div>
 
