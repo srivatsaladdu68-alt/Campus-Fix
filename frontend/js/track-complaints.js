@@ -218,16 +218,19 @@ function renderDetailModal(data) {
   const historyList = document.getElementById('modal-history-list');
   if (data.history && data.history.length > 0) {
     historyList.innerHTML = data.history.map(h => `
-      <div style="padding: 0.65rem 0.85rem; background: #f8fafc; border-radius: var(--radius-sm); border-left: 3px solid var(--secondary); font-size: 0.85rem;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 0.2rem;">
-          <strong>${escapeHtml(h.changed_by_name || 'System')} (${escapeHtml(h.changed_by_role || 'user')})</strong>
-          <span style="color: var(--text-muted); font-size: 0.78rem;">${API.formatDate(h.changed_at)}</span>
+      <div style="padding: 0.85rem 1rem; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(244, 239, 230, 0.12); border-left: 3px solid var(--electric-indigo-bright, #6366f1); border-radius: var(--radius-sm); font-size: 0.88rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem; flex-wrap: wrap; gap: 0.5rem;">
+          <strong style="color: var(--cream-gold, #fbd784); font-weight: 700; font-size: 0.92rem;">
+            ${escapeHtml(h.changed_by_name || 'System')} 
+            <span style="color: #a5b4fc; font-weight: 500; font-size: 0.78rem; text-transform: uppercase; margin-left: 4px;">(${escapeHtml(h.changed_by_role || 'user')})</span>
+          </strong>
+          <span style="color: #94a3b8; font-size: 0.8rem;">${API.formatDate(h.changed_at)}</span>
         </div>
-        <div style="color: var(--text-main);">${escapeHtml(h.notes || `Transitioned to ${h.new_status}`)}</div>
+        <div style="color: #f8fafc; font-size: 0.88rem; line-height: 1.45;">${escapeHtml(h.notes || `Transitioned to ${h.new_status}`)}</div>
       </div>
     `).join('');
   } else {
-    historyList.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem;">No history records found.</div>';
+    historyList.innerHTML = '<div style="color: var(--cream-dim, #94a3b8); font-size: 0.85rem; padding: 0.5rem 0;">No history records found.</div>';
   }
 
   // Setup Modal Footer Actions (e.g. Reopen Button)
