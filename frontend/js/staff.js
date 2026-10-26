@@ -138,6 +138,8 @@ function openTaskModal(faultId) {
   const statusSelect = document.getElementById('task-action-status');
   if (task.status === 'In Progress') {
     statusSelect.value = 'Resolved';
+  } else if (task.status === 'Resolved') {
+    statusSelect.value = 'Closed';
   } else {
     statusSelect.value = 'In Progress';
   }

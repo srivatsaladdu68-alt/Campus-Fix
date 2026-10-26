@@ -326,11 +326,11 @@ function updateStatus(req, res) {
       if (fault.assigned_to !== req.user.user_id) {
         return res.status(403).json({ success: false, message: 'Staff can only update tasks assigned to them.' });
       }
-      const allowedStaffTransitions = ['In Progress', 'Resolved'];
+      const allowedStaffTransitions = ['In Progress', 'Resolved', 'Closed'];
       if (!allowedStaffTransitions.includes(status)) {
         return res.status(403).json({
           success: false,
-          message: 'Staff members can only transition tasks to "In Progress" or "Resolved".'
+          message: 'Staff members can only transition tasks to "In Progress", "Resolved", or "Closed".'
         });
       }
     } else if (req.user.role !== 'admin') {
@@ -339,7 +339,7 @@ function updateStatus(req, res) {
 
     const oldStatus = fault.status;
     let resolvedAt = fault.resolved_at;
-    if (status === 'Resolved' && !resolvedAt) {
+    if ((status === 'Resolved' || status === 'Closed') && !resolvedAt) {
       resolvedAt = new Date().toISOString().replace('T', ' ').substring(0, 19);
     } else if (status === 'Reopened' || status === 'In Progress') {
       resolvedAt = null;
@@ -370,7 +370,7 @@ function updateStatus(req, res) {
             VALUES (?, ?, ?, datetime('now'))
           `).run(faultId, staffId, auditNote);
         }
-      } else if (status === 'Resolved') {
+      } else if (status === 'Resolved' || status === 'Closed') {
         if (existingMaint) {
           db.prepare(`
             UPDATE maintenance_records
