@@ -21,11 +21,12 @@ db.exec(`
   DELETE FROM sqlite_sequence WHERE name IN ('faults', 'fault_history', 'maintenance_records', 'notifications');
 `);
 
-// 3. Delete all users EXCEPT the 5 official demo login accounts
+// 3. Delete all users EXCEPT the 6 official demo login accounts
 const demoEmails = [
   'admin@vnrvjiet.in',
   'staff.mike@vnrvjiet.in',
   'staff.sarah@vnrvjiet.in',
+  'staff.david@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
   'prof.sharma@vnrvjiet.in'
 ];
@@ -33,7 +34,7 @@ const demoEmails = [
 const placeholders = demoEmails.map(() => '?').join(',');
 db.prepare(`DELETE FROM users WHERE email NOT IN (${placeholders})`).run(...demoEmails);
 
-// 4. Update the 5 retained demo accounts to standard clean profiles
+// 4. Update the 6 retained demo accounts to standard clean profiles
 db.prepare(`
   UPDATE users 
   SET full_name = 'Administrator', role = 'admin', approval_status = 'approved', is_active = 1, department = 'Campus Administration'
@@ -50,6 +51,12 @@ db.prepare(`
   UPDATE users 
   SET full_name = 'Sarah Williams (Plumber)', role = 'staff', staff_id = 'STF-PLUM-02', approval_status = 'approved', is_active = 1, department = 'Plumbing & Facilities'
   WHERE email = 'staff.sarah@vnrvjiet.in'
+`).run();
+
+db.prepare(`
+  UPDATE users 
+  SET full_name = 'David Miller (Carpenter)', role = 'staff', staff_id = 'STF-CARP-03', approval_status = 'approved', is_active = 1, department = 'Carpentry & Furniture Maintenance'
+  WHERE email = 'staff.david@vnrvjiet.in'
 `).run();
 
 db.prepare(`
