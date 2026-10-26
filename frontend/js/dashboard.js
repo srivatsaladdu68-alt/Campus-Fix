@@ -74,25 +74,27 @@ async function loadDashboardData() {
     `).join('');
   }
 
-  // Render recent notifications
+  // Render recent notifications (if widget exists)
   const notifList = document.getElementById('recent-notifications-list');
-  if (res.notifications.length === 0) {
-    notifList.innerHTML = `
-      <div style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.88rem;">
-        No notifications yet. Status updates will appear here when technicians take action.
-      </div>
-    `;
-  } else {
-    notifList.innerHTML = res.notifications.map(n => `
-      <div style="padding: 0.95rem 1.15rem; background: ${n.is_read ? 'var(--bg-deep)' : 'rgba(99, 102, 241, 0.12)'}; border: 1px solid ${n.is_read ? 'var(--border-cream)' : 'var(--electric-indigo)'}; border-radius: var(--radius-md); font-size: 0.88rem; margin-bottom: 0.5rem;">
-        <div style="font-weight: ${n.is_read ? '500' : '700'}; color: var(--cream-pure); margin-bottom: 0.25rem;">
-          ${escapeHtml(n.message)}
+  if (notifList) {
+    if (res.notifications.length === 0) {
+      notifList.innerHTML = `
+        <div style="text-align: center; color: var(--text-muted); padding: 1.5rem; font-size: 0.88rem;">
+          No notifications yet. Status updates will appear here when technicians take action.
         </div>
-        <div style="font-size: 0.75rem; color: var(--cream-muted);">
-          ${API.formatDate(n.created_at)}
+      `;
+    } else {
+      notifList.innerHTML = res.notifications.map(n => `
+        <div style="padding: 0.95rem 1.15rem; background: ${n.is_read ? 'var(--bg-deep)' : 'rgba(99, 102, 241, 0.12)'}; border: 1px solid ${n.is_read ? 'var(--border-cream)' : 'var(--electric-indigo)'}; border-radius: var(--radius-md); font-size: 0.88rem; margin-bottom: 0.5rem;">
+          <div style="font-weight: ${n.is_read ? '500' : '700'}; color: var(--cream-pure); margin-bottom: 0.25rem;">
+            ${escapeHtml(n.message)}
+          </div>
+          <div style="font-size: 0.75rem; color: var(--cream-muted);">
+            ${API.formatDate(n.created_at)}
+          </div>
         </div>
-      </div>
-    `).join('');
+      `).join('');
+    }
   }
 
   lucide.createIcons();
