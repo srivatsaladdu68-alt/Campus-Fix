@@ -27,6 +27,7 @@ const demoEmails = [
   'staff.mike@vnrvjiet.in',
   'staff.sarah@vnrvjiet.in',
   'staff.david@vnrvjiet.in',
+  'staff.kevin@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
   'prof.sharma@vnrvjiet.in'
 ];
@@ -57,6 +58,12 @@ db.prepare(`
   UPDATE users 
   SET full_name = 'David Miller (Carpenter)', role = 'staff', staff_id = 'STF-CARP-03', approval_status = 'approved', is_active = 1, department = 'Carpentry & Furniture Maintenance'
   WHERE email = 'staff.david@vnrvjiet.in'
+`).run();
+
+db.prepare(`
+  UPDATE users 
+  SET full_name = 'Kevin Brown (WiFi & Network Tech)', role = 'staff', staff_id = 'STF-WIFI-04', approval_status = 'approved', is_active = 1, department = 'IT & Network Infrastructure'
+  WHERE email = 'staff.kevin@vnrvjiet.in'
 `).run();
 
 db.prepare(`
