@@ -161,7 +161,6 @@ function renderSidebarNav(user) {
     const isAllComplaints = currentPage === 'track-complaints.html';
 
     sidebarNav.innerHTML = `
-      <span class="nav-category">Management</span>
       <a href="admin-dashboard.html#overview" class="sidebar-link">
         <i data-lucide="layout-dashboard"></i>
         <span>Analytics Overview</span>
