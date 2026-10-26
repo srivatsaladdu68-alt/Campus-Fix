@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Equipment Directory – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-icon">
+        <i data-lucide="wrench" style="width: 20px; height: 20px;"></i>
+      </div>
+      <span>Campus Fix</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="equipment.html" class="active">Equipment</a></li>
+      <li><a href="report-fault.html">Report Fault</a></li>
+      <li><a href="track-complaints.html">Track Status</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="live-stats.html">Live Stats</a></li>
+    </ul>
+
+    <div class="nav-actions" id="nav-auth-buttons">
+      <a href="login.html" class="btn btn-outline btn-sm">Sign In</a>
+      <a href="report-fault.html" class="btn btn-gold btn-sm">Report a Fault</a>
+    </div>
+  </nav>
+
+  <!-- Editorial Hero Header -->
+  <header class="hero" style="min-height: 45vh; padding: 5rem 2rem 3.5rem;">
+    <div class="hero-content">
+      <div class="editorial-tag">CAMPUS ASSET DIRECTORY</div>
+      <h1>Equipment Handled By Campus Fix</h1>
+      <p>
+        Select any category or asset below to file a targeted maintenance request immediately with automated technician assignment.
+      </p>
+    </div>
+  </header>
+
+  <!-- Campus Equipment Directory -->
+  <section class="equipment-section" style="padding-top: 2rem;">
+    <div class="equipment-grid">
+      <!-- Item 1: Chair -->
+      <div class="equipment-card">
+        <img src="images/chair_broken_fault.svg" alt="Study Chair">
+        <div class="equipment-header">
+          <span class="badge badge-verified">Furniture</span>
+          <span class="badge badge-medium">Medium</span>
+        </div>
+        <h3>Ergonomic Study Chairs</h3>
+        <p>Broken gas lifts, tilted seat frames, missing wheels, and damaged classroom desks.</p>
+        <a href="report-fault.html" class="btn btn-outline btn-sm">Report Chair</a>
+      </div>
+
+      <!-- Item 2: Pipe -->
+      <div class="equipment-card">
+        <img src="images/pipe_leak_fault.svg" alt="Water Pipe Leak">
+        <div class="equipment-header">
+          <span class="badge badge-reported">Plumbing</span>
+          <span class="badge badge-critical">Critical</span>
+        </div>
+        <h3>Under-Sink Water Pipes</h3>
+        <p>Continuous tap leakage, pipe burst, drainage clogging, and washroom flooding.</p>
+        <a href="report-fault.html" class="btn btn-outline btn-sm">Report Pipe</a>
+      </div>
+
+      <!-- Item 3: Projector -->
+      <div class="equipment-card">
+        <img src="images/projector_fault.svg" alt="Ceiling Projector">
+        <div class="equipment-header">
+          <span class="badge badge-assigned">Classroom AV</span>
+          <span class="badge badge-high">High</span>
+        </div>
+        <h3>Ceiling Projectors</h3>
+        <p>HDMI/VGA connector faults, bulb replacement alerts, and lecture blackout issues.</p>
+        <a href="report-fault.html" class="btn btn-outline btn-sm">Report Projector</a>
+      </div>
+
+      <!-- Item 4: AC -->
+      <div class="equipment-card">
+        <img src="images/ac_fault.svg" alt="Central AC">
+        <div class="equipment-header">
+          <span class="badge badge-reported">HVAC</span>
+          <span class="badge badge-critical">Critical</span>
+        </div>
+        <h3>Central AC Compressors</h3>
+        <p>Compressor overheating error codes, circuit breaker trips, and cooling failure.</p>
+        <a href="report-fault.html" class="btn btn-outline btn-sm">Report AC</a>
+      </div>
+
+      <!-- Item 5: Wi-Fi -->
+      <div class="equipment-card">
+        <img src="images/wifi_fault.svg" alt="Wi-Fi Access Point">
+        <div class="equipment-header">
+          <span class="badge badge-assigned">IT / Network</span>
+          <span class="badge badge-medium">Medium</span>
+        </div>
+        <h3>Wi-Fi Access Points</h3>
+        <p>Hostel routers blinking offline, PoE wiring disconnections, and coverage deadzones.</p>
+        <a href="report-fault.html" class="btn btn-outline btn-sm">Report Wi-Fi</a>
+      </div>
+
+      <!-- Item 6: PC -->
+      <div class="equipment-card">
+        <img src="images/computer_lab.svg" alt="Computer Lab Workstation">
+        <div class="equipment-header">
+          <span class="badge badge-verified">Lab Hardware</span>
+          <span class="badge badge-high">High</span>
+        </div>
+        <h3>Computer Lab Workstations</h3>
+        <p>Non-booting CPU towers, operating system crashes, faulty monitors, and peripherals.</p>
+        <a href="report-fault.html" class="btn btn-outline btn-sm">Report PC</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Footer (MNTN Style) -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h3>Campus Fix</h3>
+        <p>
+          A unified fault detection and maintenance management system engineered to keep collegiate campuses, labs, and facilities operating flawlessly.
+        </p>
+      </div>
+
+      <div class="footer-column">
+        <h4>Portals & Actions</h4>
+        <ul>
+          <li><a href="report-fault.html">Report a Fault</a></li>
+          <li><a href="track-complaints.html">Track Complaint</a></li>
+          <li><a href="staff-dashboard.html">Technician Portal</a></li>
+          <li><a href="admin-dashboard.html">Admin Control Center</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>System Information</h4>
+        <ul>
+          <li><a href="features.html">Platform Features</a></li>
+          <li><a href="how-it-works.html">How It Works</a></li>
+          <li><a href="live-stats.html">Live Analytics</a></li>
+          <li><a href="login.html">Account Sign In</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>&copy; 2026 VNR Vignana Jyothi Institute of Engineering & Technology (VNRVJIET). All rights reserved.</span>
+      <span>Designed with Electric Indigo & Cream Elegance</span>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
