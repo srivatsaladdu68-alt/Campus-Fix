@@ -4,6 +4,7 @@
   "description": "Campus Fix - Smart Campus Fault Detection and Maintenance Management System",
   "scripts": {
     "start": "node backend/server.js",
+    "build": "cd backend && npm install",
     "seed": "node backend/database.js",
     "install:all": "cd backend && npm install"
   },
