@@ -35,6 +35,7 @@
 
     <!-- Centered Form Card -->
     <div class="auth-card">
+      <div id="login-alert" style="display: none; padding: 0.8rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.86rem; background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35); color: #fca5a5; line-height: 1.4;"></div>
       <form id="login-form">
         <div class="form-group">
           <label for="email">Campus Email Address</label>
@@ -119,19 +120,24 @@
       lucide.createIcons();
     }
 
-    // Check for query parameters
+    // Check for query parameters without toast popups
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('expired')) {
-      API.showToast('Your session has expired. Please sign in again.', 'warning');
-    }
-    if (urlParams.get('pending')) {
-      API.showToast('Registration received! Your account is pending administrator review and approval before you can sign in.', 'info');
+    const alertBox = document.getElementById('login-alert');
+    if (urlParams.get('expired') && alertBox) {
+      alertBox.textContent = 'Your session has expired. Please sign in again.';
+      alertBox.style.display = 'block';
+    } else if (urlParams.get('pending') && alertBox) {
+      alertBox.textContent = 'Registration received! Your account is pending administrator review.';
+      alertBox.style.background = 'rgba(251, 215, 132, 0.14)';
+      alertBox.style.borderColor = 'rgba(251, 215, 132, 0.35)';
+      alertBox.style.color = 'var(--cream-gold)';
+      alertBox.style.display = 'block';
     }
 
     function fillCreds(email, pass) {
       document.getElementById('email').value = email;
       document.getElementById('password').value = pass;
-      API.showToast(`Selected demo credentials for ${email}`, 'info');
+      if (alertBox) alertBox.style.display = 'none';
     }
 
     const form = document.getElementById('login-form');
@@ -139,11 +145,16 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if (alertBox) alertBox.style.display = 'none';
+
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
 
       if (!email || !password) {
-        API.showToast('Please enter both email and password.', 'error');
+        if (alertBox) {
+          alertBox.textContent = 'Please enter both email and password.';
+          alertBox.style.display = 'block';
+        }
         return;
       }
 
@@ -158,26 +169,29 @@
       if (res && res.success) {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.user));
-        API.showToast(`Welcome back, ${res.user.full_name}!`, 'success');
-
+        // Direct seamless redirection without toast popup delays
         const redirect = urlParams.get('redirect') || Auth.getDashboardUrl(res.user.role);
-        setTimeout(() => {
-          window.location.href = redirect;
-        }, 500);
+        window.location.href = redirect;
       } else {
-        if (res && res.code === 'USER_NOT_FOUND') {
-          API.showToast("No account found for this email! Click 'Register Account' below to sign up.", 'warning');
-          const regBtn = document.querySelector('.btn-auth-switch');
-          if (regBtn) {
-            regBtn.style.borderColor = 'var(--cream-gold)';
-            regBtn.style.boxShadow = '0 0 18px rgba(251, 215, 132, 0.45)';
+        if (alertBox) {
+          let msg = res && res.message ? res.message : 'Invalid email or password.';
+          if (res && res.code === 'USER_NOT_FOUND') {
+            msg = "No account found for this email. Click 'Register Account' below to sign up.";
+            const regBtn = document.querySelector('.btn-auth-switch');
+            if (regBtn) {
+              regBtn.style.borderColor = 'var(--cream-gold)';
+              regBtn.style.boxShadow = '0 0 18px rgba(251, 215, 132, 0.45)';
+            }
+          } else if (res && res.code === 'PENDING_APPROVAL') {
+            msg = 'Your account is currently pending administrator verification. Please await approval.';
+          } else if (res && res.code === 'ACCOUNT_REJECTED') {
+            msg = 'Your registration request was not approved by the administrator.';
           }
-        } else if (res && res.code === 'PENDING_APPROVAL') {
-          API.showToast('Your account is currently pending administrator verification. Please await approval.', 'warning');
-        } else if (res && res.code === 'ACCOUNT_REJECTED') {
-          API.showToast('Your registration request was not approved by the administrator.', 'error');
-        } else {
-          API.showToast(res && res.message ? res.message : 'Invalid email or password.', 'error');
+          alertBox.textContent = msg;
+          alertBox.style.background = 'rgba(239, 68, 68, 0.14)';
+          alertBox.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+          alertBox.style.color = '#fca5a5';
+          alertBox.style.display = 'block';
         }
       }
     });
