@@ -29,6 +29,7 @@ const demoEmails = [
   'staff.david@vnrvjiet.in',
   'staff.kevin@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
+  'prof.pratyusha@vnrvjiet.in',
   'prof.sharma@vnrvjiet.in'
 ];
 
@@ -74,8 +75,8 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Prof. Rajesh Sharma', role = 'faculty', student_id = 'FAC-CS-102', roll_number = 'FAC-CS-102', staff_id = 'FAC-CS-102', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
-  WHERE email = 'prof.sharma@vnrvjiet.in'
+  SET full_name = 'Prof. Pratyusha', email = 'prof.pratyusha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-CS-102', roll_number = 'FAC-CS-102', staff_id = 'FAC-CS-102', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  WHERE email IN ('prof.sharma@vnrvjiet.in', 'prof.pratyusha@vnrvjiet.in') OR (role = 'faculty' AND full_name LIKE '%Sharma%')
 `).run();
 
 // 5. Re-enable foreign keys

@@ -161,7 +161,7 @@ For demonstration and testing convenience, the login page features **1-click qui
 | **Administrator** | `admin@campusfix.edu` | `Admin@123` | Full administrative controls, staff dispatch, analytics, CSV export |
 | **Maintenance Staff 1** | `staff.mike@campusfix.edu` | `Staff@123` | Electrician & IT Technician |
 | **Maintenance Staff 2** | `staff.sarah@campusfix.edu` | `Staff@123` | Plumber & Facilities Specialist |
-| **Faculty Member** | `prof.sharma@campusfix.edu` | `Faculty@123` | University Professor / Instructor |
+| **Faculty Member** | `prof.pratyusha@vnrvjiet.in` | `Faculty@123` | Prof. Pratyusha (University Professor / Instructor) |
 | **Student** | `student.alex@campusfix.edu` | `Student@123` | Alex Morgan (Student Reporter) |
 
 ---

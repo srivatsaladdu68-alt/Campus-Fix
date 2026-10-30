@@ -181,9 +181,12 @@ function seedDatabase() {
     ['Sarah Williams (Plumber)', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities'],
     ['David Miller (Carpenter)', 'staff.david@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance'],
     ['Kevin Brown (WiFi & Network Tech)', 'staff.kevin@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure'],
-    ['Prof. Rajesh Sharma', 'prof.sharma@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
+    ['Prof. Pratyusha', 'prof.pratyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
     ['Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering']
   ];
+
+  // Update legacy faculty name if present
+  db.exec("UPDATE users SET full_name = 'Prof. Pratyusha', email = 'prof.pratyusha@vnrvjiet.in' WHERE email = 'prof.sharma@vnrvjiet.in' OR (role = 'faculty' AND full_name LIKE '%Sharma%')");
 
   for (const u of coreUsers) {
     const exists = db.prepare('SELECT user_id FROM users WHERE email = ?').get(u[1]);
