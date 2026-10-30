@@ -24,9 +24,12 @@ db.exec(`
 // 3. Delete all users EXCEPT the 6 official demo login accounts
 const demoEmails = [
   'admin@vnrvjiet.in',
+  'staff.abhipray@vnrvjiet.in',
+  'staff.santosh@vnrvjiet.in',
+  'staff.ramarao@vnrvjiet.in',
+  'staff.lakshith@vnrvjiet.in',
   'staff.mike@vnrvjiet.in',
   'staff.sarah@vnrvjiet.in',
-  'staff.ramarao@vnrvjiet.in',
   'staff.david@vnrvjiet.in',
   'staff.kevin@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
@@ -37,7 +40,7 @@ const demoEmails = [
 const placeholders = demoEmails.map(() => '?').join(',');
 db.prepare(`DELETE FROM users WHERE email NOT IN (${placeholders})`).run(...demoEmails);
 
-// 4. Update the 6 retained demo accounts to standard clean profiles
+// 4. Update the retained demo accounts to standard clean profiles
 db.prepare(`
   UPDATE users 
   SET full_name = 'Administrator', role = 'admin', approval_status = 'approved', is_active = 1, department = 'Campus Administration'
@@ -46,14 +49,14 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Mike Johnson (Electrician)', role = 'staff', staff_id = 'STF-ELEC-01', approval_status = 'approved', is_active = 1, department = 'Electrical & IT Maintenance'
-  WHERE email = 'staff.mike@vnrvjiet.in'
+  SET full_name = 'Abhipray (Electrician)', role = 'staff', email = 'staff.abhipray@vnrvjiet.in', staff_id = 'STF-ELEC-01', approval_status = 'approved', is_active = 1, department = 'Electrical & IT Maintenance'
+  WHERE email IN ('staff.mike@vnrvjiet.in', 'staff.abhipray@vnrvjiet.in') OR staff_id = 'STF-ELEC-01'
 `).run();
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Sarah Williams (Plumber)', role = 'staff', staff_id = 'STF-PLUM-02', approval_status = 'approved', is_active = 1, department = 'Plumbing & Facilities'
-  WHERE email = 'staff.sarah@vnrvjiet.in'
+  SET full_name = 'Santosh (Plumber)', role = 'staff', email = 'staff.santosh@vnrvjiet.in', staff_id = 'STF-PLUM-02', approval_status = 'approved', is_active = 1, department = 'Plumbing & Facilities'
+  WHERE email IN ('staff.sarah@vnrvjiet.in', 'staff.santosh@vnrvjiet.in') OR staff_id = 'STF-PLUM-02'
 `).run();
 
 db.prepare(`
@@ -64,8 +67,8 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Kevin Brown (WiFi & Network Tech)', role = 'staff', staff_id = 'STF-WIFI-04', approval_status = 'approved', is_active = 1, department = 'IT & Network Infrastructure'
-  WHERE email = 'staff.kevin@vnrvjiet.in'
+  SET full_name = 'Lakshith (WiFi & Network Tech)', role = 'staff', email = 'staff.lakshith@vnrvjiet.in', staff_id = 'STF-WIFI-04', approval_status = 'approved', is_active = 1, department = 'IT & Network Infrastructure'
+  WHERE email IN ('staff.kevin@vnrvjiet.in', 'staff.lakshith@vnrvjiet.in') OR staff_id = 'STF-WIFI-04'
 `).run();
 
 db.prepare(`

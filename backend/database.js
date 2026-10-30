@@ -177,10 +177,10 @@ function seedDatabase() {
 
   const coreUsers = [
     ['Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration'],
-    ['Mike Johnson (Electrician)', 'staff.mike@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance'],
-    ['Sarah Williams (Plumber)', 'staff.sarah@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities'],
+    ['Abhipray (Electrician)', 'staff.abhipray@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance'],
+    ['Santosh (Plumber)', 'staff.santosh@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities'],
     ['Rama Rao (Carpenter)', 'staff.ramarao@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance'],
-    ['Kevin Brown (WiFi & Network Tech)', 'staff.kevin@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure'],
+    ['Lakshith (WiFi & Network Tech)', 'staff.lakshith@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure'],
     ['Prof. Pratyusha', 'prof.pratyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
     ['Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering']
   ];
@@ -188,6 +188,9 @@ function seedDatabase() {
   // Update legacy user accounts if present
   db.exec("UPDATE users SET full_name = 'Prof. Pratyusha', email = 'prof.pratyusha@vnrvjiet.in' WHERE email = 'prof.sharma@vnrvjiet.in' OR (role = 'faculty' AND full_name LIKE '%Sharma%')");
   db.exec("UPDATE users SET full_name = 'Rama Rao (Carpenter)', email = 'staff.ramarao@vnrvjiet.in' WHERE email = 'staff.david@vnrvjiet.in' OR staff_id = 'STF-CARP-03' OR full_name LIKE '%David Miller%'");
+  db.exec("UPDATE users SET full_name = 'Abhipray (Electrician)', email = 'staff.abhipray@vnrvjiet.in' WHERE email = 'staff.mike@vnrvjiet.in' OR staff_id = 'STF-ELEC-01' OR full_name LIKE '%Mike Johnson%'");
+  db.exec("UPDATE users SET full_name = 'Santosh (Plumber)', email = 'staff.santosh@vnrvjiet.in' WHERE email = 'staff.sarah@vnrvjiet.in' OR staff_id = 'STF-PLUM-02' OR full_name LIKE '%Sarah Williams%'");
+  db.exec("UPDATE users SET full_name = 'Lakshith (WiFi & Network Tech)', email = 'staff.lakshith@vnrvjiet.in' WHERE email = 'staff.kevin@vnrvjiet.in' OR staff_id = 'STF-WIFI-04' OR full_name LIKE '%Kevin Brown%'");
 
   for (const u of coreUsers) {
     const exists = db.prepare('SELECT user_id FROM users WHERE email = ?').get(u[1]);

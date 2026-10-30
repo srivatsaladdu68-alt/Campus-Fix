@@ -158,11 +158,13 @@ For demonstration and testing convenience, the login page features **1-click qui
 
 | Role | Email | Password | Description |
 |---|---|---|---|
-| **Administrator** | `admin@campusfix.edu` | `Admin@123` | Full administrative controls, staff dispatch, analytics, CSV export |
-| **Maintenance Staff 1** | `staff.mike@campusfix.edu` | `Staff@123` | Electrician & IT Technician |
-| **Maintenance Staff 2** | `staff.sarah@campusfix.edu` | `Staff@123` | Plumber & Facilities Specialist |
-| **Faculty Member** | `prof.pratyusha@vnrvjiet.in` | `Faculty@123` | Prof. Pratyusha (University Professor / Instructor) |
-| **Student** | `student.alex@campusfix.edu` | `Student@123` | Alex Morgan (Student Reporter) |
+| **Administrator** | `admin@vnrvjiet.in` | `Admin@123` | Campus Administrator |
+| **Electrician** | `staff.abhipray@vnrvjiet.in` | `Staff@123` | Abhipray (Electrician - STF-ELEC-01) |
+| **Plumber** | `staff.santosh@vnrvjiet.in` | `Staff@123` | Santosh (Plumber - STF-PLUM-02) |
+| **Carpenter** | `staff.ramarao@vnrvjiet.in` | `Staff@123` | Rama Rao (Carpenter - STF-CARP-03) |
+| **WiFi Tech** | `staff.lakshith@vnrvjiet.in` | `Staff@123` | Lakshith (WiFi Tech - STF-WIFI-04) |
+| **Faculty Member** | `prof.pratyusha@vnrvjiet.in` | `Faculty@123` | Prof. Pratyusha (Faculty - FAC-CS-102) |
+| **Student** | `student.alex@vnrvjiet.in` | `Student@123` | Alex Morgan (Student - 22071A0501) |
 
 ---
 
