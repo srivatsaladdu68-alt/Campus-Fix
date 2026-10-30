@@ -182,7 +182,7 @@ function seedDatabase() {
     ['Rama Rao (Carpenter)', 'staff.ramarao@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance'],
     ['Harish (WiFi & Network Tech)', 'staff.harish@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-WIFI-04', 'IT & Network Infrastructure'],
     ['Prof. Pratyusha', 'prof.pratyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
-    ['Alex Morgan', 'student.alex@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering']
+    ['Srivatsa', 'student.srivatsa@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering']
   ];
 
   // Update legacy user accounts if present
@@ -191,6 +191,7 @@ function seedDatabase() {
   db.exec("UPDATE users SET full_name = 'Prakash (Electrician)', email = 'staff.prakash@vnrvjiet.in' WHERE email IN ('staff.mike@vnrvjiet.in', 'staff.abhipray@vnrvjiet.in', 'staff.prakash@vnrvjiet.in') OR staff_id = 'STF-ELEC-01' OR full_name LIKE '%Mike Johnson%' OR full_name LIKE '%Abhipray%'");
   db.exec("UPDATE users SET full_name = 'Santosh (Plumber)', email = 'staff.santosh@vnrvjiet.in' WHERE email = 'staff.sarah@vnrvjiet.in' OR staff_id = 'STF-PLUM-02' OR full_name LIKE '%Sarah Williams%'");
   db.exec("UPDATE users SET full_name = 'Harish (WiFi & Network Tech)', email = 'staff.harish@vnrvjiet.in' WHERE email IN ('staff.kevin@vnrvjiet.in', 'staff.lakshith@vnrvjiet.in', 'staff.harish@vnrvjiet.in') OR staff_id = 'STF-WIFI-04' OR full_name LIKE '%Kevin Brown%' OR full_name LIKE '%Lakshith%'");
+  db.exec("UPDATE users SET full_name = 'Srivatsa', email = 'student.srivatsa@vnrvjiet.in' WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number = '22071A0501'))");
 
   for (const u of coreUsers) {
     const exists = db.prepare('SELECT user_id FROM users WHERE email = ?').get(u[1]);

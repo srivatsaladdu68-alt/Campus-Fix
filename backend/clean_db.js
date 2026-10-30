@@ -34,6 +34,7 @@ const demoEmails = [
   'staff.sarah@vnrvjiet.in',
   'staff.david@vnrvjiet.in',
   'staff.kevin@vnrvjiet.in',
+  'student.srivatsa@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
   'prof.pratyusha@vnrvjiet.in',
   'prof.sharma@vnrvjiet.in'
@@ -75,8 +76,8 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Alex Morgan', role = 'student', student_id = '22071A0501', roll_number = '22071A0501', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
-  WHERE email = 'student.alex@vnrvjiet.in'
+  SET full_name = 'Srivatsa', email = 'student.srivatsa@vnrvjiet.in', role = 'student', student_id = '22071A0501', roll_number = '22071A0501', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number = '22071A0501'))
 `).run();
 
 db.prepare(`

@@ -164,14 +164,14 @@ For demonstration and testing convenience, the login page features **1-click qui
 | **Carpenter** | `staff.ramarao@vnrvjiet.in` | `Staff@123` | Rama Rao (Carpenter - STF-CARP-03) |
 | **WiFi Tech** | `staff.harish@vnrvjiet.in` | `Staff@123` | Harish (WiFi Tech - STF-WIFI-04) |
 | **Faculty Member** | `prof.pratyusha@vnrvjiet.in` | `Faculty@123` | Prof. Pratyusha (Faculty - FAC-CS-102) |
-| **Student** | `student.alex@vnrvjiet.in` | `Student@123` | Alex Morgan (Student - 22071A0501) |
+| **Student** | `student.srivatsa@vnrvjiet.in` | `Student@123` | Srivatsa (Student - 22071A0501) |
 
 ---
 
 ## 🧪 Testing Every Major Feature
 
 ### 1. Test Fault Reporting
-1. Sign in as `student.alex@campusfix.edu`.
+1. Sign in as `student.srivatsa@vnrvjiet.in`.
 2. Click **Report New Fault**.
 3. Select **Science Complex**, Floor **2nd Floor**, Room **Restroom 2B**, Category **Washroom**.
 4. Notice the **Intelligent Duplicate Warning banner** immediately indicating an existing open complaint in that exact room!
