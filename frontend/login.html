@@ -73,37 +73,6 @@
           Register Account
         </a>
       </div>
-
-      <!-- Quick 1-Click Demo Accounts Switcher -->
-      <div class="demo-accounts-box">
-        <div class="demo-accounts-header">
-          <i data-lucide="zap" style="width: 14px; height: 14px; color: var(--cream-gold);"></i>
-          <span>1-Click Demo Logins</span>
-        </div>
-        <div class="demo-chips-grid">
-          <button type="button" class="demo-role-chip" onclick="fillCreds('admin@vnrvjiet.in', 'Admin@123')">
-            <span class="role-tag-pill admin">Admin</span> Administrator
-          </button>
-          <button type="button" class="demo-role-chip" onclick="fillCreds('staff.mike@vnrvjiet.in', 'Staff@123')">
-            <span class="role-tag-pill staff">Staff</span> Electrician (Mike)
-          </button>
-          <button type="button" class="demo-role-chip" onclick="fillCreds('staff.sarah@vnrvjiet.in', 'Staff@123')">
-            <span class="role-tag-pill staff">Staff</span> Plumber (Sarah)
-          </button>
-          <button type="button" class="demo-role-chip" onclick="fillCreds('staff.david@vnrvjiet.in', 'Staff@123')">
-            <span class="role-tag-pill staff">Staff</span> Carpenter (David)
-          </button>
-          <button type="button" class="demo-role-chip" onclick="fillCreds('staff.kevin@vnrvjiet.in', 'Staff@123')">
-            <span class="role-tag-pill staff">Staff</span> WiFi Tech (Kevin)
-          </button>
-          <button type="button" class="demo-role-chip" onclick="fillCreds('student.alex@vnrvjiet.in', 'Student@123')">
-            <span class="role-tag-pill student">Student</span> Alex Morgan
-          </button>
-          <button type="button" class="demo-role-chip" onclick="fillCreds('prof.sharma@vnrvjiet.in', 'Faculty@123')">
-            <span class="role-tag-pill faculty">Faculty</span> Prof. Sharma
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -138,12 +107,6 @@
       alertBox.style.borderColor = 'rgba(251, 215, 132, 0.35)';
       alertBox.style.color = 'var(--cream-gold)';
       alertBox.style.display = 'block';
-    }
-
-    function fillCreds(email, pass) {
-      document.getElementById('email').value = email;
-      document.getElementById('password').value = pass;
-      if (alertBox) alertBox.style.display = 'none';
     }
 
     const form = document.getElementById('login-form');
