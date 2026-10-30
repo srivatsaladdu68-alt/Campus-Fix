@@ -26,6 +26,7 @@ const demoEmails = [
   'admin@vnrvjiet.in',
   'staff.mike@vnrvjiet.in',
   'staff.sarah@vnrvjiet.in',
+  'staff.ramarao@vnrvjiet.in',
   'staff.david@vnrvjiet.in',
   'staff.kevin@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
@@ -57,8 +58,8 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'David Miller (Carpenter)', role = 'staff', staff_id = 'STF-CARP-03', approval_status = 'approved', is_active = 1, department = 'Carpentry & Furniture Maintenance'
-  WHERE email = 'staff.david@vnrvjiet.in'
+  SET full_name = 'Rama Rao (Carpenter)', email = 'staff.ramarao@vnrvjiet.in', role = 'staff', staff_id = 'STF-CARP-03', approval_status = 'approved', is_active = 1, department = 'Carpentry & Furniture Maintenance'
+  WHERE email IN ('staff.david@vnrvjiet.in', 'staff.ramarao@vnrvjiet.in') OR staff_id = 'STF-CARP-03'
 `).run();
 
 db.prepare(`
