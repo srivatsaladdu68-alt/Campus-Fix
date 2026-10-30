@@ -8,6 +8,7 @@
     "build": "npm install && cd backend && npm install",
     "postinstall": "cd backend && npm install",
     "seed": "node backend/database.js",
+    "clean": "node backend/clean_db.js",
     "install:all": "cd backend && npm install"
   },
   "dependencies": {
