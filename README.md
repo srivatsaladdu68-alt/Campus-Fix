@@ -162,7 +162,7 @@ For demonstration and testing convenience, the login page features **1-click qui
 | **Electrician** | `staff.prakash@vnrvjiet.in` | `Staff@123` | Prakash (Electrician - STF-ELEC-01) |
 | **Plumber** | `staff.santosh@vnrvjiet.in` | `Staff@123` | Santosh (Plumber - STF-PLUM-02) |
 | **Carpenter** | `staff.ramarao@vnrvjiet.in` | `Staff@123` | Rama Rao (Carpenter - STF-CARP-03) |
-| **WiFi Tech** | `staff.harish@vnrvjiet.in` | `Staff@123` | Harish (WiFi Tech - STF-WIFI-04) |
+| **Lab Technician** | `staff.harish@vnrvjiet.in` | `Staff@123` | Harish (Lab Technician - STF-LAB-04) |
 | **Faculty Member** | `prof.pratyusha@vnrvjiet.in` | `Faculty@123` | Prof. Pratyusha (Faculty - FAC-CS-102) |
 | **Student** | `student.srivatsa@vnrvjiet.in` | `Student@123` | Srivatsa (Student - 22071A0501) |
 

@@ -70,8 +70,8 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Harish (WiFi & Network Tech)', role = 'staff', email = 'staff.harish@vnrvjiet.in', staff_id = 'STF-WIFI-04', approval_status = 'approved', is_active = 1, department = 'IT & Network Infrastructure'
-  WHERE email IN ('staff.kevin@vnrvjiet.in', 'staff.lakshith@vnrvjiet.in', 'staff.harish@vnrvjiet.in') OR staff_id = 'STF-WIFI-04'
+  SET full_name = 'Harish (Lab Technician)', role = 'staff', email = 'staff.harish@vnrvjiet.in', staff_id = 'STF-LAB-04', approval_status = 'approved', is_active = 1, department = 'Laboratory & IT Infrastructure'
+  WHERE email IN ('staff.kevin@vnrvjiet.in', 'staff.lakshith@vnrvjiet.in', 'staff.harish@vnrvjiet.in') OR staff_id IN ('STF-WIFI-04', 'STF-LAB-04')
 `).run();
 
 db.prepare(`
