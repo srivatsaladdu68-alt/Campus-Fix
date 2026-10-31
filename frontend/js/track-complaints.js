@@ -138,9 +138,9 @@ async function loadComplaints() {
           <button class="btn btn-outline btn-sm" onclick="openDetailModal(${f.fault_id})" title="View Details">
             <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
           </button>
-          ${(Auth.getUser()?.role === 'admin' && !['Closed', 'Resolved'].includes(f.status) && !f.assigned_to) ? `
-            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign maintenance technician">
-              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
+          ${(Auth.getUser()?.role === 'admin' && !['Closed', 'Resolved'].includes(f.status)) ? `
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign maintenance technician' : 'Assign maintenance technician'}">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
             </button>
           ` : ''}
         </div>

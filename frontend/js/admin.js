@@ -385,14 +385,19 @@ async function loadAllComplaints() {
         </div>
       </td>
       <td>
-        ${f.staff_name ? `<span style="font-weight: 600; color: var(--cream-gold); font-size: 0.85rem;">${escapeHtml(f.staff_name)}</span>` : '<span style="color:var(--cream-dim);font-size:0.82rem;">Unassigned</span>'}
+        ${f.staff_name ? `
+          <div>
+            <div style="font-weight: 600; color: var(--cream-gold); font-size: 0.86rem;">${escapeHtml(f.staff_name)}</div>
+            ${f.staff_code ? `<div style="font-size: 0.72rem; color: var(--cream-muted); font-family: monospace;">${escapeHtml(f.staff_code)}</div>` : ''}
+          </div>
+        ` : '<span style="color:var(--cream-dim);font-size:0.82rem;">Unassigned</span>'}
       </td>
       <td>${API.getStatusBadge(f.status)}</td>
       <td>
         <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-          ${(!['Closed', 'Resolved'].includes(f.status) && !f.assigned_to) ? `
-            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="Assign Staff & Deadline">
-              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign
+          ${!['Closed', 'Resolved', 'Rejected'].includes(f.status) ? `
+            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign Staff & Deadline' : 'Assign Staff & Deadline'}">
+              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
             </button>
           ` : ''}
           <button class="btn btn-outline btn-sm" onclick="openStatusModal(${f.fault_id})" title="Change Status">

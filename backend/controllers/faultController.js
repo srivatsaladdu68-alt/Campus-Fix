@@ -21,6 +21,68 @@ function calculateDeadline(priority) {
   return deadline.toISOString().replace('T', ' ').substring(0, 19);
 }
 
+/**
+ * Automatically find the least busy / free technician qualified for the given category
+ */
+function findAvailableTechnician(category, itemName = '') {
+  let tradePattern = '%';
+  const cat = (category || '').toLowerCase();
+  const item = (itemName || '').toLowerCase();
+
+  if (cat === 'electrical') {
+    tradePattern = '%ELEC%';
+  } else if (cat === 'plumbing' || cat === 'washroom') {
+    tradePattern = '%PLUM%';
+  } else if (cat === 'furniture') {
+    tradePattern = '%CARP%';
+  } else if (cat === 'classroom equipment') {
+    if (/chair|desk|table|bench|board|door|window|podium|furniture/i.test(item)) {
+      tradePattern = '%CARP%';
+    } else {
+      tradePattern = '%LAB%';
+    }
+  } else if (cat === 'laboratory equipment' || cat === 'network/it') {
+    tradePattern = '%LAB%';
+  } else if (cat === 'safety') {
+    tradePattern = '%ELEC%';
+  }
+
+  // 1. First look for staff matching tradePattern, ordered by lowest number of active tasks
+  const candidate = db.prepare(`
+    SELECT u.user_id, u.full_name, u.email, u.phone, u.staff_id, u.department,
+           COUNT(f.fault_id) as active_tasks
+    FROM users u
+    LEFT JOIN faults f ON f.assigned_to = u.user_id AND f.status NOT IN ('Resolved', 'Closed', 'Rejected')
+    WHERE u.role = 'staff'
+      AND u.is_active = 1
+      AND (u.approval_status = 'approved' OR u.approval_status IS NULL)
+      AND (
+        u.staff_id LIKE ? OR
+        u.department LIKE ? OR
+        u.full_name LIKE ?
+      )
+    GROUP BY u.user_id
+    ORDER BY active_tasks ASC, RANDOM()
+    LIMIT 1
+  `).get(tradePattern, tradePattern, tradePattern);
+
+  if (candidate) return candidate;
+
+  // 2. Fallback: least busy active staff across all trades
+  return db.prepare(`
+    SELECT u.user_id, u.full_name, u.email, u.phone, u.staff_id, u.department,
+           COUNT(f.fault_id) as active_tasks
+    FROM users u
+    LEFT JOIN faults f ON f.assigned_to = u.user_id AND f.status NOT IN ('Resolved', 'Closed', 'Rejected')
+    WHERE u.role = 'staff'
+      AND u.is_active = 1
+      AND (u.approval_status = 'approved' OR u.approval_status IS NULL)
+    GROUP BY u.user_id
+    ORDER BY active_tasks ASC, RANDOM()
+    LIMIT 1
+  `).get();
+}
+
 // Submit a new fault report
 function createFault(req, res) {
   try {
@@ -66,12 +128,17 @@ function createFault(req, res) {
     const deadline = calculateDeadline(chosenPriority);
     const userId = req.user.user_id;
 
+    // Automatically assign to available technician in the respective trade
+    const assignedTech = findAvailableTechnician(category, itemName);
+    const initialStatus = assignedTech ? 'Assigned' : 'Reported';
+    const assignedTo = assignedTech ? assignedTech.user_id : null;
+
     const insertFault = db.prepare(`
       INSERT INTO faults (
         complaint_code, reported_by, title, item_name, description, category,
         building_id, floor_number, room_number, image_path, priority,
-        status, deadline, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reported', ?, datetime('now'), datetime('now'))
+        status, assigned_to, deadline, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
     `);
 
     const result = insertFault.run(
@@ -86,27 +153,51 @@ function createFault(req, res) {
       room_number.trim(),
       imagePath,
       chosenPriority,
+      initialStatus,
+      assignedTo,
       deadline
     );
 
     const faultId = result.lastInsertRowid;
 
-    // Record in history audit
+    // Record initial history audit
     db.prepare(`
       INSERT INTO fault_history (fault_id, changed_by, old_status, new_status, notes, changed_at)
       VALUES (?, ?, NULL, 'Reported', 'Complaint submitted by user', datetime('now'))
     `).run(faultId, userId);
 
-    // Notifications
-    createNotification(
-      userId,
-      faultId,
-      `Your complaint [${complaintCode}] has been successfully registered.`
-    );
-    notifyAdmins(
-      faultId,
-      `New complaint [${complaintCode}] reported: "${title.trim()}" in ${room_number.trim()} (${category}).`
-    );
+    if (assignedTech) {
+      db.prepare(`
+        INSERT INTO fault_history (fault_id, changed_by, old_status, new_status, notes, changed_at)
+        VALUES (?, ?, 'Reported', 'Assigned', ?, datetime('now'))
+      `).run(
+        faultId,
+        userId,
+        `Automatically assigned to ${assignedTech.full_name} (${assignedTech.staff_id || assignedTech.department})`
+      );
+
+      // Notify the assigned technician directly
+      createNotification(
+        assignedTech.user_id,
+        faultId,
+        `New work order [${complaintCode}] assigned to you: "${itemName}" in ${room_number.trim()} (${category}).`
+      );
+
+      // Notify reporter with technician name
+      createNotification(
+        userId,
+        faultId,
+        `Your complaint [${complaintCode}] for "${itemName}" has been registered and assigned to ${assignedTech.full_name}.`
+      );
+    } else {
+      createNotification(
+        userId,
+        faultId,
+        `Your complaint [${complaintCode}] has been successfully registered.`
+      );
+    }
+
+    // NOTE: Admin notification intentionally omitted as per requirement
 
     return res.status(201).json({
       success: true,
@@ -149,6 +240,8 @@ function getFaults(req, res) {
         u_staff.full_name AS staff_name,
         u_staff.email AS staff_email,
         u_staff.phone AS staff_phone,
+        u_staff.staff_id AS staff_code,
+        u_staff.department AS staff_department,
         CASE 
           WHEN f.deadline IS NOT NULL AND f.deadline < datetime('now') AND f.status NOT IN ('Resolved', 'Closed', 'Rejected')
           THEN 1 ELSE 0 
@@ -250,6 +343,8 @@ function getFaultById(req, res) {
         u_staff.full_name AS staff_name,
         u_staff.email AS staff_email,
         u_staff.phone AS staff_phone,
+        u_staff.staff_id AS staff_code,
+        u_staff.department AS staff_department,
         CASE 
           WHEN f.deadline IS NOT NULL AND f.deadline < datetime('now') AND f.status NOT IN ('Resolved', 'Closed', 'Rejected')
           THEN 1 ELSE 0 
