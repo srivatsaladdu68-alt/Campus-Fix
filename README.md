@@ -198,7 +198,7 @@ For demonstration and testing convenience, the login page features **1-click qui
 ### 4. Test Reopening a Complaint
 1. Log back in as the student reporter.
 2. Go to **Track Complaints**, click **View** on the resolved complaint.
-3. Observe the full interactive visual progress timeline (`Reported → Verified → Assigned → In Progress → Resolved`).
+3. Observe the full interactive visual progress timeline (`Reported → Assigned → Verified → In Progress → Resolved`).
 4. Click **Reopen Complaint**, enter a reason, and submit.
 5. The complaint status transitions to `Reopened` and an urgent alert is dispatched to admins.
 

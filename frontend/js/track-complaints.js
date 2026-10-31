@@ -286,7 +286,7 @@ function renderDetailModal(data) {
 
 // Render Timeline Progress
 function renderTimeline(currentStatus) {
-  const steps = ['Reported', 'Verified', 'Assigned', 'In Progress', 'Resolved', 'Closed'];
+  const steps = ['Reported', 'Assigned', 'Verified', 'In Progress', 'Resolved', 'Closed'];
   const timelineEl = document.getElementById('modal-timeline');
 
   if (currentStatus === 'Rejected') {

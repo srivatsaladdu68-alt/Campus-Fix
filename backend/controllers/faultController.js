@@ -442,7 +442,7 @@ function assignStaff(req, res) {
     }
 
     const oldStatus = fault.status;
-    const newStatus = (fault.status === 'Reported' || fault.status === 'Verified') ? 'Assigned' : fault.status;
+    const newStatus = (fault.status === 'Reported') ? 'Assigned' : fault.status;
 
     let targetDeadline = fault.deadline;
     if (deadline) {

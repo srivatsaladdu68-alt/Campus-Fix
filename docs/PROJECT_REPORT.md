@@ -134,10 +134,10 @@ erDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> Reported: User Submits Fault
-    Reported --> Verified: Admin Reviews & Verifies
+    Reported --> Assigned: Admin Dispatches Technician
     Reported --> Rejected: Invalid / Duplicate / Spam
-    Verified --> Assigned: Admin Dispatches Technician
-    Assigned --> In_Progress: Technician Starts Repair
+    Assigned --> Verified: Technician Verifies on Site
+    Verified --> In_Progress: Technician Starts Repair
     In_Progress --> Resolved: Technician Completes Fix
     Resolved --> Closed: Verification Period Passes
     Resolved --> Reopened: User Flags Unresolved Fault
@@ -180,7 +180,7 @@ stateDiagram-v2
 
 ### Q3: What is the status workflow for a complaint?
 > **Answer:** 
-> $$\text{Reported} \to \text{Verified} \to \text{Assigned} \to \text{In Progress} \to \text{Resolved} \to \text{Closed}$$
+> $$\text{Reported} \to \text{Assigned} \to \text{Verified} \to \text{In Progress} \to \text{Resolved} \to \text{Closed}$$
 > Handled with immutable audit entries in `fault_history` whenever state transitions occur.
 
 ### Q4: How does the CSV report generation work?
