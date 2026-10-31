@@ -39,6 +39,8 @@ const demoEmails = [
   'staff.sarah@vnrvjiet.in',
   'staff.david@vnrvjiet.in',
   'staff.kevin@vnrvjiet.in',
+  '25071a6671@vnrvjiet.in',
+  '25071a03b2@vnrvjiet.in',
   'student.srivatsa@vnrvjiet.in',
   'student.sidharth@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
@@ -83,14 +85,14 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Srivatsa', email = 'student.srivatsa@vnrvjiet.in', role = 'student', student_id = '25071A6671', roll_number = '25071A6671', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
-  WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number = '22071A0501'))
+  SET full_name = 'Srivatsa', email = '25071a6671@vnrvjiet.in', role = 'student', student_id = '25071A6671', roll_number = '25071A6671', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in', '25071a6671@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number IN ('22071A0501', '25071A6671')))
 `).run();
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Sidharth', email = 'student.sidharth@vnrvjiet.in', role = 'student', student_id = '25071A03B2', roll_number = '25071A03B2', approval_status = 'approved', is_active = 1, department = 'Mechanical Engineering'
-  WHERE email = 'student.sidharth@vnrvjiet.in' OR roll_number = '25071A0875'
+  SET full_name = 'Sidharth', email = '25071a03b2@vnrvjiet.in', role = 'student', student_id = '25071A03B2', roll_number = '25071A03B2', approval_status = 'approved', is_active = 1, department = 'Mechanical Engineering'
+  WHERE email IN ('student.sidharth@vnrvjiet.in', '25071a03b2@vnrvjiet.in') OR roll_number IN ('25071A0875', '25071A03B2')
 `).run();
 
 db.prepare(`

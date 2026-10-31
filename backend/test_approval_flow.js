@@ -144,8 +144,8 @@ async function runApprovalTests() {
     : '❌ [FAIL] 6. Post-approval login failed', postApprovalLogin);
 
   // Test 7: Student registration with roll_number & pending approval
-  const fakeStudentEmail = `fake.applicant.${Date.now()}@vnrvjiet.in`;
   const fakeStudentRoll = `22071A${Date.now().toString().slice(-4)}`;
+  const fakeStudentEmail = `${fakeStudentRoll.toLowerCase()}@vnrvjiet.in`;
   const registerFakeStudent = await request('/auth/register', {
     method: 'POST',
     body: {
@@ -175,6 +175,21 @@ async function runApprovalTests() {
   console.log(noRollStudentRes.status === 400
     ? '✅ [PASS] 7b. Student registration without roll_number rejected with 400'
     : '❌ [FAIL] 7b. Student without roll_number check failed', noRollStudentRes);
+
+  // Test 7c: Student registration with mismatched email is rejected (400)
+  const mismatchStudentRes = await request('/auth/register', {
+    method: 'POST',
+    body: {
+      full_name: 'Mismatch Student',
+      email: 'mismatch.student@vnrvjiet.in',
+      roll_number: '25071A9999',
+      role: 'student',
+      password: 'StudentPassword@123'
+    }
+  });
+  console.log(mismatchStudentRes.status === 400 && mismatchStudentRes.data.message.includes('<rollno>@vnrvjiet.in')
+    ? '✅ [PASS] 7c. Student registration with mismatched email rejected with 400'
+    : '❌ [FAIL] 7c. Student mismatched email check failed', mismatchStudentRes);
 
   // Test 8: Verify admin received in-app notification about registration request
   const notifRes = await request('/notifications', {

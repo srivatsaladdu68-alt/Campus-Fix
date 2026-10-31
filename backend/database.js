@@ -193,7 +193,7 @@ function seedDatabase() {
     ['Harish (Lab Technician)', 'staff.harish@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-LAB-04', 'Laboratory & IT Infrastructure'],
     ['Suresh (Lab Technician)', 'staff.suresh@vnrvjiet.in', '+91 9876543220', staffPass, 'staff', null, null, 'STF-LAB-05', 'Laboratory & IT Infrastructure'],
     ['Prof. Prathyusha', 'prof.prathyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
-    ['Srivatsa', 'student.srivatsa@vnrvjiet.in', '+91 9876543214', userPass, 'student', '25071A6671', '25071A6671', null, 'Computer Science & Engineering']
+    ['Srivatsa', '25071a6671@vnrvjiet.in', '+91 9876543214', userPass, 'student', '25071A6671', '25071A6671', null, 'Computer Science & Engineering']
   ];
 
   // Update legacy user accounts if present
@@ -202,8 +202,8 @@ function seedDatabase() {
   db.exec("UPDATE users SET full_name = 'Prakash (Electrician)', email = 'staff.prakash@vnrvjiet.in' WHERE email IN ('staff.mike@vnrvjiet.in', 'staff.abhipray@vnrvjiet.in', 'staff.prakash@vnrvjiet.in') OR staff_id = 'STF-ELEC-01' OR full_name LIKE '%Mike Johnson%' OR full_name LIKE '%Abhipray%'");
   db.exec("UPDATE users SET full_name = 'Ramesh (Plumber)', email = 'staff.ramesh@vnrvjiet.in' WHERE email IN ('staff.sarah@vnrvjiet.in', 'staff.santosh@vnrvjiet.in') OR staff_id = 'STF-PLUM-02' OR full_name LIKE '%Sarah Williams%' OR full_name LIKE '%Santosh%'");
   db.exec("UPDATE users SET full_name = 'Harish (Lab Technician)', email = 'staff.harish@vnrvjiet.in', staff_id = 'STF-LAB-04', department = 'Laboratory & IT Infrastructure' WHERE email IN ('staff.kevin@vnrvjiet.in', 'staff.lakshith@vnrvjiet.in', 'staff.harish@vnrvjiet.in') OR staff_id IN ('STF-WIFI-04', 'STF-LAB-04') OR full_name LIKE '%Kevin Brown%' OR full_name LIKE '%Lakshith%' OR full_name LIKE '%WiFi%Tech%' OR full_name LIKE '%Harish%'");
-  db.exec("UPDATE users SET full_name = 'Srivatsa', email = 'student.srivatsa@vnrvjiet.in', student_id = '25071A6671', roll_number = '25071A6671' WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number = '22071A0501'))");
-  db.exec("UPDATE users SET full_name = 'Sidharth', email = 'student.sidharth@vnrvjiet.in', student_id = '25071A03B2', roll_number = '25071A03B2' WHERE email = 'student.sidharth@vnrvjiet.in' OR roll_number = '25071A0875'");
+  db.exec("UPDATE users SET full_name = 'Srivatsa', email = '25071a6671@vnrvjiet.in', student_id = '25071A6671', roll_number = '25071A6671' WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in', '25071a6671@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number IN ('22071A0501', '25071A6671')))");
+  db.exec("UPDATE users SET full_name = 'Sidharth', email = '25071a03b2@vnrvjiet.in', student_id = '25071A03B2', roll_number = '25071A03B2' WHERE email IN ('student.sidharth@vnrvjiet.in', '25071a03b2@vnrvjiet.in') OR roll_number IN ('25071A0875', '25071A03B2')");
 
   for (const u of coreUsers) {
     const exists = db.prepare('SELECT user_id FROM users WHERE email = ?').get(u[1]);

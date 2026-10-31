@@ -82,8 +82,8 @@ async function runTests() {
     assert(badLogin.status === 401, 'Invalid password correctly rejected with 401');
 
     // 5. User Registration & Admin Approval Workflow
-    const uniqueEmail = `test.student.${Date.now()}@vnrvjiet.in`;
     const uniqueRoll = `22071A${Date.now().toString().slice(-4)}`;
+    const uniqueEmail = `${uniqueRoll.toLowerCase()}@vnrvjiet.in`;
     const registerRes = await request('/auth/register', {
       method: 'POST',
       body: {

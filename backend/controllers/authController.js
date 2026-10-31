@@ -37,8 +37,17 @@ function register(req, res) {
     const facultyIdVal = (req.body.faculty_id || req.body.employee_id || roll_number || staff_id || '').trim().toUpperCase();
 
     // Specific validation based on role:
-    if (assignedRole === 'student' && !studentRollNo) {
-      return res.status(400).json({ success: false, message: 'Student Roll Number is required for student registration.' });
+    if (assignedRole === 'student') {
+      if (!studentRollNo) {
+        return res.status(400).json({ success: false, message: 'Student Roll Number is required for student registration.' });
+      }
+      const expectedStudentEmail = `${studentRollNo.toLowerCase()}@vnrvjiet.in`;
+      if (trimmedEmail !== expectedStudentEmail) {
+        return res.status(400).json({
+          success: false,
+          message: `Student email address must follow the format <rollno>@vnrvjiet.in (expected: ${expectedStudentEmail}).`
+        });
+      }
     }
     if (assignedRole === 'staff' && !staffIdVal) {
       return res.status(400).json({ success: false, message: 'Staff ID is required for maintenance staff registration.' });
