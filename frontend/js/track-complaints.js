@@ -288,27 +288,54 @@ function renderTimeline(currentStatus) {
     return;
   }
 
-  const currentIndex = steps.indexOf(currentStatus);
+  // Determine which steps are completed and which step is actively current:
+  // - When 'Assigned': Step 1 (Reported) & Step 2 (Assigned) have tick marks (✓); points to Step 3 (Verified) as CURRENT.
+  // - When 'Verified': Step 3 (Verified) is completed (✓); points to Step 4 (In Progress) as CURRENT.
+  // - When 'In Progress': Steps 1-3 completed (✓); Step 4 (In Progress) is CURRENT.
+  // - When 'Resolved': Steps 1-5 completed (✓); points to Step 6 (Closed) as Pending.
+  // - When 'Closed': All steps completed with ✓.
+  let activeIndex;
+  let isAllClosed = false;
+
+  if (currentStatus === 'Assigned') {
+    activeIndex = 2; // Assigned is complete (✓), now pointing to Step 3 (Verified) as Current!
+  } else if (currentStatus === 'Verified') {
+    activeIndex = 3; // Verified is complete (✓), now pointing to Step 4 (In Progress) as Current!
+  } else if (currentStatus === 'In Progress') {
+    activeIndex = 3; // Repair is actively In Progress
+  } else if (currentStatus === 'Resolved') {
+    activeIndex = 5; // Resolved is complete (✓), pointing to Step 6 (Closed)
+  } else if (currentStatus === 'Closed') {
+    isAllClosed = true;
+    activeIndex = 5;
+  } else {
+    activeIndex = 1; // 'Reported' completed (✓), pointing to Step 2 (Assigned)
+  }
 
   timelineEl.innerHTML = steps.map((step, idx) => {
     let stateClass = '';
     let dotContent = idx + 1;
     let badgeHtml = '';
 
-    if (currentIndex >= idx) {
-      if (currentIndex === idx) {
-        if (currentStatus === 'Closed') {
-          stateClass = 'completed active-completed';
-          dotContent = '✓';
-          badgeHtml = '<span class="timeline-active-pill" style="background: rgba(52, 211, 153, 0.22); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.5);">Completed</span>';
-        } else {
-          stateClass = 'active';
-          dotContent = '●';
-          badgeHtml = '<span class="timeline-active-pill">Current</span>';
-        }
+    if (isAllClosed) {
+      if (idx === 5) {
+        stateClass = 'completed active-completed';
+        dotContent = '✓';
+        badgeHtml = '<span class="timeline-active-pill" style="background: rgba(52, 211, 153, 0.22); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.5);">Completed</span>';
       } else {
         stateClass = 'completed';
         dotContent = '✓';
+      }
+    } else {
+      if (idx < activeIndex) {
+        stateClass = 'completed';
+        dotContent = '✓';
+      } else if (idx === activeIndex) {
+        stateClass = 'active';
+        dotContent = '●';
+        badgeHtml = '<span class="timeline-active-pill">Current</span>';
+      } else {
+        dotContent = idx + 1;
       }
     }
 
