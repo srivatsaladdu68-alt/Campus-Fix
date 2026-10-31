@@ -36,12 +36,12 @@
     <!-- Centered Form Card -->
     <div class="auth-card">
       <div id="login-alert" style="display: none; padding: 0.8rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.86rem; background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35); color: #fca5a5; line-height: 1.4;"></div>
-      <form id="login-form">
+      <form id="login-form" autocomplete="off">
         <div class="form-group">
           <label for="email">Campus Email Address</label>
           <div class="form-control-wrap">
             <i data-lucide="mail" class="input-icon"></i>
-            <input type="email" id="email" class="form-control" placeholder="yourname@vnrvjiet.in" required autofocus autocomplete="email">
+            <input type="email" id="email" class="form-control" placeholder="yourname@vnrvjiet.in" required autofocus autocomplete="off">
           </div>
           <small style="display: block; margin-top: 0.35rem; font-size: 0.74rem; color: var(--cream-muted);">
             Unified portal for Students, Faculty, Maintenance Staff, and Administrators.
@@ -52,7 +52,7 @@
           <label for="password">Password</label>
           <div class="form-control-wrap">
             <i data-lucide="lock" class="input-icon"></i>
-            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="new-password">
             <button type="button" class="toggle-password-btn" id="toggle-pwd-btn" onclick="togglePasswordVisibility()" title="Show/Hide password">
               <i data-lucide="eye" id="toggle-pwd-icon" style="width: 18px; height: 18px;"></i>
             </button>
@@ -109,6 +109,14 @@
       alertBox.style.display = 'block';
     }
 
+    // Ensure clean login inputs without lingering autofill
+    window.addEventListener('DOMContentLoaded', () => {
+      const emailInput = document.getElementById('email');
+      const pwdInput = document.getElementById('password');
+      if (emailInput && !urlParams.get('email')) emailInput.value = '';
+      if (pwdInput) pwdInput.value = '';
+    });
+
     const form = document.getElementById('login-form');
     const submitBtn = document.getElementById('login-btn');
 
@@ -138,9 +146,9 @@
       if (res && res.success) {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.user));
-        // Direct seamless redirection without toast popup delays
+        // Direct seamless redirection using replace so login doesn't linger in history
         const redirect = urlParams.get('redirect') || Auth.getDashboardUrl(res.user.role);
-        window.location.href = redirect;
+        window.location.replace(redirect);
       } else {
         if (alertBox) {
           let msg = res && res.message ? res.message : 'Invalid email or password.';

@@ -28,14 +28,14 @@ function getDashboardUrl(role) {
 // Route Guard for Protected Dashboard Pages
 function requireAuth(allowedRoles = []) {
   if (!isLoggedIn()) {
-    window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.pathname)}`;
+    window.location.replace(`/login.html?redirect=${encodeURIComponent(window.location.pathname)}`);
     return null;
   }
 
   const user = getUser();
   if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
     // Redirect to their respective dashboard
-    window.location.href = getDashboardUrl(user.role);
+    window.location.replace(getDashboardUrl(user.role));
     return null;
   }
 
@@ -46,15 +46,25 @@ function requireAuth(allowedRoles = []) {
 function redirectIfLoggedIn() {
   if (isLoggedIn()) {
     const user = getUser();
-    window.location.href = getDashboardUrl(user.role);
+    window.location.replace(getDashboardUrl(user.role));
   }
 }
 
 function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-  window.location.href = '/login.html';
+  sessionStorage.clear();
+  window.location.replace('/login.html');
 }
+
+// BFCache / History Navigation Guard: Immediately redirect out if unauthenticated on Back/Forward
+window.addEventListener('pageshow', function (event) {
+  const protectedPages = ['admin-dashboard', 'staff-dashboard', 'dashboard', 'notifications', 'report-fault', 'track-complaints'];
+  const isProtected = protectedPages.some(page => window.location.pathname.includes(page));
+  if (isProtected && !isLoggedIn()) {
+    window.location.replace('/login.html');
+  }
+});
 
 // Update Topbar and Sidebar Profile Elements
 function renderUserProfile() {
