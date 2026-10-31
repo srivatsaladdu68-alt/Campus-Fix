@@ -691,6 +691,18 @@ input::placeholder, textarea::placeholder {
   color: var(--cream-dim);
 }
 
+/* Prevent bright white/blue browser autofill highlight and keep dark palette */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #151736 inset !important;
+  -webkit-text-fill-color: #fdfbf7 !important;
+  caret-color: #fdfbf7 !important;
+  border-color: var(--border-cream) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
 /* Quick Equipment Picker Cards (in report-fault.html) */
 .quick-picker-grid {
   display: grid;

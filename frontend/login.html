@@ -37,11 +37,15 @@
     <div class="auth-card">
       <div id="login-alert" style="display: none; padding: 0.8rem 1rem; border-radius: var(--radius-sm); margin-bottom: 1.25rem; font-size: 0.86rem; background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35); color: #fca5a5; line-height: 1.4;"></div>
       <form id="login-form" autocomplete="off">
+        <!-- Hidden decoy inputs to absorb browser password manager autofill -->
+        <input type="text" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" tabindex="-1" autocomplete="off">
+        <input type="password" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" tabindex="-1" autocomplete="new-password">
+
         <div class="form-group">
           <label for="email">Campus Email Address</label>
           <div class="form-control-wrap">
             <i data-lucide="mail" class="input-icon"></i>
-            <input type="email" id="email" class="form-control" placeholder="yourname@vnrvjiet.in" required autofocus autocomplete="off">
+            <input type="email" id="email" class="form-control" placeholder="yourname@vnrvjiet.in" required readonly onfocus="this.removeAttribute('readonly')" autocomplete="off">
           </div>
           <small style="display: block; margin-top: 0.35rem; font-size: 0.74rem; color: var(--cream-muted);">
             Unified portal for Students, Faculty, Maintenance Staff, and Administrators.
@@ -52,7 +56,7 @@
           <label for="password">Password</label>
           <div class="form-control-wrap">
             <i data-lucide="lock" class="input-icon"></i>
-            <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="new-password">
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required readonly onfocus="this.removeAttribute('readonly')" autocomplete="new-password">
             <button type="button" class="toggle-password-btn" id="toggle-pwd-btn" onclick="togglePasswordVisibility()" title="Show/Hide password">
               <i data-lucide="eye" id="toggle-pwd-icon" style="width: 18px; height: 18px;"></i>
             </button>
@@ -110,12 +114,18 @@
     }
 
     // Ensure clean login inputs without lingering autofill
-    window.addEventListener('DOMContentLoaded', () => {
+    function clearLoginFields() {
       const emailInput = document.getElementById('email');
       const pwdInput = document.getElementById('password');
       if (emailInput && !urlParams.get('email')) emailInput.value = '';
       if (pwdInput) pwdInput.value = '';
-    });
+    }
+    window.addEventListener('DOMContentLoaded', clearLoginFields);
+    window.addEventListener('pageshow', clearLoginFields);
+    window.addEventListener('load', clearLoginFields);
+    setTimeout(clearLoginFields, 50);
+    setTimeout(clearLoginFields, 150);
+    setTimeout(clearLoginFields, 300);
 
     const form = document.getElementById('login-form');
     const submitBtn = document.getElementById('login-btn');
