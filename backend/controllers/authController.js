@@ -13,9 +13,13 @@ function register(req, res) {
       return res.status(400).json({ success: false, message: 'Please provide full name, email, and password.' });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
+    const trimmedEmail = (email || '').trim().toLowerCase();
+    const vnrvjietRegex = /^[a-zA-Z0-9._%+-]+@vnrvjiet\.in$/;
+    if (!vnrvjietRegex.test(trimmedEmail)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Only official college email addresses ending with @vnrvjiet.in are allowed.' 
+      });
     }
 
     if (password.length < 6) {
@@ -181,7 +185,17 @@ function login(req, res) {
       return res.status(400).json({ success: false, message: 'Please enter both email and password.' });
     }
 
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email.toLowerCase().trim());
+    const trimmedEmail = (email || '').trim().toLowerCase();
+    const vnrvjietRegex = /^[a-zA-Z0-9._%+-]+@vnrvjiet\.in$/;
+    if (!vnrvjietRegex.test(trimmedEmail)) {
+      return res.status(400).json({
+        success: false,
+        code: 'INVALID_DOMAIN',
+        message: 'Only official college email addresses ending with @vnrvjiet.in are permitted.'
+      });
+    }
+
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(trimmedEmail);
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -275,7 +289,16 @@ function createStaff(req, res) {
       return res.status(400).json({ success: false, message: 'Name, email, and password are required.' });
     }
 
-    const existing = db.prepare('SELECT user_id FROM users WHERE email = ?').get(email.toLowerCase().trim());
+    const trimmedEmail = (email || '').trim().toLowerCase();
+    const vnrvjietRegex = /^[a-zA-Z0-9._%+-]+@vnrvjiet\.in$/;
+    if (!vnrvjietRegex.test(trimmedEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Staff accounts must use an official college email ending with @vnrvjiet.in.'
+      });
+    }
+
+    const existing = db.prepare('SELECT user_id FROM users WHERE email = ?').get(trimmedEmail);
     if (existing) {
       return res.status(409).json({ success: false, message: 'An account with this email already exists.' });
     }

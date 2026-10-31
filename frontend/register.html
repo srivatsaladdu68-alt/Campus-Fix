@@ -67,13 +67,13 @@
         </div>
 
         <div class="form-group">
-          <label for="email" id="email-label">Campus Email Address *</label>
+          <label for="email" id="email-label">Campus Email Address (@vnrvjiet.in) *</label>
           <div class="form-control-wrap">
             <i data-lucide="mail" class="input-icon"></i>
-            <input type="email" id="email" class="form-control" placeholder="student.srivatsa@vnrvjiet.in" required autocomplete="email">
+            <input type="email" id="email" class="form-control" placeholder="student.srivatsa@vnrvjiet.in" required autocomplete="email" pattern="^[a-zA-Z0-9._%+\-]+@vnrvjiet\.in$" title="Please enter your official @vnrvjiet.in email address">
           </div>
           <small id="email-hint" style="display: block; margin-top: 0.35rem; font-size: 0.74rem; color: var(--cream-muted);">
-            Use your official student email (e.g. <code>student@vnrvjiet.in</code>)
+            Only official college emails ending with <code>@vnrvjiet.in</code> are accepted.
           </small>
         </div>
 
@@ -192,8 +192,8 @@
       const roleNote = document.getElementById('role-note');
 
       if (role === 'staff') {
-        emailInput.placeholder = 'staff.mike@vnrvjiet.in';
-        emailHint.innerHTML = 'Use your facility staff email (e.g. <code>staff.name@vnrvjiet.in</code>)';
+        emailInput.placeholder = 'staff.name@vnrvjiet.in';
+        emailHint.innerHTML = 'Only official staff emails ending with <code>@vnrvjiet.in</code> are accepted';
         deptGroup.style.display = 'block';
         staffIdGroup.style.display = 'block';
         studentRollGroup.style.display = 'none';
@@ -203,7 +203,7 @@
         roleNote.style.borderColor = 'rgba(251, 215, 132, 0.35)';
       } else if (role === 'faculty') {
         emailInput.placeholder = 'prof.prathyusha@vnrvjiet.in';
-        emailHint.innerHTML = 'Use your official faculty / department email (e.g. <code>prof.name@vnrvjiet.in</code>)';
+        emailHint.innerHTML = 'Only official faculty emails ending with <code>@vnrvjiet.in</code> are accepted';
         deptGroup.style.display = 'none';
         staffIdGroup.style.display = 'none';
         studentRollGroup.style.display = 'none';
@@ -213,7 +213,7 @@
         roleNote.style.borderColor = 'rgba(52, 211, 153, 0.35)';
       } else {
         emailInput.placeholder = 'student.srivatsa@vnrvjiet.in';
-        emailHint.innerHTML = 'Use your official student email (e.g. <code>student@vnrvjiet.in</code>)';
+        emailHint.innerHTML = 'Only official student emails ending with <code>@vnrvjiet.in</code> are accepted';
         deptGroup.style.display = 'none';
         staffIdGroup.style.display = 'none';
         studentRollGroup.style.display = 'block';
@@ -251,6 +251,11 @@
 
       if (!full_name || !email || !password) {
         API.showToast('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      if (!email.toLowerCase().endsWith('@vnrvjiet.in')) {
+        API.showToast('Registration is restricted to official @vnrvjiet.in email addresses.', 'error');
         return;
       }
 

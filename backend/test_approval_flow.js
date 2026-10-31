@@ -41,6 +41,30 @@ async function runApprovalTests() {
     ? '✅ [PASS] 1. Unrecognized email correctly returns USER_NOT_FOUND code & registration prompt'
     : '❌ [FAIL] 1. Random email login failed', randomLogin);
 
+  // Test 1b: Disallowed non-vnrvjiet email on login
+  const foreignLogin = await request('/auth/login', {
+    method: 'POST',
+    body: { email: 'intruder@gmail.com', password: 'SomePassword@123' }
+  });
+  console.log(foreignLogin.status === 400 && foreignLogin.data.code === 'INVALID_DOMAIN'
+    ? '✅ [PASS] 1b. Non-vnrvjiet email rejected on login with INVALID_DOMAIN'
+    : '❌ [FAIL] 1b. Non-vnrvjiet email allowed on login', foreignLogin);
+
+  // Test 1c: Disallowed non-vnrvjiet email on registration
+  const foreignRegister = await request('/auth/register', {
+    method: 'POST',
+    body: {
+      full_name: 'Outsider User',
+      email: 'outsider@gmail.com',
+      password: 'Password@123',
+      role: 'student',
+      roll_number: '25071A9999'
+    }
+  });
+  console.log(foreignRegister.status === 400 && foreignRegister.data.message.includes('@vnrvjiet.in')
+    ? '✅ [PASS] 1c. Non-vnrvjiet email rejected on registration'
+    : '❌ [FAIL] 1c. Non-vnrvjiet email allowed on registration', foreignRegister);
+
   // Test 2: Staff registration
   // Test 2: Staff registration with staff_id
   const staffEmail = `new.electrician.${Date.now()}@vnrvjiet.in`;

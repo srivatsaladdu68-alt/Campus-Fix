@@ -42,13 +42,13 @@
         <input type="password" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;" tabindex="-1" autocomplete="new-password">
 
         <div class="form-group">
-          <label for="email">Campus Email Address</label>
+          <label for="email">Campus Email Address (@vnrvjiet.in)</label>
           <div class="form-control-wrap">
             <i data-lucide="mail" class="input-icon"></i>
-            <input type="email" id="email" class="form-control" placeholder="yourname@vnrvjiet.in" required readonly onfocus="this.removeAttribute('readonly')" autocomplete="off">
+            <input type="email" id="email" class="form-control" placeholder="yourname@vnrvjiet.in" required readonly onfocus="this.removeAttribute('readonly')" autocomplete="off" pattern="^[a-zA-Z0-9._%+\-]+@vnrvjiet\.in$" title="Please enter your official @vnrvjiet.in email address">
           </div>
           <small style="display: block; margin-top: 0.35rem; font-size: 0.74rem; color: var(--cream-muted);">
-            Unified portal for Students, Faculty, Maintenance Staff, and Administrators.
+            Unified portal for Students, Faculty, Maintenance Staff, and Administrators (@vnrvjiet.in only).
           </small>
         </div>
 
@@ -140,6 +140,14 @@
       if (!email || !password) {
         if (alertBox) {
           alertBox.textContent = 'Please enter both email and password.';
+          alertBox.style.display = 'block';
+        }
+        return;
+      }
+
+      if (!email.toLowerCase().endsWith('@vnrvjiet.in')) {
+        if (alertBox) {
+          alertBox.textContent = 'Only official @vnrvjiet.in email addresses are permitted.';
           alertBox.style.display = 'block';
         }
         return;
