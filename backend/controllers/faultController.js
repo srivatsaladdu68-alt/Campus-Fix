@@ -22,7 +22,8 @@ function calculateDeadline(priority) {
 }
 
 /**
- * Automatically find the least busy / free technician qualified for the given category
+ * Automatically find a free technician (0 active tasks) qualified for the given category/trade.
+ * If all technicians of that specific department are already assigned, returns null.
  */
 function findAvailableTechnician(category, itemName = '') {
   let tradePattern = '%';
@@ -47,7 +48,7 @@ function findAvailableTechnician(category, itemName = '') {
     tradePattern = '%ELEC%';
   }
 
-  // 1. First look for staff matching tradePattern, ordered by lowest number of active tasks
+  // Look ONLY for staff matching this specific trade who currently have 0 active tasks (completely free)
   const candidate = db.prepare(`
     SELECT u.user_id, u.full_name, u.email, u.phone, u.staff_id, u.department,
            COUNT(f.fault_id) as active_tasks
@@ -62,25 +63,92 @@ function findAvailableTechnician(category, itemName = '') {
         u.full_name LIKE ?
       )
     GROUP BY u.user_id
-    ORDER BY active_tasks ASC, RANDOM()
+    HAVING active_tasks = 0
+    ORDER BY RANDOM()
     LIMIT 1
   `).get(tradePattern, tradePattern, tradePattern);
 
-  if (candidate) return candidate;
+  // If candidate is found with 0 active tasks, return them; otherwise null (all workers of this dept are busy)
+  return candidate || null;
+}
 
-  // 2. Fallback: least busy active staff across all trades
-  return db.prepare(`
-    SELECT u.user_id, u.full_name, u.email, u.phone, u.staff_id, u.department,
-           COUNT(f.fault_id) as active_tasks
-    FROM users u
-    LEFT JOIN faults f ON f.assigned_to = u.user_id AND f.status NOT IN ('Resolved', 'Closed', 'Rejected')
-    WHERE u.role = 'staff'
-      AND u.is_active = 1
-      AND (u.approval_status = 'approved' OR u.approval_status IS NULL)
-    GROUP BY u.user_id
-    ORDER BY active_tasks ASC, RANDOM()
-    LIMIT 1
-  `).get();
+/**
+ * Automatically assign any queued complaints waiting in "We will assign soon"
+ * to this staff member if they have just become free.
+ */
+function dispatchPendingQueueForStaff(staffId) {
+  try {
+    const staff = db.prepare(`
+      SELECT user_id, full_name, department, staff_id
+      FROM users
+      WHERE user_id = ? AND role = 'staff' AND is_active = 1
+    `).get(staffId);
+
+    if (!staff) return;
+
+    // Verify staff has 0 active tasks
+    const activeTasks = db.prepare(`
+      SELECT COUNT(*) as count
+      FROM faults
+      WHERE assigned_to = ? AND status NOT IN ('Resolved', 'Closed', 'Rejected')
+    `).get(staffId).count;
+
+    if (activeTasks > 0) return; // Still has active work
+
+    const sid = (staff.staff_id || '').toUpperCase();
+    const dept = (staff.department || '').toLowerCase();
+
+    let tradeCategory = 'Electrical';
+    if (sid.includes('PLUM') || dept.includes('plumb')) tradeCategory = 'Plumbing';
+    else if (sid.includes('CARP') || dept.includes('carpenter') || dept.includes('furniture')) tradeCategory = 'Furniture';
+    else if (sid.includes('LAB') || dept.includes('lab') || dept.includes('infrastructure')) tradeCategory = 'Laboratory Equipment';
+
+    // Find oldest unassigned complaint in this trade
+    const pendingFault = db.prepare(`
+      SELECT fault_id, complaint_code, title, item_name, room_number, category, reported_by
+      FROM faults
+      WHERE assigned_to IS NULL AND status = 'Reported'
+        AND (
+          category = ? OR 
+          (? = 'Furniture' AND category = 'Classroom Equipment') OR
+          (? = 'Plumbing' AND category = 'Washroom') OR
+          (? = 'Laboratory Equipment' AND category IN ('Network/IT', 'Classroom Equipment'))
+        )
+      ORDER BY created_at ASC
+      LIMIT 1
+    `).get(tradeCategory, tradeCategory, tradeCategory, tradeCategory);
+
+    if (pendingFault) {
+      db.prepare(`
+        UPDATE faults
+        SET assigned_to = ?, status = 'Assigned', updated_at = datetime('now')
+        WHERE fault_id = ?
+      `).run(staff.user_id, pendingFault.fault_id);
+
+      db.prepare(`
+        INSERT INTO fault_history (fault_id, changed_by, old_status, new_status, notes, changed_at)
+        VALUES (?, ?, 'Reported', 'Assigned', ?, datetime('now'))
+      `).run(
+        pendingFault.fault_id,
+        staff.user_id,
+        `Auto-assigned from queue to ${staff.full_name} (${staff.staff_id || staff.department}) as technician became free`
+      );
+
+      createNotification(
+        staff.user_id,
+        pendingFault.fault_id,
+        `New work order [${pendingFault.complaint_code}] assigned from queue: "${pendingFault.item_name || pendingFault.title}" in ${pendingFault.room_number}.`
+      );
+
+      createNotification(
+        pendingFault.reported_by,
+        pendingFault.fault_id,
+        `Great news! A technician has become available. Your complaint [${pendingFault.complaint_code}] is now assigned to ${staff.full_name}.`
+      );
+    }
+  } catch (err) {
+    console.error('Error dispatching pending queue for staff:', err);
+  }
 }
 
 // Submit a new fault report
@@ -190,10 +258,11 @@ function createFault(req, res) {
         `Your complaint [${complaintCode}] for "${itemName}" has been registered and assigned to ${assignedTech.full_name}.`
       );
     } else {
+      // All department workers are already assigned / busy
       createNotification(
         userId,
         faultId,
-        `Your complaint [${complaintCode}] has been successfully registered.`
+        `Your complaint [${complaintCode}] has been registered. All technicians in this department are currently occupied with ongoing tasks; we will assign soon.`
       );
     }
 
@@ -201,9 +270,14 @@ function createFault(req, res) {
 
     return res.status(201).json({
       success: true,
-      message: 'Complaint submitted successfully.',
+      message: assignedTech 
+        ? `Complaint submitted and assigned to ${assignedTech.full_name}.`
+        : 'Complaint registered. All technicians of this department are currently occupied. We will assign soon.',
       complaint_code: complaintCode,
       fault_id: faultId,
+      is_assigned: Boolean(assignedTech),
+      assigned_technician: assignedTech ? assignedTech.full_name : null,
+      queue_message: assignedTech ? null : 'All technicians currently occupied - We will assign soon',
       has_duplicates: activeDuplicates.length > 0,
       active_duplicates: activeDuplicates
     });
@@ -516,6 +590,14 @@ function updateStatus(req, res) {
         faultId,
         `Complaint [${fault.complaint_code}] "${fault.title}" was marked as "${status}" by ${req.user.full_name}.`
       );
+    }
+
+    // If technician has freed up, check if any pending complaint in the queue is waiting for their trade
+    if (['Resolved', 'Closed', 'Rejected'].includes(status)) {
+      const freedStaffId = fault.assigned_to || (req.user.role === 'staff' ? req.user.user_id : null);
+      if (freedStaffId) {
+        dispatchPendingQueueForStaff(freedStaffId);
+      }
     }
 
     return res.json({

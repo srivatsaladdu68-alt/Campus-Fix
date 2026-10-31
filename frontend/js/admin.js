@@ -387,7 +387,11 @@ async function loadAllComplaints() {
             <div style="font-weight: 600; color: var(--cream-gold); font-size: 0.86rem;">${escapeHtml(f.staff_name)}</div>
             ${f.staff_code ? `<div style="font-size: 0.72rem; color: var(--cream-muted); font-family: monospace;">${escapeHtml(f.staff_code)}</div>` : ''}
           </div>
-        ` : '<span style="color:var(--cream-dim);font-size:0.82rem;">Unassigned</span>'}
+        ` : `
+          <span style="color: var(--cream-gold); font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            <i data-lucide="clock" style="width: 12px; height: 12px;"></i> We will assign soon
+          </span>
+        `}
       </td>
       <td>${API.getStatusBadge(f.status)}</td>
       <td>

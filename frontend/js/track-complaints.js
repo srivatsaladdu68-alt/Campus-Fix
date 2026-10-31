@@ -131,7 +131,13 @@ async function loadComplaints() {
       <td>${API.getPriorityBadge(f.priority)}</td>
       <td>${API.getStatusBadge(f.status)}</td>
       <td>
-        ${f.staff_name ? `<span style="font-weight: 600; font-size: 0.85rem; color: var(--cream-gold);">${escapeHtml(f.staff_name)}</span>` : '<span style="color: #94a3b8; font-size: 0.82rem;">Unassigned</span>'}
+        ${f.staff_name ? `
+          <span style="font-weight: 600; font-size: 0.85rem; color: var(--cream-gold);">${escapeHtml(f.staff_name)}</span>
+        ` : `
+          <span style="color: var(--cream-gold); font-size: 0.82rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+            <i data-lucide="clock" style="width: 13px; height: 13px;"></i> We will assign soon
+          </span>
+        `}
       </td>
       <td>
         <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
@@ -197,7 +203,14 @@ function renderDetailModal(data) {
 
   // Technician details + Direct Admin Assign Button (hidden if already Completed, Closed, or Assigned)
   const isFinished = ['Closed', 'Resolved'].includes(f.status);
-  const staffDisplay = f.staff_name ? `<span style="color: var(--cream-gold); font-weight: 700;">${escapeHtml(f.staff_name)}</span> <span style="color: var(--cream-muted);">(${escapeHtml(f.staff_phone || 'Staff')})</span>` : '<span style="color: #94a3b8; font-style: italic;">Unassigned</span>';
+  const staffDisplay = f.staff_name ? `
+    <span style="color: var(--cream-gold); font-weight: 700;">${escapeHtml(f.staff_name)}</span> 
+    <span style="color: var(--cream-muted);">(${escapeHtml(f.staff_phone || 'Staff')})</span>
+  ` : `
+    <span style="color: var(--cream-gold); font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
+      <i data-lucide="clock" style="width: 14px; height: 14px;"></i> All department technicians currently occupied &bull; We will assign soon
+    </span>
+  `;
   document.getElementById('modal-staff').innerHTML = staffDisplay;
 
   document.getElementById('modal-description').textContent = f.description;
@@ -333,7 +346,11 @@ function renderTimeline(currentStatus) {
       } else if (idx === activeIndex) {
         stateClass = 'active';
         dotContent = '●';
-        badgeHtml = '<span class="timeline-active-pill">Current</span>';
+        if (currentStatus === 'Reported' && idx === 1) {
+          badgeHtml = '<span class="timeline-active-pill" style="background: rgba(251, 215, 132, 0.22); color: var(--cream-gold); border: 1px solid rgba(251, 215, 132, 0.55); font-size: 0.64rem;">We will assign soon</span>';
+        } else {
+          badgeHtml = '<span class="timeline-active-pill">Current</span>';
+        }
       } else {
         dotContent = idx + 1;
       }

@@ -240,9 +240,34 @@ function setupFormSubmit() {
     lucide.createIcons();
 
     if (res && res.success) {
-      API.showToast(`Complaint registered successfully! Code: ${res.complaint_code}`, 'success');
       document.getElementById('modal-complaint-code').textContent = res.complaint_code;
       document.getElementById('modal-track-link').href = `track-complaints.html?code=${res.complaint_code}`;
+
+      const msgEl = document.getElementById('modal-success-message');
+      if (res.is_assigned) {
+        API.showToast(`Complaint registered and assigned to ${res.assigned_technician}! [${res.complaint_code}]`, 'success');
+        if (msgEl) {
+          msgEl.innerHTML = `Your fault report has been logged and automatically assigned to <strong>${escapeHtml(res.assigned_technician)}</strong>.`;
+        }
+      } else {
+        API.showToast(`Complaint registered [${res.complaint_code}]! All technicians currently occupied — We will assign soon.`, 'info');
+        if (msgEl) {
+          msgEl.innerHTML = `
+            <div style="background: rgba(251, 215, 132, 0.12); border: 1px solid rgba(251, 215, 132, 0.35); padding: 0.85rem; border-radius: var(--radius-sm); margin-bottom: 0.75rem;">
+              <div style="color: var(--cream-gold); font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem;">
+                ⏳ All Department Technicians Busy
+              </div>
+              <div style="color: var(--cream-pure); font-size: 0.9rem; font-weight: 600;">
+                We will assign soon
+              </div>
+              <div style="color: var(--cream-muted); font-size: 0.78rem; margin-top: 0.25rem;">
+                Your report is queued with high priority and will auto-dispatch as soon as a technician completes their current repair.
+              </div>
+            </div>
+          `;
+        }
+      }
+
       const modal = document.getElementById('success-modal');
       if (modal) {
         modal.classList.add('open', 'active');
