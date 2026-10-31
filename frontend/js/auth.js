@@ -51,10 +51,23 @@ function redirectIfLoggedIn() {
 }
 
 function logout() {
+  window.location.href = '/logout.html';
+}
+
+function performLogout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   sessionStorage.clear();
   window.location.replace('/login.html');
+}
+
+function cancelLogout() {
+  if (isLoggedIn()) {
+    const user = getUser();
+    window.location.replace(getDashboardUrl(user.role));
+  } else {
+    window.location.replace('/index.html');
+  }
 }
 
 // BFCache / History Navigation Guard: Immediately redirect out if unauthenticated on Back/Forward
@@ -288,6 +301,8 @@ window.Auth = {
   requireAuth,
   redirectIfLoggedIn,
   logout,
+  performLogout,
+  cancelLogout,
   renderUserProfile,
   updateNotificationBadge
 };

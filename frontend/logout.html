@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirm Logout – Campus Fix</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .logout-user-box {
+      background: var(--bg-deep, #0b0c1e);
+      border: 1px solid var(--border-cream, rgba(244, 239, 230, 0.12));
+      border-radius: var(--radius-md, 12px);
+      padding: 1.25rem;
+      margin: 1.5rem 0 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-align: left;
+    }
+    .logout-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-full, 9999px);
+      background: linear-gradient(135deg, var(--electric-indigo, #6366f1), #3730a3);
+      color: var(--cream-pure, #fdfbf7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      border: 2px solid var(--border-indigo, rgba(99, 102, 241, 0.3));
+    }
+    .logout-user-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .logout-user-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--cream-pure, #fdfbf7);
+      margin-bottom: 0.2rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .logout-user-role {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-bottom: 0.3rem;
+    }
+    .role-admin { background: rgba(96, 165, 250, 0.18); color: #93c5fd; border: 1px solid rgba(96, 165, 250, 0.35); }
+    .role-staff { background: rgba(52, 211, 153, 0.18); color: #6ee7b7; border: 1px solid rgba(52, 211, 153, 0.35); }
+    .role-faculty { background: rgba(251, 215, 132, 0.18); color: #fde68a; border: 1px solid rgba(251, 215, 132, 0.35); }
+    .role-student { background: rgba(251, 215, 132, 0.18); color: #fde68a; border: 1px solid rgba(251, 215, 132, 0.35); }
+    .logout-user-email {
+      font-size: 0.8rem;
+      color: var(--cream-muted, #b0a99c);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .logout-actions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .btn-confirm-logout {
+      width: 100%;
+      padding: 0.95rem 1.5rem;
+      border-radius: var(--radius-sm, 8px);
+      font-size: 1rem;
+      font-weight: 600;
+      border: 1px solid #ef4444;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 18px rgba(239, 68, 68, 0.28);
+    }
+    .btn-confirm-logout:hover {
+      background: linear-gradient(135deg, #f87171, #ef4444);
+      box-shadow: 0 6px 24px rgba(239, 68, 68, 0.45);
+      transform: translateY(-1px);
+    }
+    .btn-cancel-logout {
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      border-radius: var(--radius-sm, 8px);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: 1px solid var(--border-cream, rgba(244, 239, 230, 0.14));
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--cream-soft, #f4efe6);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.25s ease;
+    }
+    .btn-cancel-logout:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: var(--cream-gold, #fbd784);
+      color: var(--cream-pure, #fdfbf7);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-brand">
+      <div class="nav-logo-icon">
+        <i data-lucide="wrench"></i>
+      </div>
+      <span>Campus Fix</span>
+    </a>
+    <div class="nav-actions">
+      <a href="javascript:void(0)" onclick="Auth.cancelLogout()" class="btn btn-outline">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+        <span>Return to Dashboard</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Logout Confirmation Container -->
+  <div class="auth-wrapper">
+    <div class="auth-page-header">
+      <div class="auth-badge-icon" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35); color: #f87171;">
+        <i data-lucide="log-out" style="width: 26px; height: 26px;"></i>
+      </div>
+      <h1>Sign Out</h1>
+      <p>Do you want to log out of your Campus Fix session?</p>
+    </div>
+
+    <div class="auth-card" style="text-align: center;">
+      <!-- Active User Profile Preview -->
+      <div id="logout-user-preview" class="logout-user-box" style="display: none;">
+        <div id="logout-user-avatar" class="logout-avatar">U</div>
+        <div class="logout-user-info">
+          <div id="logout-user-name" class="logout-user-name">User</div>
+          <span id="logout-user-role" class="logout-user-role role-student">STUDENT</span>
+          <div id="logout-user-email" class="logout-user-email">user@vnrvjiet.in</div>
+        </div>
+      </div>
+
+      <p style="color: var(--cream-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 1.5rem;">
+        You will need to re-enter your campus credentials the next time you access your maintenance dashboard.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="logout-actions-grid">
+        <button type="button" class="btn-confirm-logout" onclick="confirmLogout()">
+          <i data-lucide="log-out" style="width: 18px; height: 18px;"></i>
+          <span>Yes, Log Out</span>
+        </button>
+
+        <button type="button" class="btn-cancel-logout" onclick="Auth.cancelLogout()">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+          <span>Cancel & Stay Signed In</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Populate active user info on page load
+    const user = Auth.getUser();
+    if (user) {
+      const preview = document.getElementById('logout-user-preview');
+      const nameEl = document.getElementById('logout-user-name');
+      const emailEl = document.getElementById('logout-user-email');
+      const roleEl = document.getElementById('logout-user-role');
+      const avatarEl = document.getElementById('logout-user-avatar');
+
+      if (preview) preview.style.display = 'flex';
+      if (nameEl) nameEl.textContent = user.full_name;
+      if (emailEl) emailEl.textContent = user.email;
+
+      if (avatarEl) {
+        const initials = user.full_name
+          .split(' ')
+          .filter(n => n.length > 0)
+          .map(n => n[0])
+          .join('')
+          .substring(0, 2)
+          .toUpperCase();
+        avatarEl.textContent = initials || 'U';
+      }
+
+      if (roleEl) {
+        roleEl.className = 'logout-user-role role-' + user.role;
+        roleEl.textContent = user.role.toUpperCase();
+      }
+    } else {
+      // If already logged out, immediately direct to login
+      window.location.replace('/login.html');
+    }
+
+    function confirmLogout() {
+      Auth.performLogout();
+    }
+  </script>
+</body>
+</html>
