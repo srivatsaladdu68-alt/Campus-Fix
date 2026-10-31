@@ -91,15 +91,35 @@ function renderTasks(tasks) {
       </td>
       <td>${API.getStatusBadge(t.status)}</td>
       <td>
-        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center;">
+        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; align-items: center;">
           ${t.status === 'Assigned' ? `
-            <button class="btn btn-secondary btn-sm" onclick="startTaskQuick(${t.fault_id})">
-              <i data-lucide="play" style="width: 14px; height: 14px;"></i> Start
+            <button class="btn btn-gold btn-sm" onclick="verifyTaskQuick(${t.fault_id})" title="Verify fault on-site">
+              <i data-lucide="check-check" style="width: 14px; height: 14px;"></i> Verify
+            </button>
+            <button class="btn btn-outline btn-sm" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171;" onclick="openWrongMsgModal(${t.fault_id})" title="Flag as Wrong Message / Invalid Report">
+              <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i> Wrong Msg
+            </button>
+          ` : ''}
+          ${t.status === 'Verified' ? `
+            <button class="btn btn-secondary btn-sm" onclick="startTaskQuick(${t.fault_id})" title="Start repair work">
+              <i data-lucide="play" style="width: 14px; height: 14px;"></i> Start Work
+            </button>
+            <button class="btn btn-outline btn-sm" style="border-color: rgba(239, 68, 68, 0.45); color: #f87171;" onclick="openWrongMsgModal(${t.fault_id})" title="Flag as Wrong Message / Invalid Report">
+              <i data-lucide="alert-circle" style="width: 14px; height: 14px;"></i> Wrong Msg
+            </button>
+          ` : ''}
+          ${t.status === 'In Progress' ? `
+            <button class="btn btn-gold btn-sm" onclick="resolveTaskQuick(${t.fault_id})" title="Mark task as resolved">
+              <i data-lucide="check" style="width: 14px; height: 14px;"></i> Resolve
             </button>
           ` : ''}
           ${t.status === 'Closed' ? `
             <span class="badge" style="background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.4); padding: 5px 12px; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 5px;">
               <i data-lucide="check-circle-2" style="width: 15px; height: 15px; color: #34d399;"></i> Completed
+            </span>
+          ` : t.status === 'Rejected' ? `
+            <span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); padding: 5px 12px; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 5px;">
+              <i data-lucide="x-circle" style="width: 15px; height: 15px; color: #f87171;"></i> Wrong Msg
             </span>
           ` : `
             <button class="btn btn-outline btn-sm" onclick="openTaskModal(${t.fault_id})">
@@ -114,11 +134,26 @@ function renderTasks(tasks) {
   lucide.createIcons();
 }
 
+// Quick Verify Task on-site
+async function verifyTaskQuick(faultId) {
+  const res = await API.call(`/faults/${faultId}/status`, 'PATCH', {
+    status: 'Verified',
+    notes: 'Technician inspected the reported location and verified the fault on-site.'
+  });
+
+  if (res && res.success) {
+    API.showToast('Fault verified on-site successfully.', 'success');
+    await loadStaffDashboard();
+  } else {
+    API.showToast(res.message || 'Failed to verify task.', 'error');
+  }
+}
+
 // Quick Start Task
 async function startTaskQuick(faultId) {
   const res = await API.call(`/faults/${faultId}/status`, 'PATCH', {
     status: 'In Progress',
-    notes: 'Technician accepted the assignment and began inspection/work.'
+    notes: 'Technician began troubleshooting and repair work.'
   });
 
   if (res && res.success) {
@@ -126,6 +161,69 @@ async function startTaskQuick(faultId) {
     await loadStaffDashboard();
   } else {
     API.showToast(res.message || 'Failed to update task status.', 'error');
+  }
+}
+
+// Quick Resolve Task
+async function resolveTaskQuick(faultId) {
+  const res = await API.call(`/faults/${faultId}/status`, 'PATCH', {
+    status: 'Resolved',
+    notes: 'Technician completed the repair and tested equipment operation.'
+  });
+
+  if (res && res.success) {
+    API.showToast('Task marked as Resolved.', 'success');
+    await loadStaffDashboard();
+  } else {
+    API.showToast(res.message || 'Failed to resolve task.', 'error');
+  }
+}
+
+// Wrong Message Modal Handlers
+let wrongMsgTaskId = null;
+
+function openWrongMsgModal(faultId) {
+  const task = staffTasks.find(t => t.fault_id === faultId);
+  if (!task) return;
+  wrongMsgTaskId = faultId;
+  document.getElementById('wrong-msg-code').textContent = task.complaint_code;
+  document.getElementById('wrong-msg-preset').value = '';
+  document.getElementById('wrong-msg-reason').value = '';
+  document.getElementById('wrong-msg-modal').classList.add('open');
+  lucide.createIcons();
+}
+
+function closeWrongMsgModal() {
+  document.getElementById('wrong-msg-modal').classList.remove('open');
+  wrongMsgTaskId = null;
+}
+
+function onWrongPresetChange() {
+  const preset = document.getElementById('wrong-msg-preset').value;
+  if (preset && preset !== 'Other reason') {
+    document.getElementById('wrong-msg-reason').value = preset;
+  }
+}
+
+async function submitWrongMessage() {
+  if (!wrongMsgTaskId) return;
+  const reason = document.getElementById('wrong-msg-reason').value.trim();
+  if (!reason) {
+    API.showToast('Please provide a reason why this is a wrong message / invalid report.', 'error');
+    return;
+  }
+
+  const res = await API.call(`/faults/${wrongMsgTaskId}/status`, 'PATCH', {
+    status: 'Rejected',
+    notes: `Wrong Message / Invalid Report: ${reason}`
+  });
+
+  if (res && res.success) {
+    API.showToast('Complaint flagged as Wrong Message / Invalid and closed.', 'success');
+    closeWrongMsgModal();
+    await loadStaffDashboard();
+  } else {
+    API.showToast(res.message || 'Failed to update status.', 'error');
   }
 }
 
@@ -142,12 +240,16 @@ function openTaskModal(faultId) {
 
   // Set default status select
   const statusSelect = document.getElementById('task-action-status');
-  if (task.status === 'In Progress') {
+  if (task.status === 'Assigned') {
+    statusSelect.value = 'Verified';
+  } else if (task.status === 'Verified') {
+    statusSelect.value = 'In Progress';
+  } else if (task.status === 'In Progress') {
     statusSelect.value = 'Resolved';
   } else if (task.status === 'Resolved') {
     statusSelect.value = 'Closed';
   } else {
-    statusSelect.value = 'In Progress';
+    statusSelect.value = 'Verified';
   }
 
   document.getElementById('task-action-notes').value = '';

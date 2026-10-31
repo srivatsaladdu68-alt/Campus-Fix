@@ -422,11 +422,11 @@ function updateStatus(req, res) {
       if (fault.assigned_to !== req.user.user_id) {
         return res.status(403).json({ success: false, message: 'Staff can only update tasks assigned to them.' });
       }
-      const allowedStaffTransitions = ['In Progress', 'Resolved', 'Closed'];
+      const allowedStaffTransitions = ['Verified', 'In Progress', 'Resolved', 'Closed', 'Rejected'];
       if (!allowedStaffTransitions.includes(status)) {
         return res.status(403).json({
           success: false,
-          message: 'Staff members can only transition tasks to "In Progress", "Resolved", or "Closed".'
+          message: 'Staff members can only transition tasks to "Verified", "In Progress", "Resolved", "Closed", or "Rejected" (Wrong Message).'
         });
       }
     } else if (req.user.role !== 'admin') {
@@ -483,11 +483,25 @@ function updateStatus(req, res) {
     }
 
     // Notifications
-    createNotification(
-      fault.reported_by,
-      faultId,
-      `Your complaint [${fault.complaint_code}] status has been updated to "${status}".`
-    );
+    if (status === 'Verified') {
+      createNotification(
+        fault.reported_by,
+        faultId,
+        `Your complaint [${fault.complaint_code}] has been inspected and verified on-site by technician ${req.user.full_name}.`
+      );
+    } else if (status === 'Rejected') {
+      createNotification(
+        fault.reported_by,
+        faultId,
+        `Your complaint [${fault.complaint_code}] was flagged as Wrong Message / Invalid: "${notes || 'No fault detected or wrong location'}" by technician ${req.user.full_name}.`
+      );
+    } else {
+      createNotification(
+        fault.reported_by,
+        faultId,
+        `Your complaint [${fault.complaint_code}] status has been updated to "${status}".`
+      );
+    }
 
     if (fault.assigned_to && fault.assigned_to !== req.user.user_id) {
       createNotification(

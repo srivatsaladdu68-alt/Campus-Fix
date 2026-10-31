@@ -191,15 +191,17 @@
           <div class="form-group">
             <label for="task-action-status">Update Task Status *</label>
             <select id="task-action-status" class="form-control" required>
-              <option value="In Progress">Start Work (In Progress)</option>
-              <option value="Resolved">Resolve Task (Resolved)</option>
-              <option value="Closed">Complete Task (Closed)</option>
+              <option value="Verified">✓ Verify Problem On-Site (Verified)</option>
+              <option value="In Progress">⚡ Start Repair Work (In Progress)</option>
+              <option value="Resolved">🔧 Mark as Repaired (Resolved)</option>
+              <option value="Closed">✅ Confirm & Close (Closed)</option>
+              <option value="Rejected">❌ Flag as Wrong Message / Invalid (Rejected)</option>
             </select>
           </div>
 
           <div class="form-group">
             <label for="task-action-notes">Repair Notes & Execution Details *</label>
-            <textarea id="task-action-notes" class="form-control" rows="3" placeholder="Describe components checked, parts replaced, or troubleshooting performed..." required></textarea>
+            <textarea id="task-action-notes" class="form-control" rows="3" placeholder="Describe inspection findings, parts replaced, or details if flagging as wrong message..." required></textarea>
           </div>
 
           <div class="form-group" style="background: rgba(251, 215, 132, 0.08); border: 1px solid rgba(251, 215, 132, 0.25); padding: 0.85rem; border-radius: var(--radius-md);">
@@ -217,6 +219,46 @@
         <button type="button" class="btn btn-outline" onclick="closeTaskModal()">Cancel</button>
         <button type="button" class="btn btn-gold" id="save-task-action-btn">
           Save Updates
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flag Wrong Message / Invalid Report Dedicated Modal -->
+  <div class="modal-overlay" id="wrong-msg-modal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <div>
+          <span class="complaint-code-tag" id="wrong-msg-code" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border-color: rgba(239, 68, 68, 0.35);">CF-2026-XXXX</span>
+          <h3 style="margin-top: 0.35rem; color: #f87171;">Flag as Wrong Message / Invalid</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeWrongMsgModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--cream-muted); margin-bottom: 1rem;">
+          If this complaint was reported by mistake, contains false information, or no fault was found on-site, specify the reason below. The report will be closed as invalid.
+        </p>
+        <div class="form-group">
+          <label for="wrong-msg-preset">Reason Preset</label>
+          <select id="wrong-msg-preset" class="form-control" style="margin-bottom: 0.75rem;" onchange="onWrongPresetChange()">
+            <option value="">Select quick reason...</option>
+            <option value="No fault found on-site / Equipment is functioning normally">No fault found on-site / Equipment is functioning normally</option>
+            <option value="Wrong room number or location specified">Wrong room number or location specified</option>
+            <option value="False / spam report">False / spam report</option>
+            <option value="Sent to wrong trade / Misdirected complaint">Sent to wrong trade / Misdirected complaint</option>
+            <option value="Duplicate or accidental submission">Duplicate or accidental submission</option>
+            <option value="Other reason">Other reason...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="wrong-msg-reason">Detailed Explanation *</label>
+          <textarea id="wrong-msg-reason" class="form-control" rows="3" placeholder="Explain details so administration and the student/faculty understand why this was flagged as a wrong message..." required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" onclick="closeWrongMsgModal()">Cancel</button>
+        <button type="button" class="btn btn-sm" style="background: #ef4444; color: #fff; border: none; padding: 0.65rem 1.25rem; font-weight: 700; border-radius: var(--radius-sm); display: inline-flex; align-items: center; gap: 0.4rem;" onclick="submitWrongMessage()">
+          <i data-lucide="slash" style="width: 14px; height: 14px;"></i> Confirm Wrong Message
         </button>
       </div>
     </div>
