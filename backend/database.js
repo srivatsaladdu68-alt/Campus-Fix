@@ -135,6 +135,12 @@ function initSchema() {
 
     // Remove iot_sensor_events table if present
     db.exec("DROP TABLE IF EXISTS iot_sensor_events");
+
+    // Ensure B Block exists
+    const hasBBlock = db.prepare("SELECT COUNT(*) as count FROM buildings WHERE building_code = 'B-BLOCK'").get().count;
+    if (hasBBlock === 0) {
+      db.prepare("INSERT INTO buildings (building_name, building_code) VALUES (?, ?)").run('B Block', 'B-BLOCK');
+    }
   } catch (err) {
     console.error('Migration notice:', err.message);
   }
@@ -152,6 +158,7 @@ function seedDatabase() {
       ['E Block', 'E-BLOCK'],
       ['D Block', 'D-BLOCK'],
       ['C Block', 'C-BLOCK'],
+      ['B Block', 'B-BLOCK'],
       ['A Block', 'A-BLOCK'],
       ['PG Block', 'PG-BLOCK'],
       ['Canteen', 'CANTEEN'],

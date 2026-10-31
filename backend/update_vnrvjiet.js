@@ -19,6 +19,7 @@ const vnrvjietBuildings = [
   ['E Block', 'E-BLOCK'],
   ['D Block', 'D-BLOCK'],
   ['C Block', 'C-BLOCK'],
+  ['B Block', 'B-BLOCK'],
   ['A Block', 'A-BLOCK'],
   ['PG Block', 'PG-BLOCK'],
   ['Canteen', 'CANTEEN'],
