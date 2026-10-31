@@ -161,14 +161,15 @@ For demonstration and testing convenience, the login page features **1-click qui
 | **Administrator** | `admin@vnrvjiet.in` | `Admin@123` | Campus Administrator |
 | **Electrician 1** | `staff.prakash@vnrvjiet.in` | `Staff@123` | Prakash (Electrician - STF-ELEC-01) |
 | **Electrician 2** | `staff.naresh@vnrvjiet.in` | `Staff@123` | Naresh (Electrician - STF-ELEC-02) |
-| **Plumber 1** | `staff.santosh@vnrvjiet.in` | `Staff@123` | Santosh (Plumber - STF-PLUM-02) |
+| **Plumber 1** | `staff.ramesh@vnrvjiet.in` | `Staff@123` | Ramesh (Plumber - STF-PLUM-02) |
 | **Plumber 2** | `staff.venkatesh@vnrvjiet.in` | `Staff@123` | Venkatesh (Plumber - STF-PLUM-03) |
 | **Carpenter 1** | `staff.ramarao@vnrvjiet.in` | `Staff@123` | Rama Rao (Carpenter - STF-CARP-03) |
 | **Carpenter 2** | `staff.krishna@vnrvjiet.in` | `Staff@123` | Krishna (Carpenter - STF-CARP-04) |
 | **Lab Technician 1** | `staff.harish@vnrvjiet.in` | `Staff@123` | Harish (Lab Technician - STF-LAB-04) |
 | **Lab Technician 2** | `staff.suresh@vnrvjiet.in` | `Staff@123` | Suresh (Lab Technician - STF-LAB-05) |
-| **Faculty Member** | `prof.pratyusha@vnrvjiet.in` | `Faculty@123` | Prof. Pratyusha (Faculty - FAC-CS-102) |
-| **Student** | `student.srivatsa@vnrvjiet.in` | `Student@123` | Srivatsa (Student - 22071A0501) |
+| **Faculty Member** | `prof.prathyusha@vnrvjiet.in` | `Faculty@123` | Prof. Prathyusha (Faculty - FAC-CS-102) |
+| **Student 1** | `student.srivatsa@vnrvjiet.in` | `Student@123` | Srivatsa (Student - 25071A6671) |
+| **Student 2** | `student.sidharth@vnrvjiet.in` | `Student@123` | Sidharth (Student - 25071A03B2) |
 
 ---
 

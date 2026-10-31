@@ -26,6 +26,7 @@ const demoEmails = [
   'admin@vnrvjiet.in',
   'staff.prakash@vnrvjiet.in',
   'staff.naresh@vnrvjiet.in',
+  'staff.ramesh@vnrvjiet.in',
   'staff.santosh@vnrvjiet.in',
   'staff.venkatesh@vnrvjiet.in',
   'staff.ramarao@vnrvjiet.in',
@@ -39,7 +40,9 @@ const demoEmails = [
   'staff.david@vnrvjiet.in',
   'staff.kevin@vnrvjiet.in',
   'student.srivatsa@vnrvjiet.in',
+  'student.sidharth@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
+  'prof.prathyusha@vnrvjiet.in',
   'prof.pratyusha@vnrvjiet.in',
   'prof.sharma@vnrvjiet.in'
 ];
@@ -62,8 +65,8 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Santosh (Plumber)', role = 'staff', email = 'staff.santosh@vnrvjiet.in', staff_id = 'STF-PLUM-02', approval_status = 'approved', is_active = 1, department = 'Plumbing & Facilities'
-  WHERE email IN ('staff.sarah@vnrvjiet.in', 'staff.santosh@vnrvjiet.in') OR staff_id = 'STF-PLUM-02'
+  SET full_name = 'Ramesh (Plumber)', role = 'staff', email = 'staff.ramesh@vnrvjiet.in', staff_id = 'STF-PLUM-02', approval_status = 'approved', is_active = 1, department = 'Plumbing & Facilities'
+  WHERE email IN ('staff.sarah@vnrvjiet.in', 'staff.santosh@vnrvjiet.in', 'staff.ramesh@vnrvjiet.in') OR staff_id = 'STF-PLUM-02'
 `).run();
 
 db.prepare(`
@@ -80,14 +83,20 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Srivatsa', email = 'student.srivatsa@vnrvjiet.in', role = 'student', student_id = '22071A0501', roll_number = '22071A0501', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  SET full_name = 'Srivatsa', email = 'student.srivatsa@vnrvjiet.in', role = 'student', student_id = '25071A6671', roll_number = '25071A6671', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
   WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number = '22071A0501'))
 `).run();
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Prof. Pratyusha', email = 'prof.pratyusha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-CS-102', roll_number = 'FAC-CS-102', staff_id = 'FAC-CS-102', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
-  WHERE email IN ('prof.sharma@vnrvjiet.in', 'prof.pratyusha@vnrvjiet.in') OR (role = 'faculty' AND full_name LIKE '%Sharma%')
+  SET full_name = 'Sidharth', email = 'student.sidharth@vnrvjiet.in', role = 'student', student_id = '25071A03B2', roll_number = '25071A03B2', approval_status = 'approved', is_active = 1, department = 'Mechanical Engineering'
+  WHERE email = 'student.sidharth@vnrvjiet.in' OR roll_number = '25071A0875'
+`).run();
+
+db.prepare(`
+  UPDATE users 
+  SET full_name = 'Prof. Prathyusha', email = 'prof.prathyusha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-CS-102', roll_number = 'FAC-CS-102', staff_id = 'FAC-CS-102', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  WHERE email IN ('prof.sharma@vnrvjiet.in', 'prof.pratyusha@vnrvjiet.in', 'prof.prathyusha@vnrvjiet.in') OR (role = 'faculty' AND (full_name LIKE '%Sharma%' OR full_name LIKE '%Pratyusha%'))
 `).run();
 
 // 5. Re-enable foreign keys
