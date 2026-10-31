@@ -178,9 +178,13 @@ function seedDatabase() {
   const coreUsers = [
     ['Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration'],
     ['Prakash (Electrician)', 'staff.prakash@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance'],
+    ['Naresh (Electrician)', 'staff.naresh@vnrvjiet.in', '+91 9876543217', staffPass, 'staff', null, null, 'STF-ELEC-02', 'Electrical & IT Maintenance'],
     ['Santosh (Plumber)', 'staff.santosh@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities'],
+    ['Venkatesh (Plumber)', 'staff.venkatesh@vnrvjiet.in', '+91 9876543218', staffPass, 'staff', null, null, 'STF-PLUM-03', 'Plumbing & Facilities'],
     ['Rama Rao (Carpenter)', 'staff.ramarao@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance'],
+    ['Krishna (Carpenter)', 'staff.krishna@vnrvjiet.in', '+91 9876543219', staffPass, 'staff', null, null, 'STF-CARP-04', 'Carpentry & Furniture Maintenance'],
     ['Harish (Lab Technician)', 'staff.harish@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-LAB-04', 'Laboratory & IT Infrastructure'],
+    ['Suresh (Lab Technician)', 'staff.suresh@vnrvjiet.in', '+91 9876543220', staffPass, 'staff', null, null, 'STF-LAB-05', 'Laboratory & IT Infrastructure'],
     ['Prof. Pratyusha', 'prof.pratyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
     ['Srivatsa', 'student.srivatsa@vnrvjiet.in', '+91 9876543214', userPass, 'student', '22071A0501', '22071A0501', null, 'Computer Science & Engineering']
   ];

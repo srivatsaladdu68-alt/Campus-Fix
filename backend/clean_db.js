@@ -25,9 +25,13 @@ db.exec(`
 const demoEmails = [
   'admin@vnrvjiet.in',
   'staff.prakash@vnrvjiet.in',
+  'staff.naresh@vnrvjiet.in',
   'staff.santosh@vnrvjiet.in',
+  'staff.venkatesh@vnrvjiet.in',
   'staff.ramarao@vnrvjiet.in',
+  'staff.krishna@vnrvjiet.in',
   'staff.harish@vnrvjiet.in',
+  'staff.suresh@vnrvjiet.in',
   'staff.abhipray@vnrvjiet.in',
   'staff.lakshith@vnrvjiet.in',
   'staff.mike@vnrvjiet.in',
