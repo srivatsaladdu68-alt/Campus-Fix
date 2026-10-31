@@ -329,11 +329,8 @@ async function loadAllComplaints() {
             </div>
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})">
-              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> Assign Technician
-            </button>
-            <a href="track-complaints.html?code=${encodeURIComponent(f.complaint_code)}" class="btn btn-outline btn-sm" title="View Full Details">
-              <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+            <a href="track-complaints.html?code=${encodeURIComponent(f.complaint_code)}" class="btn btn-outline btn-sm" title="View Full Details" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+              <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
             </a>
           </div>
         </div>
@@ -394,19 +391,9 @@ async function loadAllComplaints() {
       </td>
       <td>${API.getStatusBadge(f.status)}</td>
       <td>
-        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
-          ${!['Closed', 'Resolved', 'Rejected'].includes(f.status) ? `
-            <button class="btn btn-gold btn-sm" onclick="openAssignModal(${f.fault_id})" title="${f.assigned_to ? 'Reassign Staff & Deadline' : 'Assign Staff & Deadline'}">
-              <i data-lucide="user-check" style="width: 14px; height: 14px;"></i> ${f.assigned_to ? 'Reassign' : 'Assign'}
-            </button>
-          ` : ''}
-          <button class="btn btn-outline btn-sm" onclick="openStatusModal(${f.fault_id})" title="Change Status">
-            <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> Status
-          </button>
-          <a href="track-complaints.html?code=${encodeURIComponent(f.complaint_code)}" class="btn btn-outline btn-sm" title="View Full Details">
-            <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
-          </a>
-        </div>
+        <a href="track-complaints.html?code=${encodeURIComponent(f.complaint_code)}" class="btn btn-outline btn-sm" title="View Full Details" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+          <i data-lucide="eye" style="width: 14px; height: 14px;"></i> View
+        </a>
       </td>
     </tr>
   `).join('');
