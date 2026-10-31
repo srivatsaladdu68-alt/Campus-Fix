@@ -200,8 +200,9 @@ function setupFormSubmit() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const title = document.getElementById('title').value.trim();
+    const titleEl = document.getElementById('title');
     const item_name = document.getElementById('item_name').value.trim();
+    const title = titleEl && titleEl.value.trim() ? titleEl.value.trim() : item_name;
     const category = document.getElementById('category').value;
     const priority = document.getElementById('priority').value;
     const building_id = document.getElementById('building_id').value;
@@ -210,14 +211,14 @@ function setupFormSubmit() {
     const description = document.getElementById('description').value.trim();
     const fileInput = document.getElementById('fault-image');
 
-    if (!title || !category || !building_id || !floor_number || !room_number || !description) {
+    if (!item_name || !category || !building_id || !floor_number || !room_number || !description) {
       API.showToast('Please fill out all required fields marked with *', 'error');
       return;
     }
 
     const formData = new FormData();
-    formData.append('title', title);
-    formData.append('item_name', item_name || title);
+    formData.append('title', title || item_name);
+    formData.append('item_name', item_name);
     formData.append('category', category);
     formData.append('priority', priority);
     formData.append('building_id', building_id);
@@ -272,7 +273,8 @@ function setupFormSubmit() {
 function quickFillEquipment(itemName, category, title, priority) {
   document.getElementById('item_name').value = itemName;
   document.getElementById('category').value = category;
-  document.getElementById('title').value = title;
+  const titleEl = document.getElementById('title');
+  if (titleEl) titleEl.value = title || itemName;
   if (priority) {
     document.getElementById('priority').value = priority;
   }

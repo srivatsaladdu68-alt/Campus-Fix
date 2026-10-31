@@ -135,16 +135,10 @@
           </div>
 
           <form id="report-fault-form" enctype="multipart/form-data">
-            <!-- Fault Title & Specific Item -->
-            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.25rem;">
-              <div class="form-group">
-                <label for="title">Fault Summary / Problem Title *</label>
-                <input type="text" id="title" class="form-control" placeholder="e.g. Broken study chair base or Leaking washroom pipe" required>
-              </div>
-              <div class="form-group">
-                <label for="item_name">Specific Item / Equipment *</label>
-                <input type="text" id="item_name" class="form-control" placeholder="e.g. Chair, Water Pipe, Projector, AC, Fan" required>
-              </div>
+            <!-- Specific Item / Equipment -->
+            <div class="form-group">
+              <label for="item_name">Specific Item / Equipment *</label>
+              <input type="text" id="item_name" class="form-control" placeholder="e.g. Chair, Water Pipe, Projector, AC, Fan" required>
             </div>
 
             <!-- Category & Urgency -->

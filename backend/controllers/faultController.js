@@ -24,12 +24,13 @@ function calculateDeadline(priority) {
 // Submit a new fault report
 function createFault(req, res) {
   try {
-    const { title, item_name, description, category, building_id, floor_number, room_number, priority } = req.body;
+    const { item_name, description, category, building_id, floor_number, room_number, priority } = req.body;
+    const title = (req.body.title || item_name || 'Campus Fault').trim();
 
     if (!title || !description || !category || !building_id || !floor_number || !room_number) {
       return res.status(400).json({
         success: false,
-        message: 'Please fill in all required fields: title, description, category, building, floor, and room.'
+        message: 'Please fill in all required fields: item/title, description, category, building, floor, and room.'
       });
     }
 
