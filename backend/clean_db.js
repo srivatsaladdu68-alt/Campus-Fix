@@ -26,13 +26,21 @@ const demoEmails = [
   'admin@vnrvjiet.in',
   'staff.prakash@vnrvjiet.in',
   'staff.naresh@vnrvjiet.in',
+  'staff.mahesh@vnrvjiet.in',
+  'staff.gopal@vnrvjiet.in',
   'staff.ramesh@vnrvjiet.in',
   'staff.santosh@vnrvjiet.in',
   'staff.venkatesh@vnrvjiet.in',
+  'staff.siva@vnrvjiet.in',
+  'staff.srinu@vnrvjiet.in',
   'staff.ramarao@vnrvjiet.in',
   'staff.krishna@vnrvjiet.in',
+  'staff.apparao@vnrvjiet.in',
+  'staff.mohan@vnrvjiet.in',
   'staff.harish@vnrvjiet.in',
   'staff.suresh@vnrvjiet.in',
+  'staff.ravi@vnrvjiet.in',
+  'staff.kiran@vnrvjiet.in',
   'staff.abhipray@vnrvjiet.in',
   'staff.lakshith@vnrvjiet.in',
   'staff.mike@vnrvjiet.in',
@@ -41,11 +49,16 @@ const demoEmails = [
   'staff.kevin@vnrvjiet.in',
   '25071a6671@vnrvjiet.in',
   '25071a03b2@vnrvjiet.in',
+  '26075a0309@vnrvjiet.in',
+  '25071a03b1@vnrvjiet.in',
+  '25071a6672@vnrvjiet.in',
   'student.srivatsa@vnrvjiet.in',
   'student.sidharth@vnrvjiet.in',
   'student.alex@vnrvjiet.in',
   'prof.prathyusha@vnrvjiet.in',
   'prof.pratyusha@vnrvjiet.in',
+  'prof.kvrao@vnrvjiet.in',
+  'prof.sneha@vnrvjiet.in',
   'prof.sharma@vnrvjiet.in'
 ];
 
@@ -97,8 +110,38 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
+  SET full_name = 'Anji', email = '26075a0309@vnrvjiet.in', role = 'student', student_id = '26075A0309', roll_number = '26075A0309', approval_status = 'approved', is_active = 1, department = 'Mechanical Engineering'
+  WHERE email = '26075a0309@vnrvjiet.in' OR roll_number = '26075A0309'
+`).run();
+
+db.prepare(`
+  UPDATE users 
+  SET full_name = 'Bhuvanesh', email = '25071a03b1@vnrvjiet.in', role = 'student', student_id = '25071A03B1', roll_number = '25071A03B1', approval_status = 'approved', is_active = 1, department = 'Mechanical Engineering'
+  WHERE email = '25071a03b1@vnrvjiet.in' OR roll_number = '25071A03B1'
+`).run();
+
+db.prepare(`
+  UPDATE users 
+  SET full_name = 'Srinidhi', email = '25071a6672@vnrvjiet.in', role = 'student', student_id = '25071A6672', roll_number = '25071A6672', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  WHERE email = '25071a6672@vnrvjiet.in' OR roll_number = '25071A6672'
+`).run();
+
+db.prepare(`
+  UPDATE users 
   SET full_name = 'Prof. Prathyusha', email = 'prof.prathyusha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-CS-102', roll_number = 'FAC-CS-102', staff_id = 'FAC-CS-102', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
-  WHERE email IN ('prof.sharma@vnrvjiet.in', 'prof.pratyusha@vnrvjiet.in', 'prof.prathyusha@vnrvjiet.in') OR (role = 'faculty' AND (full_name LIKE '%Sharma%' OR full_name LIKE '%Pratyusha%'))
+  WHERE email IN ('prof.sharma@vnrvjiet.in', 'prof.pratyusha@vnrvjiet.in', 'prof.prathyusha@vnrvjiet.in') OR (role = 'faculty' AND (full_name LIKE '%Sharma%' OR full_name LIKE '%Prathyusha%'))
+`).run();
+
+db.prepare(`
+  UPDATE users 
+  SET full_name = 'Prof. K. V. Rao', email = 'prof.kvrao@vnrvjiet.in', role = 'faculty', student_id = 'FAC-ECE-103', roll_number = 'FAC-ECE-103', staff_id = 'FAC-ECE-103', approval_status = 'approved', is_active = 1, department = 'Electronics & Communication Engineering'
+  WHERE email = 'prof.kvrao@vnrvjiet.in' OR student_id = 'FAC-ECE-103'
+`).run();
+
+db.prepare(`
+  UPDATE users 
+  SET full_name = 'Prof. Sneha Reddy', email = 'prof.sneha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-IT-104', roll_number = 'FAC-IT-104', staff_id = 'FAC-IT-104', approval_status = 'approved', is_active = 1, department = 'Information Technology'
+  WHERE email = 'prof.sneha@vnrvjiet.in' OR student_id = 'FAC-IT-104'
 `).run();
 
 // 5. Re-enable foreign keys

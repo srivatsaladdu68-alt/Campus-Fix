@@ -186,14 +186,28 @@ function seedDatabase() {
     ['Administrator', 'admin@vnrvjiet.in', '+91 9876543210', adminPass, 'admin', null, null, null, 'Campus Administration'],
     ['Prakash (Electrician)', 'staff.prakash@vnrvjiet.in', '+91 9876543211', staffPass, 'staff', null, null, 'STF-ELEC-01', 'Electrical & IT Maintenance'],
     ['Naresh (Electrician)', 'staff.naresh@vnrvjiet.in', '+91 9876543217', staffPass, 'staff', null, null, 'STF-ELEC-02', 'Electrical & IT Maintenance'],
+    ['Mahesh (Electrician)', 'staff.mahesh@vnrvjiet.in', '+91 9876543226', staffPass, 'staff', null, null, 'STF-ELEC-03', 'Electrical & IT Maintenance'],
+    ['Gopal (Electrician)', 'staff.gopal@vnrvjiet.in', '+91 9876543227', staffPass, 'staff', null, null, 'STF-ELEC-04', 'Electrical & IT Maintenance'],
     ['Ramesh (Plumber)', 'staff.ramesh@vnrvjiet.in', '+91 9876543212', staffPass, 'staff', null, null, 'STF-PLUM-02', 'Plumbing & Facilities'],
     ['Venkatesh (Plumber)', 'staff.venkatesh@vnrvjiet.in', '+91 9876543218', staffPass, 'staff', null, null, 'STF-PLUM-03', 'Plumbing & Facilities'],
+    ['Siva (Plumber)', 'staff.siva@vnrvjiet.in', '+91 9876543228', staffPass, 'staff', null, null, 'STF-PLUM-04', 'Plumbing & Facilities'],
+    ['Srinu (Plumber)', 'staff.srinu@vnrvjiet.in', '+91 9876543229', staffPass, 'staff', null, null, 'STF-PLUM-05', 'Plumbing & Facilities'],
     ['Rama Rao (Carpenter)', 'staff.ramarao@vnrvjiet.in', '+91 9876543215', staffPass, 'staff', null, null, 'STF-CARP-03', 'Carpentry & Furniture Maintenance'],
     ['Krishna (Carpenter)', 'staff.krishna@vnrvjiet.in', '+91 9876543219', staffPass, 'staff', null, null, 'STF-CARP-04', 'Carpentry & Furniture Maintenance'],
+    ['Appa Rao (Carpenter)', 'staff.apparao@vnrvjiet.in', '+91 9876543230', staffPass, 'staff', null, null, 'STF-CARP-05', 'Carpentry & Furniture Maintenance'],
+    ['Mohan (Carpenter)', 'staff.mohan@vnrvjiet.in', '+91 9876543231', staffPass, 'staff', null, null, 'STF-CARP-06', 'Carpentry & Furniture Maintenance'],
     ['Harish (Lab Technician)', 'staff.harish@vnrvjiet.in', '+91 9876543216', staffPass, 'staff', null, null, 'STF-LAB-04', 'Laboratory & IT Infrastructure'],
     ['Suresh (Lab Technician)', 'staff.suresh@vnrvjiet.in', '+91 9876543220', staffPass, 'staff', null, null, 'STF-LAB-05', 'Laboratory & IT Infrastructure'],
+    ['Ravi (Lab Technician)', 'staff.ravi@vnrvjiet.in', '+91 9876543232', staffPass, 'staff', null, null, 'STF-LAB-06', 'Laboratory & IT Infrastructure'],
+    ['Kiran (Lab Technician)', 'staff.kiran@vnrvjiet.in', '+91 9876543233', staffPass, 'staff', null, null, 'STF-LAB-07', 'Laboratory & IT Infrastructure'],
     ['Prof. Prathyusha', 'prof.prathyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
-    ['Srivatsa', '25071a6671@vnrvjiet.in', '+91 9876543214', userPass, 'student', '25071A6671', '25071A6671', null, 'Computer Science & Engineering']
+    ['Prof. K. V. Rao', 'prof.kvrao@vnrvjiet.in', '+91 9876543221', facultyPass, 'faculty', 'FAC-ECE-103', 'FAC-ECE-103', 'FAC-ECE-103', 'Electronics & Communication Engineering'],
+    ['Prof. Sneha Reddy', 'prof.sneha@vnrvjiet.in', '+91 9876543222', facultyPass, 'faculty', 'FAC-IT-104', 'FAC-IT-104', 'FAC-IT-104', 'Information Technology'],
+    ['Srivatsa', '25071a6671@vnrvjiet.in', '+91 9876543214', userPass, 'student', '25071A6671', '25071A6671', null, 'Computer Science & Engineering'],
+    ['Sidharth', '25071a03b2@vnrvjiet.in', '+91 9876543234', userPass, 'student', '25071A03B2', '25071A03B2', null, 'Mechanical Engineering'],
+    ['Anji', '26075a0309@vnrvjiet.in', '+91 9876543223', userPass, 'student', '26075A0309', '26075A0309', null, 'Mechanical Engineering'],
+    ['Bhuvanesh', '25071a03b1@vnrvjiet.in', '+91 9876543224', userPass, 'student', '25071A03B1', '25071A03B1', null, 'Mechanical Engineering'],
+    ['Srinidhi', '25071a6672@vnrvjiet.in', '+91 9876543225', userPass, 'student', '25071A6672', '25071A6672', null, 'Computer Science & Engineering']
   ];
 
   // Update legacy user accounts if present

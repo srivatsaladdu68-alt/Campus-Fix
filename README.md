@@ -161,15 +161,28 @@ For demonstration and testing convenience, the login page features **1-click qui
 | **Administrator** | `admin@vnrvjiet.in` | `Admin@123` | Campus Administrator |
 | **Electrician 1** | `staff.prakash@vnrvjiet.in` | `Staff@123` | Prakash (Electrician - STF-ELEC-01) |
 | **Electrician 2** | `staff.naresh@vnrvjiet.in` | `Staff@123` | Naresh (Electrician - STF-ELEC-02) |
+| **Electrician 3** | `staff.mahesh@vnrvjiet.in` | `Staff@123` | Mahesh (Electrician - STF-ELEC-03) |
+| **Electrician 4** | `staff.gopal@vnrvjiet.in` | `Staff@123` | Gopal (Electrician - STF-ELEC-04) |
 | **Plumber 1** | `staff.ramesh@vnrvjiet.in` | `Staff@123` | Ramesh (Plumber - STF-PLUM-02) |
 | **Plumber 2** | `staff.venkatesh@vnrvjiet.in` | `Staff@123` | Venkatesh (Plumber - STF-PLUM-03) |
+| **Plumber 3** | `staff.siva@vnrvjiet.in` | `Staff@123` | Siva (Plumber - STF-PLUM-04) |
+| **Plumber 4** | `staff.srinu@vnrvjiet.in` | `Staff@123` | Srinu (Plumber - STF-PLUM-05) |
 | **Carpenter 1** | `staff.ramarao@vnrvjiet.in` | `Staff@123` | Rama Rao (Carpenter - STF-CARP-03) |
 | **Carpenter 2** | `staff.krishna@vnrvjiet.in` | `Staff@123` | Krishna (Carpenter - STF-CARP-04) |
+| **Carpenter 3** | `staff.apparao@vnrvjiet.in` | `Staff@123` | Appa Rao (Carpenter - STF-CARP-05) |
+| **Carpenter 4** | `staff.mohan@vnrvjiet.in` | `Staff@123` | Mohan (Carpenter - STF-CARP-06) |
 | **Lab Technician 1** | `staff.harish@vnrvjiet.in` | `Staff@123` | Harish (Lab Technician - STF-LAB-04) |
 | **Lab Technician 2** | `staff.suresh@vnrvjiet.in` | `Staff@123` | Suresh (Lab Technician - STF-LAB-05) |
-| **Faculty Member** | `prof.prathyusha@vnrvjiet.in` | `Faculty@123` | Prof. Prathyusha (Faculty - FAC-CS-102) |
+| **Lab Technician 3** | `staff.ravi@vnrvjiet.in` | `Staff@123` | Ravi (Lab Technician - STF-LAB-06) |
+| **Lab Technician 4** | `staff.kiran@vnrvjiet.in` | `Staff@123` | Kiran (Lab Technician - STF-LAB-07) |
+| **Faculty Member 1** | `prof.prathyusha@vnrvjiet.in` | `Faculty@123` | Prof. Prathyusha (Faculty - FAC-CS-102) |
+| **Faculty Member 2** | `prof.kvrao@vnrvjiet.in` | `Faculty@123` | Prof. K. V. Rao (Faculty - FAC-ECE-103) |
+| **Faculty Member 3** | `prof.sneha@vnrvjiet.in` | `Faculty@123` | Prof. Sneha Reddy (Faculty - FAC-IT-104) |
 | **Student 1** | `25071a6671@vnrvjiet.in` | `Student@123` | Srivatsa (Student - 25071A6671) |
 | **Student 2** | `25071a03b2@vnrvjiet.in` | `Student@123` | Sidharth (Student - 25071A03B2) |
+| **Student 3** | `26075a0309@vnrvjiet.in` | `Student@123` | Anji (Student - 26075A0309) |
+| **Student 4** | `25071a03b1@vnrvjiet.in` | `Student@123` | Bhuvanesh (Student - 25071A03B1) |
+| **Student 5** | `25071a6672@vnrvjiet.in` | `Student@123` | Srinidhi (Student - 25071A6672) |
 
 ---
 
