@@ -7,9 +7,9 @@ try { db.exec('ALTER TABLE faults ADD COLUMN item_name TEXT;'); } catch(e){}
 
 // 2. Update users with Student ID / Roll Number and Department
 const updateUser = db.prepare('UPDATE users SET student_id = ?, department = ? WHERE email = ?');
-updateUser.run('STU-2024-CS-041', 'Computer Science & Engineering', 'student.alex@campusfix.edu');
+updateUser.run('STU-2024-CS-041', 'AIML', 'student.alex@campusfix.edu');
 updateUser.run('STU-2024-EC-089', 'Electronics & Communication', 'student.priya@campusfix.edu');
-updateUser.run('FAC-CS-102', 'Computer Science & Engineering', 'prof.sharma@campusfix.edu');
+updateUser.run('FAC-CS-102', 'AIML', 'prof.sharma@campusfix.edu');
 updateUser.run('EMP-TECH-01', 'Electrical & Maintenance Dept', 'staff.mike@campusfix.edu');
 updateUser.run('EMP-TECH-02', 'Plumbing & Civil Facilities', 'staff.sarah@campusfix.edu');
 updateUser.run('ADMIN-DIR-01', 'Campus Facilities Directorate', 'admin@campusfix.edu');

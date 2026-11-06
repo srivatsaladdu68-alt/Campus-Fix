@@ -229,7 +229,7 @@ async function runApprovalTests() {
       email: facultyEmail,
       role: 'faculty',
       faculty_id: facultyIdCode,
-      department: 'Computer Science & Engineering',
+      department: 'AIML',
       phone: '+91 94444 33333',
       password: 'FacultyPassword@123'
     }

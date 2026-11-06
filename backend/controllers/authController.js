@@ -95,7 +95,7 @@ function register(req, res) {
     if (assignedRole === 'staff') {
       deptValue = department ? department.trim() : 'General Facilities';
     } else if (assignedRole === 'faculty') {
-      deptValue = (department || req.body.faculty_department || 'Computer Science & Engineering').trim();
+      deptValue = (department || req.body.faculty_department || 'AIML').trim();
     } else {
       deptValue = department ? department.trim() : 'Student Body';
     }

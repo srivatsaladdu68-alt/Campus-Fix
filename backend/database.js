@@ -200,17 +200,18 @@ function seedDatabase() {
     ['Suresh (Lab Technician)', 'staff.suresh@vnrvjiet.in', '+91 9876543220', staffPass, 'staff', null, null, 'STF-LAB-05', 'Laboratory & IT Infrastructure'],
     ['Ravi (Lab Technician)', 'staff.ravi@vnrvjiet.in', '+91 9876543232', staffPass, 'staff', null, null, 'STF-LAB-06', 'Laboratory & IT Infrastructure'],
     ['Kiran (Lab Technician)', 'staff.kiran@vnrvjiet.in', '+91 9876543233', staffPass, 'staff', null, null, 'STF-LAB-07', 'Laboratory & IT Infrastructure'],
-    ['Prof. Prathyusha', 'prof.prathyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'Computer Science & Engineering'],
+    ['Prof. Prathyusha', 'prof.prathyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'AIML'],
     ['Prof. K. V. Rao', 'prof.kvrao@vnrvjiet.in', '+91 9876543221', facultyPass, 'faculty', 'FAC-ECE-103', 'FAC-ECE-103', 'FAC-ECE-103', 'Electronics & Communication Engineering'],
     ['Prof. Sneha Reddy', 'prof.sneha@vnrvjiet.in', '+91 9876543222', facultyPass, 'faculty', 'FAC-IT-104', 'FAC-IT-104', 'FAC-IT-104', 'Information Technology'],
-    ['Srivatsa', '25071a6671@vnrvjiet.in', '+91 9876543214', userPass, 'student', '25071A6671', '25071A6671', null, 'Computer Science & Engineering'],
+    ['Srivatsa', '25071a6671@vnrvjiet.in', '+91 9876543214', userPass, 'student', '25071A6671', '25071A6671', null, 'AIML'],
     ['Sidharth', '25071a03b2@vnrvjiet.in', '+91 9876543234', userPass, 'student', '25071A03B2', '25071A03B2', null, 'Mechanical Engineering'],
     ['Anji', '26075a0309@vnrvjiet.in', '+91 9876543223', userPass, 'student', '26075A0309', '26075A0309', null, 'Mechanical Engineering'],
     ['Bhuvanesh', '25071a03b1@vnrvjiet.in', '+91 9876543224', userPass, 'student', '25071A03B1', '25071A03B1', null, 'Mechanical Engineering'],
-    ['Srinidhi', '25071a6672@vnrvjiet.in', '+91 9876543225', userPass, 'student', '25071A6672', '25071A6672', null, 'Computer Science & Engineering']
+    ['Srinidhi', '25071a6672@vnrvjiet.in', '+91 9876543225', userPass, 'student', '25071A6672', '25071A6672', null, 'AIML']
   ];
 
   // Update legacy user accounts if present
+  db.exec("UPDATE users SET department = 'AIML' WHERE department LIKE '%Computer Science%'");
   db.exec("UPDATE users SET full_name = 'Prof. Prathyusha', email = 'prof.prathyusha@vnrvjiet.in' WHERE email IN ('prof.sharma@vnrvjiet.in', 'prof.pratyusha@vnrvjiet.in') OR (role = 'faculty' AND (full_name LIKE '%Sharma%' OR full_name LIKE '%Pratyusha%'))");
   db.exec("UPDATE users SET full_name = 'Rama Rao (Carpenter)', email = 'staff.ramarao@vnrvjiet.in' WHERE email = 'staff.david@vnrvjiet.in' OR staff_id = 'STF-CARP-03' OR full_name LIKE '%David Miller%'");
   db.exec("UPDATE users SET full_name = 'Prakash (Electrician)', email = 'staff.prakash@vnrvjiet.in' WHERE email IN ('staff.mike@vnrvjiet.in', 'staff.abhipray@vnrvjiet.in', 'staff.prakash@vnrvjiet.in') OR staff_id = 'STF-ELEC-01' OR full_name LIKE '%Mike Johnson%' OR full_name LIKE '%Abhipray%'");

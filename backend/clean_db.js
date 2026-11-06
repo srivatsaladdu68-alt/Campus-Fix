@@ -98,7 +98,7 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Srivatsa', email = '25071a6671@vnrvjiet.in', role = 'student', student_id = '25071A6671', roll_number = '25071A6671', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  SET full_name = 'Srivatsa', email = '25071a6671@vnrvjiet.in', role = 'student', student_id = '25071A6671', roll_number = '25071A6671', approval_status = 'approved', is_active = 1, department = 'AIML'
   WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in', '25071a6671@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number IN ('22071A0501', '25071A6671')))
 `).run();
 
@@ -122,13 +122,13 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Srinidhi', email = '25071a6672@vnrvjiet.in', role = 'student', student_id = '25071A6672', roll_number = '25071A6672', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  SET full_name = 'Srinidhi', email = '25071a6672@vnrvjiet.in', role = 'student', student_id = '25071A6672', roll_number = '25071A6672', approval_status = 'approved', is_active = 1, department = 'AIML'
   WHERE email = '25071a6672@vnrvjiet.in' OR roll_number = '25071A6672'
 `).run();
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Prof. Prathyusha', email = 'prof.prathyusha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-CS-102', roll_number = 'FAC-CS-102', staff_id = 'FAC-CS-102', approval_status = 'approved', is_active = 1, department = 'Computer Science & Engineering'
+  SET full_name = 'Prof. Prathyusha', email = 'prof.prathyusha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-CS-102', roll_number = 'FAC-CS-102', staff_id = 'FAC-CS-102', approval_status = 'approved', is_active = 1, department = 'AIML'
   WHERE email IN ('prof.sharma@vnrvjiet.in', 'prof.pratyusha@vnrvjiet.in', 'prof.prathyusha@vnrvjiet.in') OR (role = 'faculty' AND (full_name LIKE '%Sharma%' OR full_name LIKE '%Prathyusha%'))
 `).run();
 
