@@ -57,6 +57,8 @@ const demoEmails = [
   'student.alex@vnrvjiet.in',
   'prof.prathyusha@vnrvjiet.in',
   'prof.pratyusha@vnrvjiet.in',
+  'prof.veeresh@vnrvjiet.in',
+  'prof.naveen@vnrvjiet.in',
   'prof.kvrao@vnrvjiet.in',
   'prof.sneha@vnrvjiet.in',
   'prof.sharma@vnrvjiet.in'
@@ -134,14 +136,14 @@ db.prepare(`
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Prof. K. V. Rao', email = 'prof.kvrao@vnrvjiet.in', role = 'faculty', student_id = 'FAC-ECE-103', roll_number = 'FAC-ECE-103', staff_id = 'FAC-ECE-103', approval_status = 'approved', is_active = 1, department = 'Electronics & Communication Engineering'
-  WHERE email = 'prof.kvrao@vnrvjiet.in' OR student_id = 'FAC-ECE-103'
+  SET full_name = 'Prof. Veeresh', email = 'prof.veeresh@vnrvjiet.in', role = 'faculty', student_id = 'FAC-ECE-103', roll_number = 'FAC-ECE-103', staff_id = 'FAC-ECE-103', approval_status = 'approved', is_active = 1, department = 'Electronics & Communication Engineering'
+  WHERE email IN ('prof.kvrao@vnrvjiet.in', 'prof.veeresh@vnrvjiet.in') OR student_id = 'FAC-ECE-103'
 `).run();
 
 db.prepare(`
   UPDATE users 
-  SET full_name = 'Prof. Sneha Reddy', email = 'prof.sneha@vnrvjiet.in', role = 'faculty', student_id = 'FAC-IT-104', roll_number = 'FAC-IT-104', staff_id = 'FAC-IT-104', approval_status = 'approved', is_active = 1, department = 'Information Technology'
-  WHERE email = 'prof.sneha@vnrvjiet.in' OR student_id = 'FAC-IT-104'
+  SET full_name = 'Prof. Naveen', email = 'prof.naveen@vnrvjiet.in', role = 'faculty', student_id = 'FAC-IT-104', roll_number = 'FAC-IT-104', staff_id = 'FAC-IT-104', approval_status = 'approved', is_active = 1, department = 'Information Technology'
+  WHERE email IN ('prof.sneha@vnrvjiet.in', 'prof.naveen@vnrvjiet.in') OR student_id = 'FAC-IT-104'
 `).run();
 
 // 5. Re-enable foreign keys

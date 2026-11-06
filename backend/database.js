@@ -201,8 +201,8 @@ function seedDatabase() {
     ['Ravi (Lab Technician)', 'staff.ravi@vnrvjiet.in', '+91 9876543232', staffPass, 'staff', null, null, 'STF-LAB-06', 'Laboratory & IT Infrastructure'],
     ['Kiran (Lab Technician)', 'staff.kiran@vnrvjiet.in', '+91 9876543233', staffPass, 'staff', null, null, 'STF-LAB-07', 'Laboratory & IT Infrastructure'],
     ['Prof. Prathyusha', 'prof.prathyusha@vnrvjiet.in', '+91 9876543213', facultyPass, 'faculty', 'FAC-CS-102', 'FAC-CS-102', 'FAC-CS-102', 'AIML'],
-    ['Prof. K. V. Rao', 'prof.kvrao@vnrvjiet.in', '+91 9876543221', facultyPass, 'faculty', 'FAC-ECE-103', 'FAC-ECE-103', 'FAC-ECE-103', 'Electronics & Communication Engineering'],
-    ['Prof. Sneha Reddy', 'prof.sneha@vnrvjiet.in', '+91 9876543222', facultyPass, 'faculty', 'FAC-IT-104', 'FAC-IT-104', 'FAC-IT-104', 'Information Technology'],
+    ['Prof. Veeresh', 'prof.veeresh@vnrvjiet.in', '+91 9876543221', facultyPass, 'faculty', 'FAC-ECE-103', 'FAC-ECE-103', 'FAC-ECE-103', 'Electronics & Communication Engineering'],
+    ['Prof. Naveen', 'prof.naveen@vnrvjiet.in', '+91 9876543222', facultyPass, 'faculty', 'FAC-IT-104', 'FAC-IT-104', 'FAC-IT-104', 'Information Technology'],
     ['Srivatsa', '25071a6671@vnrvjiet.in', '+91 9876543214', userPass, 'student', '25071A6671', '25071A6671', null, 'AIML'],
     ['Sidharth', '25071a03b2@vnrvjiet.in', '+91 9876543234', userPass, 'student', '25071A03B2', '25071A03B2', null, 'Mechanical Engineering'],
     ['Anji', '26075a0309@vnrvjiet.in', '+91 9876543223', userPass, 'student', '26075A0309', '26075A0309', null, 'Mechanical Engineering'],
@@ -219,6 +219,8 @@ function seedDatabase() {
   db.exec("UPDATE users SET full_name = 'Harish (Lab Technician)', email = 'staff.harish@vnrvjiet.in', staff_id = 'STF-LAB-04', department = 'Laboratory & IT Infrastructure' WHERE email IN ('staff.kevin@vnrvjiet.in', 'staff.lakshith@vnrvjiet.in', 'staff.harish@vnrvjiet.in') OR staff_id IN ('STF-WIFI-04', 'STF-LAB-04') OR full_name LIKE '%Kevin Brown%' OR full_name LIKE '%Lakshith%' OR full_name LIKE '%WiFi%Tech%' OR full_name LIKE '%Harish%'");
   db.exec("UPDATE users SET full_name = 'Srivatsa', email = '25071a6671@vnrvjiet.in', student_id = '25071A6671', roll_number = '25071A6671' WHERE email IN ('student.alex@vnrvjiet.in', 'student.srivatsa@vnrvjiet.in', '25071a6671@vnrvjiet.in') OR (role = 'student' AND (full_name LIKE '%Alex%' OR roll_number IN ('22071A0501', '25071A6671')))");
   db.exec("UPDATE users SET full_name = 'Sidharth', email = '25071a03b2@vnrvjiet.in', student_id = '25071A03B2', roll_number = '25071A03B2' WHERE email IN ('student.sidharth@vnrvjiet.in', '25071a03b2@vnrvjiet.in') OR roll_number IN ('25071A0875', '25071A03B2')");
+  db.exec("UPDATE users SET full_name = 'Prof. Veeresh', email = 'prof.veeresh@vnrvjiet.in' WHERE email IN ('prof.kvrao@vnrvjiet.in', 'prof.veeresh@vnrvjiet.in') OR staff_id = 'FAC-ECE-103'");
+  db.exec("UPDATE users SET full_name = 'Prof. Naveen', email = 'prof.naveen@vnrvjiet.in' WHERE email IN ('prof.sneha@vnrvjiet.in', 'prof.naveen@vnrvjiet.in') OR staff_id = 'FAC-IT-104'");
 
   for (const u of coreUsers) {
     const exists = db.prepare('SELECT user_id FROM users WHERE email = ?').get(u[1]);
