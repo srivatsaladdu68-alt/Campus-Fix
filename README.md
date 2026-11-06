@@ -175,9 +175,9 @@ For demonstration and testing convenience, the login page features **1-click qui
 | **Lab Technician 2** | `staff.suresh@vnrvjiet.in` | `Staff@123` | Suresh (Lab Technician - STF-LAB-05) |
 | **Lab Technician 3** | `staff.ravi@vnrvjiet.in` | `Staff@123` | Ravi (Lab Technician - STF-LAB-06) |
 | **Lab Technician 4** | `staff.kiran@vnrvjiet.in` | `Staff@123` | Kiran (Lab Technician - STF-LAB-07) |
-| **Faculty Member 1** | `prof.prathyusha@vnrvjiet.in` | `Faculty@123` | Prof. Prathyusha (Faculty - FAC-CS-102 - AIML) |
-| **Faculty Member 2** | `prof.veeresh@vnrvjiet.in` | `Faculty@123` | Prof. Veeresh (Faculty - FAC-ECE-103) |
-| **Faculty Member 3** | `prof.naveen@vnrvjiet.in` | `Faculty@123` | Prof. Naveen (Faculty - FAC-IT-104) |
+| **Faculty Member 1** | `prof.prathyusha@vnrvjiet.in` | `Faculty@123` | Prof. Prathyusha (Faculty - FAC-CS-102 - Mathematics) |
+| **Faculty Member 2** | `prof.veeresh@vnrvjiet.in` | `Faculty@123` | Prof. Veeresh (Faculty - FAC-ECE-103 - AIML) |
+| **Faculty Member 3** | `prof.naveen@vnrvjiet.in` | `Faculty@123` | Prof. Naveen (Faculty - FAC-IT-104 - AIML) |
 | **Student 1** | `25071a6671@vnrvjiet.in` | `Student@123` | Srivatsa (Student - 25071A6671) |
 | **Student 2** | `25071a03b2@vnrvjiet.in` | `Student@123` | Sidharth (Student - 25071A03B2) |
 | **Student 3** | `26075a0309@vnrvjiet.in` | `Student@123` | Anji (Student - 26075A0309) |
