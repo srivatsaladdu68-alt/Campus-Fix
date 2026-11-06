@@ -6,6 +6,28 @@ let currentFaults = [];
 let selectedFault = null;
 let staffMembers = [];
 
+// Helper to determine trade title (e.g. Carpenters, Electricians, Plumbers)
+function getTradeTitles(category, itemName = '') {
+  const cat = (category || '').toLowerCase();
+  const item = (itemName || '').toLowerCase();
+
+  if (cat === 'electrical' || cat === 'safety') {
+    return { singular: 'Electrician', plural: 'Electricians' };
+  } else if (cat === 'plumbing' || cat === 'washroom') {
+    return { singular: 'Plumber', plural: 'Plumbers' };
+  } else if (cat === 'furniture') {
+    return { singular: 'Carpenter', plural: 'Carpenters' };
+  } else if (cat === 'classroom equipment') {
+    if (/chair|desk|table|bench|board|door|window|podium|furniture/i.test(item)) {
+      return { singular: 'Carpenter', plural: 'Carpenters' };
+    }
+    return { singular: 'Lab Technician', plural: 'Lab Technicians' };
+  } else if (cat === 'laboratory equipment' || cat === 'network/it') {
+    return { singular: 'Lab Technician', plural: 'Lab Technicians' };
+  }
+  return { singular: 'Technician', plural: 'Technicians' };
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const user = Auth.requireAuth();
   if (!user) return;
@@ -203,12 +225,16 @@ function renderDetailModal(data) {
 
   // Technician details + Direct Admin Assign Button (hidden if already Completed, Closed, or Assigned)
   const isFinished = ['Closed', 'Resolved'].includes(f.status);
+  const trade = (f.trade_name_plural)
+    ? { singular: f.trade_name || 'Technician', plural: f.trade_name_plural }
+    : getTradeTitles(f.category, f.item_name || f.title);
+
   const staffDisplay = f.staff_name ? `
     <span style="color: var(--cream-gold); font-weight: 700;">${escapeHtml(f.staff_name)}</span> 
     <span style="color: var(--cream-muted);">(${escapeHtml(f.staff_phone || 'Staff')})</span>
   ` : `
     <span style="color: var(--cream-gold); font-weight: 600; display: inline-flex; align-items: center; gap: 5px;">
-      <i data-lucide="clock" style="width: 14px; height: 14px;"></i> All department technicians currently occupied &bull; We will assign soon
+      <i data-lucide="clock" style="width: 14px; height: 14px;"></i> All ${escapeHtml(trade.plural.toLowerCase())} currently occupied &bull; We will assign soon
     </span>
   `;
   document.getElementById('modal-staff').innerHTML = staffDisplay;

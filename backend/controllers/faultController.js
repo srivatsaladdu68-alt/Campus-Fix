@@ -20,6 +20,28 @@ function calculateDeadline(priority) {
   const deadline = new Date(now.getTime() + hoursToAdd * 60 * 60 * 1000);
   return deadline.toISOString().replace('T', ' ').substring(0, 19);
 }
+// Helper to determine trade title (e.g., Carpenters, Electricians, Plumbers) for a complaint
+function getTradeTitles(category, itemName = '') {
+  const cat = (category || '').toLowerCase();
+  const item = (itemName || '').toLowerCase();
+
+  if (cat === 'electrical' || cat === 'safety') {
+    return { singular: 'Electrician', plural: 'Electricians' };
+  } else if (cat === 'plumbing' || cat === 'washroom') {
+    return { singular: 'Plumber', plural: 'Plumbers' };
+  } else if (cat === 'furniture') {
+    return { singular: 'Carpenter', plural: 'Carpenters' };
+  } else if (cat === 'classroom equipment') {
+    if (/chair|desk|table|bench|board|door|window|podium|furniture/i.test(item)) {
+      return { singular: 'Carpenter', plural: 'Carpenters' };
+    }
+    return { singular: 'Lab Technician', plural: 'Lab Technicians' };
+  } else if (cat === 'laboratory equipment' || cat === 'network/it') {
+    return { singular: 'Lab Technician', plural: 'Lab Technicians' };
+  }
+  return { singular: 'Technician', plural: 'Technicians' };
+}
+
 
 /**
  * Automatically find a free technician (0 active tasks) qualified for the given category/trade.
@@ -258,26 +280,30 @@ function createFault(req, res) {
         `Your complaint [${complaintCode}] for "${itemName}" has been registered and assigned to ${assignedTech.full_name}.`
       );
     } else {
-      // All department workers are already assigned / busy
+      // All trade workers are already assigned / busy
+      const trade = getTradeTitles(category, itemName);
       createNotification(
         userId,
         faultId,
-        `Your complaint [${complaintCode}] has been registered. All technicians in this department are currently occupied with ongoing tasks; we will assign soon.`
+        `Your complaint [${complaintCode}] has been registered. All ${trade.plural.toLowerCase()} are currently occupied with ongoing tasks; we will assign soon.`
       );
     }
 
     // NOTE: Admin notification intentionally omitted as per requirement
+    const tradeInfo = getTradeTitles(category, itemName);
 
     return res.status(201).json({
       success: true,
       message: assignedTech 
         ? `Complaint submitted and assigned to ${assignedTech.full_name}.`
-        : 'Complaint registered. All technicians of this department are currently occupied. We will assign soon.',
+        : `Complaint registered. All ${tradeInfo.plural.toLowerCase()} are currently occupied. We will assign soon.`,
       complaint_code: complaintCode,
       fault_id: faultId,
       is_assigned: Boolean(assignedTech),
       assigned_technician: assignedTech ? assignedTech.full_name : null,
-      queue_message: assignedTech ? null : 'All technicians currently occupied - We will assign soon',
+      trade_name: tradeInfo.singular,
+      trade_name_plural: tradeInfo.plural,
+      queue_message: assignedTech ? null : `All ${tradeInfo.plural.toLowerCase()} currently occupied - We will assign soon`,
       has_duplicates: activeDuplicates.length > 0,
       active_duplicates: activeDuplicates
     });
@@ -433,6 +459,10 @@ function getFaultById(req, res) {
     if (!fault) {
       return res.status(404).json({ success: false, message: 'Complaint not found.' });
     }
+
+    const tradeInfo = getTradeTitles(fault.category, fault.item_name || fault.title);
+    fault.trade_name = tradeInfo.singular;
+    fault.trade_name_plural = tradeInfo.plural;
 
     // Authorization check: students/faculty can only view their own
     if ((req.user.role === 'student' || req.user.role === 'faculty') && fault.reported_by !== req.user.user_id) {

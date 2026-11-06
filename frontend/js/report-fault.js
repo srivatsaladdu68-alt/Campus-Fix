@@ -15,6 +15,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupFormSubmit();
 });
 
+// Helper to determine trade title (e.g. Carpenters, Electricians, Plumbers)
+function getTradeTitles(category, itemName = '') {
+  const cat = (category || '').toLowerCase();
+  const item = (itemName || '').toLowerCase();
+
+  if (cat === 'electrical' || cat === 'safety') {
+    return { singular: 'Electrician', plural: 'Electricians' };
+  } else if (cat === 'plumbing' || cat === 'washroom') {
+    return { singular: 'Plumber', plural: 'Plumbers' };
+  } else if (cat === 'furniture') {
+    return { singular: 'Carpenter', plural: 'Carpenters' };
+  } else if (cat === 'classroom equipment') {
+    if (/chair|desk|table|bench|board|door|window|podium|furniture/i.test(item)) {
+      return { singular: 'Carpenter', plural: 'Carpenters' };
+    }
+    return { singular: 'Lab Technician', plural: 'Lab Technicians' };
+  } else if (cat === 'laboratory equipment' || cat === 'network/it') {
+    return { singular: 'Lab Technician', plural: 'Lab Technicians' };
+  }
+  return { singular: 'Technician', plural: 'Technicians' };
+}
+
 // Load Buildings Dropdown
 async function loadBuildings() {
   const select = document.getElementById('building_id');
@@ -250,18 +272,22 @@ function setupFormSubmit() {
           msgEl.innerHTML = `Your fault report has been logged and automatically assigned to <strong>${escapeHtml(res.assigned_technician)}</strong>.`;
         }
       } else {
-        API.showToast(`Complaint registered [${res.complaint_code}]! All technicians currently occupied — We will assign soon.`, 'info');
+        const trade = (res && res.trade_name_plural)
+          ? { singular: res.trade_name || 'Technician', plural: res.trade_name_plural }
+          : getTradeTitles(category, item_name);
+
+        API.showToast(`Complaint registered [${res.complaint_code}]! All ${trade.plural.toLowerCase()} currently occupied — We will assign soon.`, 'info');
         if (msgEl) {
           msgEl.innerHTML = `
             <div style="background: rgba(251, 215, 132, 0.12); border: 1px solid rgba(251, 215, 132, 0.35); padding: 0.85rem; border-radius: var(--radius-sm); margin-bottom: 0.75rem;">
               <div style="color: var(--cream-gold); font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem;">
-                ⏳ All Department Technicians Busy
+                ⏳ All ${escapeHtml(trade.plural)} Busy
               </div>
               <div style="color: var(--cream-pure); font-size: 0.9rem; font-weight: 600;">
                 We will assign soon
               </div>
               <div style="color: var(--cream-muted); font-size: 0.78rem; margin-top: 0.25rem;">
-                Your report is queued with high priority and will auto-dispatch as soon as a technician completes their current repair.
+                Your report is queued with high priority and will auto-dispatch as soon as a ${escapeHtml(trade.singular.toLowerCase())} completes their current repair.
               </div>
             </div>
           `;
